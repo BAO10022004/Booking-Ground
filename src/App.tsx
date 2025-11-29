@@ -3,22 +3,20 @@ import './assets/styles/App.css'
 
 // import component
 import HomePage from './pages/HomePage';
-import Header from './components/Header';
-import SearchBar from './components/SearchBar';
 import BottomNav from './components/BottomNavigation';
-import FilterTabs from './components/FilterTabs';
-
+import AccountPage from './pages/AccountPage';
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   
   return (
     <div className="app-container">
-      <Header />
-      <SearchBar />
-      <FilterTabs />
+     
       
       {activeTab === 'home' ? (
+
         <HomePage />
+      ) : activeTab === 'account' ? (
+        <AccountPage />
       ) : (
         <main className="venue-grid">
           <h2>Trang {activeTab} đang được phát triển</h2>
