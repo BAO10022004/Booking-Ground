@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Calendar } from 'lucide-react';
+import { ArrowLeft, Calendar, AlertCircle, CheckCircle, XCircle, Info } from 'lucide-react';
 import '../assets/styles/BookingEventPage.css';
 import BottomContinueButton from '../components/BottomContinueButton';
 import Venue from '../models/Venue';
@@ -7,18 +7,26 @@ import ScheduleGrid from '../components/ScheduleGrid';
 import DatePickerModal from '../components/DatePickerModal';
 import { getCurrentDate } from '../utils/getCurrentDate';
 import { useNavigate } from 'react-router-dom'; 
+import Toast from '../components/Toast';
 
 
+// //////////////////////////////////////////////// MAIN COMPONENT ////////////////////////////////////////////////
 export default function BookingSchedulePage({venue}: {venue: Venue}) {
 
   // //////////////////////////////////////////////// STATE //////////////////////////////////////////////// 
-  // Lấy ngày hiện tại làm mặc định nếu cần
   const defaultDate = getCurrentDate(); 
   const [selectedDate, setSelectedDate] = useState(defaultDate);
   const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [tempDate, setTempDate] = useState(defaultDate); // Khởi tạo tempDate bằng ngày mặc định
-  const navigate = useNavigate(); // Đã sửa tên biến từ navigators
+  const [tempDate, setTempDate] = useState(defaultDate);
+  const [toast, setToast] = useState<{ type: 'success' | 'error' | 'warning' | 'info'; message: string } | null>(null);
+  const navigate = useNavigate();
+
+  // //////////////////////////////////////////////// TOAST HELPER ////////////////////////////////////////////////
+  const showToast = (type: 'success' | 'error' | 'warning' | 'info', message: string) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 4000);
+  };
 
   const handleBack = () => {
     window.history.back();
@@ -34,9 +42,7 @@ export default function BookingSchedulePage({venue}: {venue: Venue}) {
 
   // //////////////////////////////////////////////// HANDLERS ////////////////////////////////////////////////
 
-  // Hàm kiểm tra thời gian liên tục và xử lý submit
   const validateContinuousTimeSlots = (selectedCells: Set<string>) => {
-    // Nhóm theo sân
     const groupedByCourt: { [key: string]: string[] } = {};
     
     selectedCells.forEach(cell => {
@@ -47,25 +53,21 @@ export default function BookingSchedulePage({venue}: {venue: Venue}) {
       groupedByCourt[court].push(time);
     });
 
-    // Kiểm tra từng sân
     const bookings: Array<{ court: string; startTime: string; endTime: string; duration: number }> = [];
     
     for (const court in groupedByCourt) {
       const times = groupedByCourt[court];
       
-      // Sắp xếp theo thứ tự thời gian
       times.sort((a, b) => {
         const indexA = timeSlots.indexOf(a);
         const indexB = timeSlots.indexOf(b);
         return indexA - indexB;
       });
 
-      // Kiểm tra liên tục
       for (let i = 0; i < times.length - 1; i++) {
         const currentIndex = timeSlots.indexOf(times[i]);
         const nextIndex = timeSlots.indexOf(times[i + 1]);
         
-        // Nếu không liên tiếp
         if (nextIndex - currentIndex !== 1) {
           return {
             isValid: false,
@@ -75,20 +77,18 @@ export default function BookingSchedulePage({venue}: {venue: Venue}) {
         }
       }
 
-      // Tính thời gian bắt đầu và kết thúc
       const startTime = times[0];
       const lastTimeIndex = timeSlots.indexOf(times[times.length - 1]);
-      const endTime = timeSlots[lastTimeIndex + 1] || times[times.length - 1]; // Thời gian kết thúc
+      const endTime = timeSlots[lastTimeIndex + 1] || times[times.length - 1];
       
       bookings.push({
         court,
         startTime,
         endTime,
-        duration: times.length * 0.5 // 0.5 giờ mỗi slot
+        duration: times.length * 0.5
       });
     }
 
-    // ✅ SỬA LỖI: Trả về kết quả hợp lệ
     return {
       isValid: true,
       message: 'Thời gian đã chọn hợp lệ.',
@@ -98,25 +98,28 @@ export default function BookingSchedulePage({venue}: {venue: Venue}) {
 
   const handleSubmit = (selectedCells: Set<string>) => {
     if (selectedCells.size === 0) {
-      alert('Vui lòng chọn ít nhất một khung giờ.');
+      showToast('warning', 'Vui lòng chọn ít nhất một khung giờ trước khi tiếp tục.');
       return;
     }
 
-    // Kiểm tra thời gian liên tục
     const validation = validateContinuousTimeSlots(selectedCells);
     
     if (!validation.isValid) {
-      alert(validation.message);
+      showToast('error', validation.message);
       return;
     }
-    navigate('/booking-confirmation', { state: { 
-      date: selectedDate,
-      venue: venue
-    } })
+
+    showToast('success', 'Đang chuyển đến trang xác nhận...');
+    
+    setTimeout(() => {
+      navigate('/booking-confirmation', { state: { 
+        date: selectedDate,
+        venue: venue
+      }});
+    }, 500);
   };
 
   const handleDateClick = () => {
-    // ✅ SỬA LỖI: Set tempDate bằng ngày đang chọn hiện tại (selectedDate)
     setTempDate(selectedDate);
     setShowDatePicker(true);
   };
@@ -124,20 +127,22 @@ export default function BookingSchedulePage({venue}: {venue: Venue}) {
   const handleDateConfirm = () => {
     if (tempDate) {
       setSelectedDate(tempDate);
-      // Reset cells khi đổi ngày
       setSelectedCells(new Set()); 
+      showToast('info', `Đã chuyển sang ngày ${tempDate}`);
     }
     setShowDatePicker(false);
   };
 
   const handleDateCancel = () => {
     setShowDatePicker(false);
-    // Không reset tempDate ở đây, để nó giữ giá trị cuối cùng nếu người dùng muốn mở lại
   };
 
   // //////////////////////////////////////////////// RENDER ////////////////////////////////////////////////
   return (
     <div className="booking-schedule-page">
+      {/* Toast Notification */}
+      {toast && <Toast {...toast} onClose={() => setToast(null)} />}
+
       {/* Header */}
       <header className="booking-header">
         <div className="booking-header-container">
@@ -193,7 +198,7 @@ export default function BookingSchedulePage({venue}: {venue: Venue}) {
 
       {/* Date Picker Modal */}
       <DatePickerModal showDatePicker={showDatePicker}
-                       tempDate={tempDate} // ✅ ĐÃ SỬA: Truyền tempDate state
+                       tempDate={tempDate}
                        handleDateCancel={handleDateCancel}
                        setTempDate={setTempDate}
                        handleDateConfirm={handleDateConfirm}/>
