@@ -1,14 +1,19 @@
 import { Heart, Share2, Star, MapPin, Clock } from 'lucide-react';
-import getGrounds from '../utils/get_ground';
+import getGrounds from '../utils/getVenues';
 import { useState } from 'react';
 import '../assets/styles/VenueGridView.css';
 import { useNavigate } from 'react-router-dom'; 
 import GetRating from '../utils/getRating';
 import GetTimePeriodVenue from '../utils/getTimeVenue';
+import BookingTypeModal from '../pages/BookingTypeModal';
 function VenueGridView() {
   const sportsVenues = getGrounds();
   const [favorites, setFavorites] = useState(new Set());
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [venue, setVenue] = useState<any | null>(null);
+
+  
   const toggleFavorite = (id: unknown) => {
     const newFavorites = new Set(favorites);
     if (newFavorites.has(id)) {
@@ -67,7 +72,10 @@ function VenueGridView() {
                   </div>
                   <button 
                     className="book-button" 
-                    onClick={() => navigate('/booking',  { state: { venue } })}
+                    onClick={() =>{
+                      setVenue(venue);
+                      setIsModalOpen(true); 
+                    }}
                   >
                     ĐẶT LỊCH
                   </button>
@@ -77,12 +85,11 @@ function VenueGridView() {
           ))}
         </div>
       </main>
-
-      {/* Modal nằm ngoài main để hiển thị đúng */}
-      {/* <BookingTypeModal
+      <BookingTypeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-      /> */}
+        venue={venue}
+      />
     </>
   );
 }

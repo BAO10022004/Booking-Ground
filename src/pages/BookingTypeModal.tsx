@@ -1,27 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, ArrowRight } from 'lucide-react';
 import ReactDOM from 'react-dom';
-import '../assets/styles/BookingTypeModal.css';
 import { useNavigate } from 'react-router-dom';
+import '../assets/styles/BookingTypeModal.css';
+import Venue from '../models/Venue';
+import getCategoriesByVenue from '../utils/getCategoriesByVenue';
 
 interface BookingTypeModalProps {
   isOpen: boolean;
   onClose: () => void;
+  venue?: Venue | null;
 }
 
-export default function BookingTypeModal({ isOpen, onClose }: BookingTypeModalProps) {
+export default function BookingTypeModal({ isOpen, onClose, venue }: BookingTypeModalProps) {
+  const navigate = useNavigate();
+  const [booking_modal, setBooking_modal] = useState('');
+
+  // Early return phải đặt sau tất cả hooks
   if (!isOpen) return null;
-    const navigate = useNavigate();
-  const handleDirectBooking = () => {
+
+  const handleDirectBooking = (booking_modal_id: string) => {
+    setBooking_modal(booking_modal_id);
     console.log('Đặt lịch ngay trực quan');
-    navigate('/booking');
+    
+    navigate(`/booking/${venue?.venueId}/${booking_modal_id}`);
     onClose();
   };
 
   const handleEventBooking = () => {
     console.log('Đặt lịch sự kiện');
+    // TODO: Navigate to event booking page
+    // navigate(`/event-booking/${venue?.venueId}`);
     onClose();
   };
+
+  const categories = getCategoriesByVenue(venue?.venueId ?? '');
 
   const modalContent = (
     <div 
@@ -50,48 +63,76 @@ export default function BookingTypeModal({ isOpen, onClose }: BookingTypeModalPr
 
         {/* Options */}
         <div className="booking-modal-options">
-          {/* Đặt lịch ngay trực quan */}
-          <div 
-            onClick={handleDirectBooking}
-            className="booking-option-card booking-option-direct"
-          >
-            <div className="booking-option-header">
-              <h3 className="booking-option-title">
-                Đặt lịch ngay trực quan
-              </h3>
-              <ArrowRight className="booking-option-arrow" size={24} />
-            </div>
-            <p className="booking-option-description">
-              Đặt lịch ngay khi khách chơi nhiều khung giờ, nhiều sân.
-            </p>
-          </div>
+          {categories.map((category) => {
+            // Option 1: Đặt lịch trực tiếp
+            if (category.categoryId === '1') {
+              return (
+                <div 
+                  key={category.categoryId}
+                  onClick={() => handleDirectBooking(category.categoryId)}
+                  className="booking-option-card booking-option-direct"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleDirectBooking(category.categoryId);
+                    }
+                  }}
+                >
+                  <div className="booking-option-header">
+                    <h3 className="booking-option-title">
+                      {category.name}
+                    </h3>
+                    <ArrowRight className="booking-option-arrow" size={24} />
+                  </div>
+                  <p className="booking-option-description">
+                    Đặt lịch ngay khi khách chơi nhiều khung giờ, nhiều sân.
+                  </p>
+                </div>
+              );
+            }
 
-          {/* Đặt lịch sự kiện */}
-          <div 
-            onClick={handleEventBooking}
-            className="booking-option-card booking-option-event"
-          >
-            {/* New Badge */}
-            <span className="booking-option-badge">
-              New
-            </span>
-            
-            <div className="booking-option-header">
-              <h3 className="booking-option-title">
-                Đặt lịch sự kiện
-              </h3>
-              <ArrowRight className="booking-option-arrow" size={24} />
-            </div>
-            <p className="booking-option-description">
-              Sự kiện giúp bạn chơi chung với người có cùng niềm đam mê, trình độ. Hay những giải đấu mang tính cạnh tranh cao, nâng cao trình độ do chủ sân tổ chức.
-            </p>
-          </div>
+            // Option 2: Đặt lịch sự kiện
+            if (category.categoryId === '2') {
+              return (
+                <div 
+                  key={category.categoryId}
+                  onClick={handleEventBooking}
+                  className="booking-option-card booking-option-event"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleEventBooking();
+                    }
+                  }}
+                >
+                  <span className="booking-option-badge">
+                    New
+                  </span>
+                  
+                  <div className="booking-option-header">
+                    <h3 className="booking-option-title">
+                      {category.name}
+                    </h3>
+                    <ArrowRight className="booking-option-arrow" size={24} />
+                  </div>
+                  <p className="booking-option-description">
+                    Sự kiện giúp bạn chơi chung với người có cùng niềm đam mê, trình độ. 
+                    Hay những giải đấu mang tính cạnh tranh cao, nâng cao trình độ do chủ sân tổ chức.
+                  </p>
+                </div>
+              );
+            }
+
+            // Trả về null nếu không match
+            return null;
+          })}
         </div>
       </div>
     </div>
   );
 
-  // Render modal vào body để tránh bị ảnh hưởng bởi CSS của parent
   return ReactDOM.createPortal(
     modalContent,
     document.body

@@ -1,21 +1,3 @@
-// Giả định đây là lớp Venue đã được import hoặc định nghĩa ở đâu đó
-/*
-class Venue {
-  readonly venueId: string; 
-  name: string; 
-  subAddress: string; 
-  district: string; 
-  city: string; 
-  address: string; 
-  operatingTime: string; 
-  phoneNumber1: string; 
-  phoneNumber2: string | null; 
-  website: string | null; 
-  deposit: number; 
-  ownerId: string; 
-  // ... constructor
-}
-*/
 
 const sportsVenues = [
   {
@@ -147,11 +129,11 @@ const sportsVenues = [
   }
 ];
 
-function getGrounds() {
+function getVenues() {
   // Trong ứng dụng thực tế, bạn sẽ tạo instance của Venue Class ở đây
   /* return sportsVenues.map(data => new Venue(data as any)); 
   */
   return sportsVenues;
 }
 
-export default getGrounds;
+export default getVenues;
