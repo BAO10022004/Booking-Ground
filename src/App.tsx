@@ -1,32 +1,15 @@
-import { useState } from 'react'
-import './assets/styles/App.css'
-
-// import component
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import BottomNav from './components/BottomNavigation';
-import AccountPage from './pages/AccountPage';
+import BookingPage from './pages/BookingPage';
+
 function App() {
-  const [activeTab, setActiveTab] = useState('home');
-  
   return (
-    <div className="app-container">
-     
-      
-      {activeTab === 'home' ? (
-
-        <HomePage />
-      ) : activeTab === 'account' ? (
-        <AccountPage />
-      ) : (
-        <main className="venue-grid">
-          <h2>Trang {activeTab} đang được phát triển</h2>
-        </main>
-      )}
-
-      {/* Bottom Navigation */}
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
-    </div>
+    <BrowserRouter basename="/Booking-Ground">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/booking" element={<BookingPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
 export default App;

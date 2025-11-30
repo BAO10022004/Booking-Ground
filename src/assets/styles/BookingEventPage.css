@@ -1,0 +1,399 @@
+/* BookingSchedulePage.css */
+
+/* Main Container */
+.booking-schedule-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #ecfdf5, #f0fdfa);
+}
+
+/* Header */
+.booking-header {
+  background-color: #047857;
+  color: white;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.booking-header-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.booking-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.booking-back-btn {
+  padding: 8px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.booking-back-btn:hover {
+  background-color: #059669;
+}
+
+.booking-header-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.booking-date-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: white;
+  color: #047857;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.booking-date-btn:hover {
+  background-color: #ecfdf5;
+}
+
+/* Content Container */
+.booking-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Legend */
+.booking-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.booking-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.booking-legend-box {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid;
+}
+
+.legend-available {
+  background-color: #e5e7eb;
+  border-color: #d1d5db;
+}
+
+.legend-booked {
+  background-color: #f87171;
+  border-color: #ef4444;
+}
+
+.legend-locked {
+  background-color: #9ca3af;
+  border-color: #6b7280;
+}
+
+.legend-event {
+  background-color: #fbcfe8;
+  border-color: #f9a8d4;
+}
+
+.booking-view-courts-btn {
+  color: #047857;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.booking-view-courts-btn:hover {
+  color: #059669;
+}
+
+/* Notice */
+.booking-notice {
+  background-color: #fffbeb;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #92400e;
+}
+
+.booking-notice-label {
+  font-weight: 600;
+}
+
+/* Schedule Grid Container */
+.booking-schedule-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.booking-schedule-scroll {
+  overflow-x: auto;
+}
+
+.booking-schedule-grid {
+  display: inline-block;
+  min-width: 100%;
+}
+
+/* Time Headers */
+.booking-time-header {
+  display: flex;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+}
+
+.booking-court-header-cell {
+  width: 48px;
+  flex-shrink: 0;
+  border-right: 1px solid #e5e7eb;
+}
+
+.booking-time-cell {
+  width: 48px;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  padding: 8px 0;
+  border-right: 1px solid #e5e7eb;
+}
+
+/* Court Rows */
+.booking-court-row {
+  display: flex;
+  border-top: 1px solid #e5e7eb;
+}
+
+.booking-court-label {
+  width: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #374151;
+  background-color: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+}
+
+.booking-slot-cell {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-right: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Slot States */
+.slot-available {
+  background-color: #e5e7eb;
+  position: relative;
+}
+
+.slot-available:hover {
+  background-color: #d1d5db;
+  transform: scale(1.05);
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.slot-booked {
+  background-color: #f87171;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.slot-locked {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.slot-selected {
+  background-color: #22c55e;
+  position: relative;
+  animation: slotPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 
+    0 0 0 2px #16a34a,
+    0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+.slot-selected:hover {
+  background-color: #16a34a;
+  transform: scale(1.05);
+  z-index: 5;
+}
+
+.slot-selected::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  animation: checkmarkAppear 0.3s ease-out;
+}
+
+@keyframes slotPop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes checkmarkAppear {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Bottom Button Container */
+.booking-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 16px;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.booking-bottom-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.booking-submit-btn {
+  width: 100%;
+  background-color: #eab308;
+  color: white;
+  font-weight: bold;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.booking-submit-btn:hover {
+  background-color: #ca8a04;
+}
+
+.booking-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* Bottom Spacing */
+.booking-bottom-spacing {
+  height: 96px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .booking-header-title {
+    font-size: 16px;
+  }
+
+  .booking-date-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .booking-legend {
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .booking-legend-box {
+    width: 20px;
+    height: 20px;
+  }
+
+  .booking-notice {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .booking-time-cell {
+    font-size: 10px;
+    padding: 6px 0;
+  }
+
+  .booking-submit-btn {
+    font-size: 16px;
+    padding: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .booking-court-header-cell,
+  .booking-court-label,
+  .booking-time-cell,
+  .booking-slot-cell {
+    width: 40px;
+  }
+
+  .booking-slot-cell {
+    height: 40px;
+  }
+
+  .booking-header-title {
+    font-size: 14px;
+  }
+
+  .booking-legend {
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,427 @@
+/* DatePickerModal.css - Enhanced Version */
+
+/* Backdrop with blur effect */
+.date-picker-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: backdropFadeIn 0.3s ease-out;
+  padding: 16px;
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Modal Container with glow */
+.date-picker-modal {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(4, 120, 87, 0.1),
+    0 0 60px rgba(4, 120, 87, 0.15);
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+/* Animated gradient background */
+.date-picker-modal::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(4, 120, 87, 0.05) 50%,
+    transparent 70%
+  );
+  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes modalSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9) rotateX(10deg);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.02) rotateX(-5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+  }
+}
+
+/* Header with animated icon */
+.date-picker-header {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0 0 24px 0;
+  color: #047857;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  animation: headerFadeIn 0.5s ease-out 0.2s backwards;
+  text-shadow: 0 2px 4px rgba(4, 120, 87, 0.1);
+}
+
+.date-picker-header::before {
+  content: '📅';
+  display: block;
+  font-size: 40px;
+  margin-bottom: 12px;
+  animation: iconBounce 1s ease-in-out infinite;
+}
+
+@keyframes headerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.1);
+  }
+}
+
+/* Date Input with glow effect */
+.date-picker-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  color: #374151;
+  cursor: pointer;
+  background: white;
+  position: relative;
+  z-index: 1;
+  animation: inputSlideIn 0.5s ease-out 0.3s backwards;
+}
+
+@keyframes inputSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.date-picker-input:hover {
+  border-color: #047857;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(4, 120, 87, 0.15);
+}
+
+.date-picker-input:focus {
+  outline: none;
+  border-color: #047857;
+  box-shadow: 
+    0 0 0 4px rgba(4, 120, 87, 0.1),
+    0 8px 16px rgba(4, 120, 87, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Animated calendar icon */
+.date-picker-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  filter: brightness(0) saturate(100%) invert(29%) sepia(76%) saturate(1015%) hue-rotate(129deg) brightness(95%) contrast(98%);
+}
+
+.date-picker-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.2) rotate(15deg);
+}
+
+/* Buttons Container */
+.date-picker-buttons {
+  display: flex;
+  gap: 12px;
+  animation: buttonsSlideIn 0.5s ease-out 0.4s backwards;
+}
+
+@keyframes buttonsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cancel Button with hover effects */
+.date-picker-cancel {
+  flex: 1;
+  padding: 14px;
+  border: 2px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.date-picker-cancel::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: #f3f4f6;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+  z-index: -1;
+}
+
+.date-picker-cancel:hover {
+  background: #f9fafb;
+  border-color: #6b7280;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.date-picker-cancel:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.date-picker-cancel:active {
+  transform: translateY(-1px);
+}
+
+/* Confirm Button with multiple effects */
+.date-picker-confirm {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%);
+  background-size: 200% 200%;
+  color: white;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 6px rgba(4, 120, 87, 0.3),
+    0 0 20px rgba(4, 120, 87, 0.2);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Ripple effect */
+.date-picker-confirm::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  z-index: -1;
+}
+
+/* Shine effect */
+.date-picker-confirm::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  animation: confirmShine 3s infinite;
+}
+
+@keyframes confirmShine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+.date-picker-confirm:hover {
+  background-position: 100% 50%;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 8px 20px rgba(4, 120, 87, 0.4),
+    0 0 40px rgba(4, 120, 87, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  animation: buttonPulse 1s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 
+      0 8px 20px rgba(4, 120, 87, 0.4),
+      0 0 40px rgba(4, 120, 87, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 10px 25px rgba(4, 120, 87, 0.5),
+      0 0 50px rgba(4, 120, 87, 0.4);
+  }
+}
+
+.date-picker-confirm:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.date-picker-confirm:active {
+  transform: translateY(-2px) scale(1);
+  box-shadow: 
+    0 4px 10px rgba(4, 120, 87, 0.3),
+    0 0 20px rgba(4, 120, 87, 0.2);
+}
+
+/* Success animation on click */
+@keyframes successPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.date-picker-confirm:active {
+  animation: successPop 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .date-picker-modal {
+    max-width: calc(100vw - 32px);
+    padding: 24px;
+  }
+
+  .date-picker-header {
+    font-size: 18px;
+  }
+
+  .date-picker-header::before {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .date-picker-input {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  .date-picker-cancel,
+  .date-picker-confirm {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* Closing animation */
+.date-picker-backdrop.closing {
+  animation: backdropFadeOut 0.3s ease-out forwards;
+}
+
+.date-picker-backdrop.closing .date-picker-modal {
+  animation: modalSlideDown 0.3s ease-out forwards;
+}
+
+@keyframes backdropFadeOut {
+  from {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  to {
+    opacity: 0;
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+  }
+}
+
+@keyframes modalSlideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+}

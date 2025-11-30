@@ -1,17 +1,10 @@
 import { 
   User, 
-  Calendar, 
   Settings, 
   Heart, 
   Clock, 
   CreditCard, 
-  Bell, 
-  LogOut,
-  ChevronRight,
-  Shield,
-  HelpCircle,
-  FileText,
-  Share2
+  Bell
 } from 'lucide-react';
 
 const menuItems = [

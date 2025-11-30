@@ -1,14 +1,8 @@
 import { useState } from 'react';
 import { 
-  User, 
   Calendar, 
-  Settings, 
   Heart, 
-  Clock, 
-  CreditCard, 
-  Bell, 
   LogOut,
-  ChevronRight,
   Shield,
   HelpCircle,
   FileText,
@@ -22,7 +16,7 @@ import acc from '../utils/get_account';
 import ButtonMenuItem from '../components/ButtonMenuItem';
 
 function AccountPage() {
-  const [user, setUser] = useState(acc);
+  const [user, ] = useState(acc);
   const stats = [
     { label: 'Đã đặt', value: '12', icon: Calendar, color: 'blue' },
     { label: 'Yêu thích', value: '8', icon: Heart, color: 'red' },
