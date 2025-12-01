@@ -33,7 +33,7 @@ function AccountPage() {
     <div className="account-page">
       <div className="profile-header">
         
-        <HeaderProfileCard user={user} />
+        {user ? <HeaderProfileCard user={user} /> : null}
         {/* Stats */}
         <Stats stats={stats} />
       </div>

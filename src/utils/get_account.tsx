@@ -14,6 +14,7 @@ export function GetAccount() {
     isActive: true,
     avatarId: false,
     coverImageId: false,
-  })
+   })
+  // return null;
 }
 export default GetAccount();

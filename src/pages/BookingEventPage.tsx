@@ -60,7 +60,7 @@ export default function BookingSchedulePage({ venueId, categoryId }: BookingSche
   const location = useLocation();
   
   const venue = getGrounds().find(v => v.venueId === venueId);
-  const account = useMemo(() => GetAccount as Account, []);
+  const account = useMemo(() => GetAccount as unknown as Account, []);
 
   // //////////////////////////////////////////////// STATE //////////////////////////////////////////////// 
   const defaultDate = getCurrentDate(); 
@@ -233,7 +233,6 @@ export default function BookingSchedulePage({ venueId, categoryId }: BookingSche
     showToast('success', 'Đang chuyển đến trang xác nhận...');
     
     setTimeout(() => {
-      navigate('/booking-confirmation/{}');
       navigate(`/booking-confirmation/${booking?.bookingId}/`);
 
     }, 500);
