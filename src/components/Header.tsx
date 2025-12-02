@@ -1,6 +1,8 @@
 import { Bell } from 'lucide-react';
 import '../assets/styles/Header.css'
+import { useNavigate } from 'react-router-dom';
 function getVietnameseDate() {
+  
   const days = [
     "Chủ nhật",
     "Thứ hai",
@@ -22,8 +24,14 @@ function getVietnameseDate() {
 }
 
 function Header() {
+  const navigate = useNavigate();
   const currentDate = getVietnameseDate();
-
+  const handleClickLogin = () => {
+    navigate("/login/")
+  };
+  const handleClickRegisterPage = () => {
+    navigate("/register/")
+  };
   return (
     <header className="header">
       <div className="header-container">
@@ -43,10 +51,10 @@ function Header() {
         </div>
         
         <div className="header-buttons">
-          <button className="header-btn header-btn-login">
+          <button className="header-btn header-btn-login" onClick={handleClickLogin}>
             Đăng nhập
           </button>
-          <button className="header-btn header-btn-register">
+          <button className="header-btn header-btn-register" onClick={handleClickRegisterPage}>
             Đăng kí
           </button>
         </div>

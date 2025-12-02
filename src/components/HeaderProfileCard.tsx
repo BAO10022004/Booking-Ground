@@ -23,6 +23,8 @@ function HeaderProfileCard({user}: {user: user})
             <Edit className="w-4 h-4" />
             <span>Chỉnh sửa</span>
           </button>
+          
+
         </div>
         </div>
     )
