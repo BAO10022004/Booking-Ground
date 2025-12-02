@@ -27,10 +27,10 @@ function Header() {
   const navigate = useNavigate();
   const currentDate = getVietnameseDate();
   const handleClickLogin = () => {
-    navigate("/login/")
+    navigate("/login/true")
   };
   const handleClickRegisterPage = () => {
-    navigate("/register/")
+    navigate("/login/false")
   };
   return (
     <header className="header">

@@ -1,81 +1,53 @@
-import React, { useState } from 'react';
-import { User, Lock, Eye, EyeOff, Mail } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import '../assets/styles/RegisterPage.css';
 
-export default function RegisterPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    username: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    // Simulate registration
-    setTimeout(() => {
-      setIsLoading(false);
-      console.log('Registration submitted:', formData);
-    }, 1500);
-  };
-
-  const handleLoginClick = () => {
-    // Add slide-out animation class
-    document.querySelector('.register-page')?.classList.add('slide-out');
-    
-    setTimeout(() => {
-      navigate('/login');
-    }, 600);
-  };
-
-  return (
-    <div className="register-page">
-      {/* Background Image */}
-      <img 
-        src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80" 
-        alt="background" 
-        className="register-bg-image"
-      />
+import type { FormEvent, ChangeEvent } from 'react';
+import {
+User,
+Lock,
+EyeOff,
+Eye,
+Mail}
+from 'lucide-react'
+import '../assets/styles/RegisterPage.css'
+interface LoginFormPageProps {
+    username: string;
+    handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+    setUsername: (value: string) => void;
+    showPassword: boolean;
+    password: string;
+    setPassword: (value: string) => void;
+    setShowPassword: (value: boolean) => void;
+    rememberMe: boolean;
+    setRememberMe: (value: boolean) => void;
+    handleForgotPassword: () => void;
+    isLoading: boolean;
+    handleRegister: () => void;
+    formData: {
+      fullName: string;
+      email: string;
+      username: string;
+      password: string;
+      confirmPassword: string;
       
-      {/* Overlay */}
-      <div className="register-bg-overlay"></div>
-
-      {/* Moving Frames */}
-      <div className="moving-frame-1"></div>
-      <div className="moving-frame-2"></div>
-
-      <div className="register-container">
-        {/* Left Panel - Welcome Message */}
-        <div className="welcome-card-register">
-          <h2 className="welcome-title-register">Chào mừng bạn !</h2>
-          <p className="welcome-text-register">
-            Đăng ký ngay hôm nay để trở thành thành viên của GIÁO DỤC CHÁNH HIỆP.
-          </p>
-          <div className="welcome-divider-register"></div>
-          <p className="welcome-subtext-register">
-            Nếu bạn đã có tài khoản, vui lòng <strong>ĐĂNG NHẬP</strong> để sử dụng những tính năng của chúng tôi.
-          </p>
-          <button className="login-link-button" onClick={handleLoginClick}>
-            ĐĂNG NHẬP
-          </button>
-        </div>
-
-        {/* Right Panel - Register Form */}
+    };
+    showConfirmPassword: boolean;
+    setShowConfirmPassword: (value: boolean) => void;
+    handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+function RegisterForm ({
+    handleSubmit,
+    showPassword,
+    setShowPassword,
+    isLoading,
+    formData,
+    handleChange,
+    showConfirmPassword,
+    setShowConfirmPassword,
+    handleRegister
+}: LoginFormPageProps)
+{   
+    
+    return (
+         <div className="login-container">
         <div className="register-card">
           <div className="register-header">
             <h1 className="register-title">Đăng ký</h1>
@@ -208,7 +180,25 @@ export default function RegisterPage() {
             </button>
           </form>
         </div>
-      </div>
-    </div>
-  );
+
+        {/* Right Panel - Welcome Message */}
+        <div className="welcome-card">
+          <h2 className="welcome-title">Xin chào !</h2>
+          <p className="welcome-text">
+            Chào mừng bạn đến với GIÁO DỤC CHÁNH HIỆP.
+          </p>
+          <div className="welcome-divider"></div>
+          <p className="welcome-subtext">
+            Nếu bạn chưa có tài khoản, vui lòng <strong>ĐĂNG KÝ</strong> để trở thành thành viên của chúng tôi.
+          </p>
+          <button className="register-button" onClick={handleRegister}>
+            Đăng nhập
+            
+          </button>
+        </div>
+        </div>
+
+        
+    )
 }
+export default RegisterForm

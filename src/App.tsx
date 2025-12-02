@@ -3,7 +3,6 @@ import HomePage from './pages/HomePage';
 import BookingPage from './pages/BookingPage';
 import BookingConfirmationPage from './pages/BookingConfirmPage';
 import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage';
 function App() {
   return (
     <BrowserRouter basename="/Booking-Ground">
@@ -16,8 +15,7 @@ function App() {
         
         {/* Booking Confirmation Page */}
         <Route path="/booking-confirmation/:bookingId" element={<BookingConfirmationPage />} />
-        <Route path="/login/" element={< LoginPage/>} />
-        <Route path="/register/" element={< RegisterPage/>} />
+        <Route path="/login/:isLoginAgument" element={< LoginPage />} />
         {/* 404 - Not Found (Optional) */}
         <Route 
           path="*" 
