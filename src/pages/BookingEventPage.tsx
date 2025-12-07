@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../assets/styles/BookingEventPage.css';
 import BottomContinueButton from '../components/BottomContinueButton';
-import Venue from '../models/Venue';
 import ScheduleGrid from '../components/ScheduleGrid';
 import DatePickerModal from '../components/DatePickerModal';
 import { getCurrentDate } from '../utils/getCurrentDate';
@@ -16,7 +15,6 @@ import bookingTool from '../utils/getBooking';
 // //////////////////////////////////////////////// TYPES ////////////////////////////////////////////////
 interface BookingSchedulePageProps {
   venueId: string;
-  categoryId: string;
 }
 
 interface BookingDetail {
@@ -55,7 +53,7 @@ class Cell {
 }
 
 // //////////////////////////////////////////////// MAIN COMPONENT ////////////////////////////////////////////////
-export default function BookingSchedulePage({ venueId, categoryId }: BookingSchedulePageProps) {
+export default function BookingSchedulePage({ venueId }: BookingSchedulePageProps) {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -83,7 +81,7 @@ export default function BookingSchedulePage({ venueId, categoryId }: BookingSche
     if (!account) {
       console.error('❌ Account not found');
     }
-  }, [venue, venueId, categoryId, account, navigate, location.state, selectedCells]);
+  }, [venue, venueId, account, navigate, location.state, selectedCells]);
 
   // //////////////////////////////////////////////// CONSTANTS ////////////////////////////////////////////////
   const timeSlots = [
@@ -184,7 +182,6 @@ export default function BookingSchedulePage({ venueId, categoryId }: BookingSche
     booking.bookingId = bookingId;
     booking.userId = account.userId;
     booking.date = bookingDate;
-    booking.isEvent = categoryId === '2';
     booking.groundId = selectedCells[0].groundId; 
 
     // Calculate total duration
@@ -365,7 +362,6 @@ export default function BookingSchedulePage({ venueId, categoryId }: BookingSche
         {/* Schedule Grid */}
         <ScheduleGrid 
           venue={venue} 
-          categories={categoryId}
           selectedCells={selectedCells} 
           setSelectedCells={setSelectedCells}
         />

@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
 import { X, ArrowRight } from 'lucide-react';
 import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/BookingTypeModal.css';
 import Venue from '../models/Venue';
-import getCategoriesByVenue from '../utils/getCategoriesByVenue';
-
 interface BookingTypeModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,27 +11,22 @@ interface BookingTypeModalProps {
 
 export default function BookingTypeModal({ isOpen, onClose, venue }: BookingTypeModalProps) {
   const navigate = useNavigate();
-  const [booking_modal, setBooking_modal] = useState('');
 
   // Early return phải đặt sau tất cả hooks
   if (!isOpen) return null;
 
-  const handleDirectBooking = (booking_modal_id: string) => {
-    setBooking_modal(booking_modal_id);
+  const handleDirectBooking = () => {
     console.log('Đặt lịch ngay trực quan');
     
-    navigate(`/booking/${venue?.venueId}/${booking_modal_id}`);
-    onClose();
+    navigate(`/booking/${venue?.venueId}`);
   };
 
   const handleEventBooking = () => {
     console.log('Đặt lịch sự kiện');
-    // TODO: Navigate to event booking page
-    // navigate(`/event-booking/${venue?.venueId}`);
+    navigate(`/event/`);
     onClose();
   };
-
-  const categories = getCategoriesByVenue(venue?.venueId ?? '');
+  
 
   const modalContent = (
     <div 
@@ -63,25 +55,21 @@ export default function BookingTypeModal({ isOpen, onClose, venue }: BookingType
 
         {/* Options */}
         <div className="booking-modal-options">
-          {categories.map((category) => {
-            // Option 1: Đặt lịch trực tiếp
-            if (category.categoryId === '1') {
-              return (
                 <div 
-                  key={category.categoryId}
-                  onClick={() => handleDirectBooking(category.categoryId)}
+                  key={'truc-quan'}
+                  onClick={() => handleDirectBooking()}
                   className="booking-option-card booking-option-direct"
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
-                      handleDirectBooking(category.categoryId);
+                      handleDirectBooking();
                     }
                   }}
                 >
                   <div className="booking-option-header">
                     <h3 className="booking-option-title">
-                      {category.name}
+                      Đặt lịch trực quan
                     </h3>
                     <ArrowRight className="booking-option-arrow" size={24} />
                   </div>
@@ -89,14 +77,8 @@ export default function BookingTypeModal({ isOpen, onClose, venue }: BookingType
                     Đặt lịch ngay khi khách chơi nhiều khung giờ, nhiều sân.
                   </p>
                 </div>
-              );
-            }
-
-            // Option 2: Đặt lịch sự kiện
-            if (category.categoryId === '2') {
-              return (
                 <div 
-                  key={category.categoryId}
+                  key={'event'}
                   onClick={handleEventBooking}
                   className="booking-option-card booking-option-event"
                   role="button"
@@ -113,7 +95,7 @@ export default function BookingTypeModal({ isOpen, onClose, venue }: BookingType
                   
                   <div className="booking-option-header">
                     <h3 className="booking-option-title">
-                      {category.name}
+                      Đặt lịch sự kiện 
                     </h3>
                     <ArrowRight className="booking-option-arrow" size={24} />
                   </div>
@@ -122,12 +104,8 @@ export default function BookingTypeModal({ isOpen, onClose, venue }: BookingType
                     Hay những giải đấu mang tính cạnh tranh cao, nâng cao trình độ do chủ sân tổ chức.
                   </p>
                 </div>
-              );
-            }
 
-            // Trả về null nếu không match
-            return null;
-          })}
+            
         </div>
       </div>
     </div>

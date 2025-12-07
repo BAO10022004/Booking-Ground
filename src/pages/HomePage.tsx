@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import FilterTabs from '../components/FilterTabs';
 import VenueGridView from '../components/VenueGridView';
+import PromotionSlider from './PromotionSlider';
 function HomePage() {
   const [activeTab, setActiveTab] = useState('home');
   
@@ -22,11 +23,9 @@ function HomePage() {
         </>
       ) : activeTab === 'account' ? (
         <AccountPage />
-      ) : (
-        <main className="venue-grid">
-          <h2>Trang {activeTab} đang được phát triển</h2>
-        </main>
-      )}
+      ) :  activeTab === 'promotion'?
+        <PromotionSlider/>
+    :<></>}
       {/* Bottom Navigation */}
       <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>

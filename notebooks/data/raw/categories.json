@@ -1,0 +1,9 @@
+{
+    "categories": [
+        { "categoryId": "a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201", "name": "Cầu lông" },
+        { "categoryId": "e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02", "name": "Pickleball" },
+        { "categoryId": "e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03", "name": "Bóng Rổ" },
+        { "categoryId": "e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04", "name": "Tennis" },
+        { "categoryId": "e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd05", "name": "Bóng chuyển" }
+    ]
+}

@@ -2,7 +2,6 @@ import { Heart, Share2, Star, MapPin, Clock } from 'lucide-react';
 import getGrounds from '../utils/getVenues';
 import { useState } from 'react';
 import '../assets/styles/VenueGridView.css';
-import { useNavigate } from 'react-router-dom'; 
 import GetRating from '../utils/getRating';
 import GetTimePeriodVenue from '../utils/getTimeVenue';
 import BookingTypeModal from '../pages/BookingTypeModal';
@@ -10,7 +9,6 @@ function VenueGridView() {
   const sportsVenues = getGrounds();
   const [favorites, setFavorites] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
   const [venue, setVenue] = useState<any | null>(null);
 
   

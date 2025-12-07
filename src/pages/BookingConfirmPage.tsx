@@ -32,7 +32,7 @@ export default function BookingConfirmationPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [selectedMethod, setSelectedMethod] = useState('vnpay')
   const handleBack = () =>      navigate(-1);
-
+  
   const handleSubmit = () => {
     if (!customerName.trim()) {
       alert('Vui lòng nhập tên của bạn');

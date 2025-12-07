@@ -137,9 +137,9 @@ const groundsData: Ground[] = [
   }),
 ];
 
-function GetGroundByVenue(venueId: string, categoriId: string){
+function GetGroundByVenue(venueId: string ){
     const groundsDataFiltered = groundsData.filter(ground => 
-        ground.venueId === venueId && ground.categoryId === categoriId
+        ground.venueId === venueId
     );
     return groundsDataFiltered;
 }

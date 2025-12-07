@@ -28,13 +28,12 @@ class Cell {
 
 interface ScheduleGridProps {
   venue: Venue;
-  categories: string;
   selectedCells: Cell[]; // ✅ Đổi từ Set<string> sang Cell[]
   setSelectedCells: (cells: Cell[]) => void; // ✅ Đổi setter
 }
 
-function ScheduleGrid({ venue, categories, selectedCells, setSelectedCells }: ScheduleGridProps) {
-  const grounds = GetGroundByVenue(venue.venueId, categories);
+function ScheduleGrid({ venue, selectedCells, setSelectedCells }: ScheduleGridProps) {
+  const grounds = GetGroundByVenue(venue.venueId);
   
   const timeSlots = [
     '6:00', '6:30', '7:00', '7:30', '8:00', '8:30', '9:00', '9:30',

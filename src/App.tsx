@@ -3,7 +3,10 @@ import HomePage from './pages/HomePage';
 import BookingPage from './pages/BookingPage';
 import BookingConfirmationPage from './pages/BookingConfirmPage';
 import LoginPage from './pages/LoginPage'
-function App() {
+import EventsBookingPage from './pages/EventsBookingPage';
+import ServiceSelectionPage from './pages/ServiceSelectionPage';
+ function App() {
+ 
   return (
     <BrowserRouter basename="/Booking-Ground">
       <Routes>
@@ -11,11 +14,13 @@ function App() {
         <Route path="/" element={<HomePage />} />
         
         {/* Booking Page - ✅ SỬA: Thêm URL params :venueId/:categoryId */}
-        <Route path="/booking/:venueId/:categoryId" element={<BookingPage />} />
+        <Route path="/booking/:venueId" element={<BookingPage />} />
         
         {/* Booking Confirmation Page */}
         <Route path="/booking-confirmation/:bookingId" element={<BookingConfirmationPage />} />
         <Route path="/login/:isLoginAgument" element={< LoginPage />} />
+        <Route path="/event/" element={< EventsBookingPage />} />
+        <Route path="/services" element={< ServiceSelectionPage />} />
         {/* 404 - Not Found (Optional) */}
         <Route 
           path="*" 
