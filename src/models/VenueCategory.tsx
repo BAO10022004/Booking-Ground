@@ -10,17 +10,21 @@ class VenueCategory {
   /** (FK, Not Null) Tham chiếu đến Categories.CategoryID */
   readonly categoryId: string; 
 
+  readonly priceId: string; 
   // ///////////////////////// Constructor /////////////////////////
   constructor({
     venueId,
     categoryId,
+    priceId,
   }: {
     venueId: string;
     categoryId: string;
+    priceId: string;
   }) {
     // Hai trường này tạo thành Khóa kép (Composite Key) và là Foreign Key
     this.venueId = venueId;
     this.categoryId = categoryId;
+    this.priceId = priceId
   }
 }
 
