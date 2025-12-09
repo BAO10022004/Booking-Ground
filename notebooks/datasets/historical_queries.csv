@@ -1,0 +1,60 @@
+,query,viewed_venues,clicked_venue_id,booked,phuong,district,city,category,time
+0,sân Pickleball ở Quận 7 vào buổi sáng,"['v-001', 'v-081', 'v-029', 'v-217']",v-001,True,,7,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,morning
+1,sân Cầu lông Huyện Nhà Bè buổi chiều,"['v-002', 'v-081', 'v-014']",v-002,False,,Nhà Bè,Hồ Chí Minh,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,afternoon
+2,sân Tennis ở Quận 8 vào buổi sáng,"['v-003', 'v-024', 'v-079', 'v-080']",v-003,True,,8,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,morning
+3,tìm sân Bóng Rổ Quận Tân Bình buổi chiều,"['v-004', 'v-008', 'v-009', 'v-055']",v-004,True,,Tân Bình,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03,afternoon
+4,sân Pickleball Huyện Hóc Môn sáng nay,"['v-005', 'v-006', 'v-007']",v-005,False,,Hóc Môn,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,morning
+5,sân Bóng chuyền Quận Gò Vấp buổi chiều,"['v-042', 'v-044', 'v-095', 'v-096']",v-096,True,,Gò Vấp,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd05,afternoon
+6,sân Cầu lông Quận Tân Phú vào buổi sáng,"['v-046', 'v-051', 'v-053', 'v-104']",v-046,True,,Tân Phú,Đồng Nai,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,morning
+7,tìm sân Pickleball Quận 12 vào buổi chiều,"['v-015', 'v-016', 'v-018', 'v-083']",v-018,False,,1,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,afternoon
+8,sân Tennis Quận 11 sáng,"['v-032', 'v-074']",v-074,True,,1,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,morning
+9,sân Pickleball Quận 1 vào buổi chiều,"['v-027', 'v-091', 'v-092']",v-027,False,,1,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,afternoon
+10,sân Cầu lông Đống Đa buổi sáng,"['v-194', 'v-195', 'v-198', 'v-244']",v-198,True,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,morning
+11,sân Bóng Rổ Hà Đông buổi chiều,"['v-186', 'v-187', 'v-188']",v-186,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03,afternoon
+12,sân Bóng chuyền Tây Hồ sáng,"['v-197', 'v-215', 'v-219']",v-219,False,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd05,morning
+13,sân Pickleball Quận Hoàng Mai buổi sáng,"['v-120', 'v-123', 'v-125', 'v-196']",v-125,True,,Hoàng Mai,Nghệ An,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,morning
+14,sân Tennis Long Biên chiều nay,"['v-107', 'v-109', 'v-177', 'v-243']",v-109,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,afternoon
+15,sân Cầu lông Quận 9 buổi chiều,"['v-030', 'v-077', 'v-078']",v-078,False,,Thủ Đức,Hồ Chí Minh,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,afternoon
+16,tìm sân Bóng chuyền Quận 8 sáng sớm,"['v-003', 'v-025', 'v-079', 'v-080']",v-080,True,,8,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd05,morning
+17,sân Pickleball Quận 5 buổi chiều,['v-026'],v-026,True,,5,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,afternoon
+18,sân Cầu lông Quận Tân Phú sáng,"['v-047', 'v-048', 'v-049', 'v-050']",v-049,False,,Tân Phú,Đồng Nai,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,morning
+19,sân Tennis Quận 6 buổi chiều,"['v-038', 'v-103']",v-038,True,,6,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,afternoon
+20,sân Bóng Rổ Thủ Đức sáng,"['v-023', 'v-073']",v-023,False,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03,morning
+21,sân Pickleball Hoài Đức buổi chiều,"['v-217', 'v-218', 'v-223']",v-217,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,afternoon
+22,sân Tennis Nam Từ Liêm sáng,"['v-131', 'v-149', 'v-171', 'v-202']",v-202,False,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,morning
+23,sân Cầu lông Hà Đông buổi chiều,"['v-150', 'v-183', 'v-186', 'v-187']",v-183,True,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,afternoon
+24,sân Bóng chuyền Đông Anh sáng,"['v-143', 'v-144', 'v-145', 'v-147', 'v-148']",v-144,False,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd05,morning
+25,sân Pickleball Đống Đa buổi chiều,"['v-195', 'v-199', 'v-228', 'v-240']",v-195,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,afternoon
+26,sân Cầu lông Hai Bà Trưng sáng,"['v-141', 'v-185', 'v-201', 'v-247']",v-201,True,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,morning
+27,sân Tennis Ba Đình buổi chiều,"['v-136', 'v-137', 'v-138', 'v-231']",v-137,False,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,afternoon
+28,sân Bóng Rổ Hoàn Kiếm sáng,"['v-151', 'v-152', 'v-203']",v-203,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03,morning
+29,sân Pickleball Long Biên buổi chiều,"['v-163', 'v-167', 'v-170', 'v-233']",v-163,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,afternoon
+30,sân Cầu lông Thanh Xuân sáng,"['v-113', 'v-114', 'v-146', 'v-209']",v-209,False,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,morning
+31,sân Tennis Thanh Trì buổi chiều,"['v-113', 'v-165', 'v-189', 'v-191']",v-189,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,afternoon
+32,sân Bóng Rổ Cầu Giấy sáng,"['v-108', 'v-216', 'v-237', 'v-248']",v-108,False,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03,morning
+33,sân Pickleball Quận 4 buổi chiều,"['v-028', 'v-031', 'v-082', 'v-085']",v-031,True,,4,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,afternoon
+34,sân Cầu lông Hóc Môn sáng,"['v-005', 'v-006', 'v-007']",v-007,False,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,morning
+35,sân Tennis Quận 12 buổi chiều,"['v-015', 'v-016', 'v-018', 'v-090']",v-016,True,,1,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,afternoon
+36,sân Bóng chuyền Quận Gò Vấp sáng,"['v-042', 'v-044', 'v-095', 'v-096']",v-042,False,,Gò Vấp,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd05,morning
+37,sân Pickleball Quận Tân Phú buổi chiều,"['v-046', 'v-051', 'v-053', 'v-104']",v-053,True,,Tân Phú,Đồng Nai,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,afternoon
+38,sân Cầu lông Bình Thạnh sáng,"['v-058', 'v-059', 'v-060', 'v-061']",v-061,False,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,morning
+39,sân Tennis Quận 7 buổi chiều,"['v-001', 'v-081', 'v-217']",v-081,True,,7,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,afternoon
+40,sân Bóng Rổ Quận 8 sáng,"['v-003', 'v-024', 'v-079', 'v-080']",v-079,False,,8,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03,morning
+41,sân Pickleball Long Biên buổi sáng,"['v-139', 'v-160', 'v-161', 'v-162']",v-161,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,morning
+42,sân Cầu lông Tây Hồ chiều,"['v-116', 'v-117', 'v-133', 'v-215']",v-133,False,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,afternoon
+43,sân Tennis Hà Đông sáng,"['v-150', 'v-183', 'v-186', 'v-187']",v-150,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,morning
+44,sân Bóng chuyền Quận Đống Đa buổi chiều,"['v-194', 'v-195', 'v-198', 'v-240']",v-240,True,,Đống Đa,Hà Nội,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd05,afternoon
+45,sân Pickleball Quận 1 sáng,"['v-027', 'v-029', 'v-091', 'v-092']",v-091,False,,1,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,morning
+46,sân Cầu lông Hai Bà Trưng buổi chiều,"['v-141', 'v-185', 'v-201', 'v-247']",v-141,True,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,afternoon
+47,sân Tennis Quận Thanh Xuân sáng,"['v-113', 'v-114', 'v-146', 'v-209']",v-114,False,,Thanh Xuân,Hà Nội,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,morning
+48,sân Bóng Rổ Long Biên buổi chiều,"['v-107', 'v-135', 'v-160', 'v-162']",v-107,True,,,,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03,afternoon
+49,sân Pickleball Huyện Thanh Trì sáng,"['v-113', 'v-165', 'v-189', 'v-191']",v-191,False,,Thanh Trì,Hà Nội,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,morning
+50,sân Cầu lông Quận 10 buổi chiều,"['v-036', 'v-037', 'v-075', 'v-076']",v-076,True,,1,Hồ Chí Minh,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,afternoon
+51,sân Tennis Quận Gò Vấp sáng,"['v-043', 'v-044', 'v-095', 'v-097']",v-044,False,,Gò Vấp,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,morning
+52,sân Bóng chuyền Quận 4 buổi chiều,"['v-028', 'v-031', 'v-082', 'v-085']",v-082,True,,4,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd05,afternoon
+53,sân Pickleball Quận Tân Bình sáng,"['v-004', 'v-008', 'v-009', 'v-055']",v-055,True,,Tân Bình,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,morning
+54,sân Cầu lông Huyện Đông Anh buổi chiều,"['v-143', 'v-144', 'v-145', 'v-147', 'v-148']",v-147,False,,Đông Anh,Hà Nội,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,afternoon
+55,sân Tennis Quận 7 sáng,"['v-001', 'v-081', 'v-217']",v-217,True,,7,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd04,morning
+56,sân Bóng Rổ Quận 12 buổi chiều,"['v-015', 'v-016', 'v-018', 'v-083']",v-015,False,,1,Hồ Chí Minh,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd03,afternoon
+57,sân Pickleball Quận Hoàng Mai sáng,"['v-120', 'v-123', 'v-125', 'v-196']",v-123,True,,Hoàng Mai,Nghệ An,e3a7b9d9-5c2f-4d33-b4c4-33f1d765cd02,morning
+58,sân Cầu lông Hoàn Kiếm buổi chiều,"['v-151', 'v-152', 'v-203']",v-151,False,,,,a1f3b6e4-2c9a-4c1b-b8a2-9c0d4fe71201,afternoon

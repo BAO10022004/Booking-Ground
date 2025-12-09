@@ -30,7 +30,7 @@ function VenueGridView() {
             <div key={venue.venueId} className="venue-card">
               <div className="venue-image-container">
                 <img 
-                  src={venue.image} 
+                  // src={venue.} 
                   alt={venue.name}
                   className="venue-image"
                 />

@@ -1,4 +1,4 @@
-import Venue from "../models/Venue";
+import {Venue} from "../models/Venue";
 
 
 function GetRating(venue : Venue){

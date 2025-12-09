@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import { Search, Menu, X } from 'lucide-react';
 import '../assets/styles/SearchBar.css';
 
-function SearchBar() {
+function SearchBar({setListView}: {setListView :  Dispatch<SetStateAction<never[]>>}) {
   const [searchText, setSearchText] = useState('');
 
   const handleClear = () => {

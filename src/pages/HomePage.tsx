@@ -11,13 +11,13 @@ import VenueGridView from '../components/VenueGridView';
 import PromotionSlider from './PromotionSlider';
 function HomePage() {
   const [activeTab, setActiveTab] = useState('home');
-  
+  const [listView, setListView] = useState([])
   return (
     <div className="app-container">  
       {activeTab === 'home' ? (
         <>
           <Header />
-          <SearchBar />
+          <SearchBar setListView={setListView}/>
           <FilterTabs />
           <VenueGridView />
         </>
