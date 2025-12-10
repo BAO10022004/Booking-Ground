@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { 
-  Calendar, 
-  Heart, 
+import { useState, useEffect } from "react";
+import {
+  Calendar,
+  Heart,
   LogOut,
   Shield,
   HelpCircle,
@@ -10,44 +10,88 @@ import {
   ChevronRight,
   TicketPercent,
   User,
-  Settings
-} from 'lucide-react';
-import '../assets/styles/AccountPage.css';
-import BookingsPage from '../components/AccountPage/BookingsPage'
-import GetAccount  from '../utils/get_account';
-import HeaderProfileCard from '../components/HeaderProfileCard';
-import ProfilePage from '../components/AccountPage/ProfilePage';
+  Settings,
+} from "lucide-react";
+import "../assets/styles/AccountPage.css";
+import BookingsPage from "../components/AccountPage/BookingsPage";
+import GetAccount from "../utils/get_account";
+import HeaderProfileCard from "../components/HeaderProfileCard";
+import ProfilePage from "../components/AccountPage/ProfilePage";
 function AccountPage() {
-  const [user] = useState(GetAccount);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAccount = async () => {
+      try {
+        const account = await GetAccount();
+        setUser(account);
+      } catch (error) {
+        console.error("Error loading account:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAccount();
+  }, []);
   const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
 
   const stats = [
-    {id: 'booked', label: 'Đã đặt', value: '12', icon: Calendar, color: 'blue' },
-    {id: 'liked', label: 'Yêu thích', value: '8', icon: Heart, color: 'red' },
-    {id: 'rating', label: 'Đánh giá', value: '5', icon: '⭐', color: 'yellow' }
+    {
+      id: "booked",
+      label: "Đã đặt",
+      value: "12",
+      icon: Calendar,
+      color: "blue",
+    },
+    { id: "liked", label: "Yêu thích", value: "8", icon: Heart, color: "red" },
+    {
+      id: "rating",
+      label: "Đánh giá",
+      value: "5",
+      icon: "⭐",
+      color: "yellow",
+    },
   ];
 
   const menuItems = [
-    { id: 'profile', title: 'Thông tin cá nhân', icon: User, color: 'emerald' },
-    { id: 'voucher', title: 'Ưu đãi', icon: TicketPercent, color: 'red' }
-    
+    { id: "profile", title: "Thông tin cá nhân", icon: User, color: "emerald" },
+    { id: "voucher", title: "Ưu đãi", icon: TicketPercent, color: "red" },
   ];
 
   const supportItems = [
-    { id: 'settings', title: 'Cài đặt', icon: Settings, color: 'gray' },
-    { id: 'privacy', title: 'Bảo mật & Quyền riêng tư', icon: Shield, color: 'emerald' },
-    { id: 'help', title: 'Trung tâm trợ giúp', icon: HelpCircle, color: 'blue' },
-    { id: 'terms', title: 'Điều khoản & Chính sách', icon: FileText, color: 'gray' },
-    { id: 'share', title: 'Chia sẻ ứng dụng', icon: Share2, color: 'purple' }
+    { id: "settings", title: "Cài đặt", icon: Settings, color: "gray" },
+    {
+      id: "privacy",
+      title: "Bảo mật & Quyền riêng tư",
+      icon: Shield,
+      color: "emerald",
+    },
+    {
+      id: "help",
+      title: "Trung tâm trợ giúp",
+      icon: HelpCircle,
+      color: "blue",
+    },
+    {
+      id: "terms",
+      title: "Điều khoản & Chính sách",
+      icon: FileText,
+      color: "gray",
+    },
+    { id: "share", title: "Chia sẻ ứng dụng", icon: Share2, color: "purple" },
   ];
 
   // Add ripple effect
-  const handleClick = (e: React.MouseEvent<HTMLElement>, callback: () => void) => {
+  const handleClick = (
+    e: React.MouseEvent<HTMLElement>,
+    callback: () => void
+  ) => {
     const element = e.currentTarget;
-    element.classList.add('ripple-effect');
-    
+    element.classList.add("ripple-effect");
+
     setTimeout(() => {
-      element.classList.remove('ripple-effect');
+      element.classList.remove("ripple-effect");
       callback();
     }, 300);
   };
@@ -69,36 +113,49 @@ function AccountPage() {
       );
     }
 
-    const selectedItem = [...menuItems, ...supportItems].find(m => m.id === selectedMenu);
-    
-    switch(selectedItem?.id  ?? selectedMenu)
-    {
-      case 'profile':{
-        return <ProfilePage/>
+    const selectedItem = [...menuItems, ...supportItems].find(
+      (m) => m.id === selectedMenu
+    );
+
+    switch (selectedItem?.id ?? selectedMenu) {
+      case "profile": {
+        return <ProfilePage />;
       }
-      case 'booked':{
-        return <BookingsPage/>
+      case "booked": {
+        return <BookingsPage />;
       }
     }
   };
+
+  if (loading) {
+    return (
+      <div className="account-page">
+        <div style={{ padding: "40px", textAlign: "center" }}>Đang tải...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="account-page">
       {/* Left Sidebar */}
       <div className="account-sidebar">
         <div className="profile-header">
-          {user  ? <HeaderProfileCard user={user} /> : null}
-          
+          {user ? <HeaderProfileCard user={user} /> : null}
+
           {/* Stats with ripple effect */}
           <div className="profile-stats">
             {stats.map((stat, index) => (
               <div
                 key={index}
                 className={`stat-card stat-${stat.color}`}
-                onClick={(e) => handleClick(e, () => {setSelectedMenu(stat.id)})}
+                onClick={(e) =>
+                  handleClick(e, () => {
+                    setSelectedMenu(stat.id);
+                  })
+                }
               >
                 <div className="stat-icon-wrapper">
-                  {typeof stat.icon === 'string' ? (
+                  {typeof stat.icon === "string" ? (
                     <span className="stat-emoji">{stat.icon}</span>
                   ) : (
                     <stat.icon className="stat-icon" />
@@ -120,7 +177,9 @@ function AccountPage() {
             {menuItems.map((item, index) => (
               <button
                 key={index}
-                className={`menu-item ${selectedMenu === item.id ? 'active' : ''}`}
+                className={`menu-item ${
+                  selectedMenu === item.id ? "active" : ""
+                }`}
                 onClick={(e) => handleClick(e, () => handleMenuClick(item.id))}
               >
                 <div className="menu-item-left">
@@ -145,7 +204,9 @@ function AccountPage() {
             {supportItems.map((item, index) => (
               <button
                 key={index}
-                className={`menu-item ${selectedMenu === item.id ? 'active' : ''}`}
+                className={`menu-item ${
+                  selectedMenu === item.id ? "active" : ""
+                }`}
                 onClick={(e) => handleClick(e, () => handleMenuClick(item.id))}
               >
                 <div className="menu-item-left">
@@ -162,9 +223,9 @@ function AccountPage() {
 
         {/* Logout Button with ripple effect */}
         <div className="logout-section">
-          <button 
+          <button
             className="logout-button"
-            onClick={(e) => handleClick(e, () => console.log('Logout'))}
+            onClick={(e) => handleClick(e, () => console.log("Logout"))}
           >
             <LogOut className="w-5 h-5" />
             <span>Đăng xuất</span>
@@ -177,9 +238,7 @@ function AccountPage() {
       </div>
 
       {/* Right Content Area - Desktop Only */}
-      <div className="account-content">
-        {renderContent()}
-      </div>
+      <div className="account-content">{renderContent()}</div>
     </div>
   );
 }

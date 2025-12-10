@@ -1,7 +1,8 @@
+import { useState, useEffect } from "react";
 import Venue from "../models/Venue";
 import GetGroundByVenue from "../utils/GetGround";
+import Ground from "../models/Ground";
 
-// ✅ Import hoặc định nghĩa Cell class
 class Cell {
   cellId: string;
   groundId: string;
@@ -28,39 +29,90 @@ class Cell {
 
 interface ScheduleGridProps {
   venue: Venue;
-  selectedCells: Cell[]; // ✅ Đổi từ Set<string> sang Cell[]
-  setSelectedCells: (cells: Cell[]) => void; // ✅ Đổi setter
+  selectedCells: Cell[];
+  setSelectedCells: (cells: Cell[]) => void;
 }
 
-function ScheduleGrid({ venue, selectedCells, setSelectedCells }: ScheduleGridProps) {
-  const grounds = GetGroundByVenue(venue.venueId);
-  
+function ScheduleGrid({
+  venue,
+  selectedCells,
+  setSelectedCells,
+}: ScheduleGridProps) {
+  const [grounds, setGrounds] = useState<Ground[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGrounds = async () => {
+      try {
+        const fetchedGrounds = await GetGroundByVenue(venue.venueId);
+        setGrounds(fetchedGrounds);
+      } catch (error) {
+        console.error("Error loading grounds:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGrounds();
+  }, [venue.venueId]);
+
   const timeSlots = [
-    '6:00', '6:30', '7:00', '7:30', '8:00', '8:30', '9:00', '9:30',
-    '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30',
-    '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
-    '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30',
-    '22:00', '22:30'
+    "6:00",
+    "6:30",
+    "7:00",
+    "7:30",
+    "8:00",
+    "8:30",
+    "9:00",
+    "9:30",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30",
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+    "17:30",
+    "18:00",
+    "18:30",
+    "19:00",
+    "19:30",
+    "20:00",
+    "20:30",
+    "21:00",
+    "21:30",
+    "22:00",
+    "22:30",
   ];
 
   // ✅ Giữ nguyên dạng Set<string> cho booked và locked (để dễ check)
   const bookedSlots = new Set([
-    'A-8:00', 'A-8:30', 'A-9:00', 'A-9:30', 'A-10:00', 'A-10:30',
+    "A-8:00",
+    "A-8:30",
+    "A-9:00",
+    "A-9:30",
+    "A-10:00",
+    "A-10:30",
   ]);
 
-  const lockedSlots = new Set([
-    'A-6:00', 'A-6:30', 'A-7:00', 'A-7:30',
-  ]);
+  const lockedSlots = new Set(["A-6:00", "A-6:30", "A-7:00", "A-7:30"]);
 
   /////////////////////////////// handleCellClick ///////////////////////////////
   const handleCellClick = (groundId: string, time: string) => {
     const cellKey = `${groundId}-${time}`;
-    
+
     // Check if slot is booked or locked
     if (bookedSlots.has(cellKey) || lockedSlots.has(cellKey)) return;
 
     // ✅ Tìm cell đã tồn tại trong selectedCells
-    const existingCellIndex = selectedCells.findIndex(cell => 
+    const existingCellIndex = selectedCells.findIndex((cell) =>
       cell.matchesSlot(groundId, time)
     );
 
@@ -68,7 +120,9 @@ function ScheduleGrid({ venue, selectedCells, setSelectedCells }: ScheduleGridPr
 
     if (existingCellIndex !== -1) {
       // ✅ Cell đã được chọn -> Xóa nó
-      newSelected = selectedCells.filter((_, index) => index !== existingCellIndex);
+      newSelected = selectedCells.filter(
+        (_, index) => index !== existingCellIndex
+      );
     } else {
       // ✅ Cell chưa được chọn -> Thêm mới
       const newCell = new Cell(groundId, time);
@@ -81,22 +135,33 @@ function ScheduleGrid({ venue, selectedCells, setSelectedCells }: ScheduleGridPr
   /////////////////////////////// getCellClass ///////////////////////////////
   const getCellClass = (groundId: string, time: string) => {
     const cellKey = `${groundId}-${time}`;
-    
-    if (bookedSlots.has(cellKey)) return 'booking-slot-cell slot-booked';
-    if (lockedSlots.has(cellKey)) return 'booking-slot-cell slot-locked';
-    
+
+    if (bookedSlots.has(cellKey)) return "booking-slot-cell slot-booked";
+    if (lockedSlots.has(cellKey)) return "booking-slot-cell slot-locked";
+
     // ✅ Check nếu cell được chọn
-    const isSelected = selectedCells.some(cell => cell.matchesSlot(groundId, time));
-    if (isSelected) return 'booking-slot-cell slot-selected';
-    
-    return 'booking-slot-cell slot-available';
+    const isSelected = selectedCells.some((cell) =>
+      cell.matchesSlot(groundId, time)
+    );
+    if (isSelected) return "booking-slot-cell slot-selected";
+
+    return "booking-slot-cell slot-available";
   };
+
+  if (loading) {
+    return (
+      <div className="booking-schedule-container">
+        <div style={{ padding: "20px", textAlign: "center" }}>
+          Đang tải sân...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="booking-schedule-container">
       <div className="booking-schedule-scroll">
         <div className="booking-schedule-grid">
-          {/* Time Headers */}
           <div className="booking-time-header">
             <div className="booking-court-header-cell"></div>
             {timeSlots.map((time) => (
@@ -106,7 +171,6 @@ function ScheduleGrid({ venue, selectedCells, setSelectedCells }: ScheduleGridPr
             ))}
           </div>
 
-          {/* Court Rows */}
           {grounds.map((ground) => (
             <div key={ground.groundId} className="booking-court-row">
               <div className="booking-court-label">{ground.name}</div>

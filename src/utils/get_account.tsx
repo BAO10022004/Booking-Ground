@@ -1,20 +1,31 @@
-import Account from '../models/account';
+import { authService } from "../services";
+import Account from "../models/account";
 
-export function GetAccount() {
+export async function GetAccount(): Promise<Account | null> {
+  try {
+    if (!authService.isAuthenticated()) {
+      return null;
+    }
+
+    const user = await authService.getCurrentUser();
     return new Account({
-    fullName: 'Nguyễn Văn A',
-    email: 'nguyenvana@email.com',
-    phoneNumber: '0123 456 789',
-    password: 'password123',
-    userId: 'user-001',
-    gender: true,
-    birthday: new Date('1990-01-01'),
-    role: false,
-    isAdmin: false, 
-    isActive: true,
-    avatarId: false,
-    coverImageId: false,
-   })
-  // return null;
+      fullName: user.name,
+      email: user.email,
+      phoneNumber: user.phone_number,
+      password: "",
+      userId: user.id,
+      gender: user.gender ?? false,
+      birthday: user.birthday ? new Date(user.birthday) : new Date(),
+      role: user.role ?? false,
+      isAdmin: user.is_admin ?? false,
+      isActive: user.is_active ?? true,
+      avatarId: user.avatar_id || false,
+      coverImageId: user.cover_image_id || false,
+    });
+  } catch (error) {
+    console.error("Error fetching account:", error);
+    return null;
+  }
 }
-export default GetAccount();
+
+export default GetAccount;
