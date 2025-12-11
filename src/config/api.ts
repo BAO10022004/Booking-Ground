@@ -13,6 +13,10 @@ export const API_ENDPOINTS = {
   VENUES: {
     LIST: "/venues",
     DETAIL: (id: string) => `/venues/${id}`,
+    SERVICES: (id: string) => `/venues/${id}/services`,
+    TERMS: (id: string) => `/venues/${id}/terms`,
+    PRICE_LISTS: (id: string) => `/venues/${id}/price-lists`,
+    IMAGES: (id: string) => `/venues/${id}/images`,
   },
   CATEGORIES: {
     LIST: "/categories",

@@ -1,23 +1,3 @@
-////////////////////////////////// imports lab//////////////////////////////////////
-import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
-import { useParams, useNavigate } from "react-router-dom";
-import "../assets/styles/BookingConfirmationPage.css";
-////////////////////////////////// imports compunent//////////////////////////////////////
-import AuthInfoSection from "../components/AuthInfoSection";
-import BookingInfoSection from "../components/BookingInfoSection";
-import VenueInfoSection from "../components/VenueInfoSection";
-import PaymentInfoSection from "../components/PaymentInfoSection";
-import CustomerInfoSection from "../components/CustomerInfoSection";
-import TermsInfoSection from "../components/TermsInfoSection";
-import PaymentMethodSection from "../components/PaymentMethodSection";
-/////////////////////////////////// import function //////////////////////////////////////
-import getBooking from "../utils/getBooking";
-import getVenues from "../utils/getVenues";
-import GetGroundById from "../utils/GetGroundById";
-import { GetAccount } from "../utils/get_account";
-/////////////////////////////// import models //////////////////////////////////////
-import type { Venue } from "../models/Venue";
 import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -33,14 +13,13 @@ import getBooking from "../utils/getBooking";
 import getVenues from "../utils/getVenues";
 import GetGroundById from "../utils/GetGroundById";
 import { GetAccount } from "../utils/get_account";
-import type Venue from "../models/Venue";
+import type { Venue as VenueModel } from "../models/Venue";
 
 export default function BookingConfirmationPage() {
   const { bookingId } = useParams<{ bookingId: string }>();
   const navigate = useNavigate();
   const booking = getBooking.getBookingsById(bookingId || "")[0];
-  const [ground, setGround] = useState<any>(null);
-  const [venue, setVenue] = useState<Venue | null>(null);
+  const [venue, setVenue] = useState<VenueModel | any>(null);
   const [account, setAccount] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showBookingInfo, setShowBookingInfo] = useState(true);
@@ -60,11 +39,13 @@ export default function BookingConfirmationPage() {
 
         const foundGround = GetGroundById(booking?.groundId || "")[0];
         const foundVenue = venuesData.find(
-          (v: any) => v.venueId === foundGround?.venueId
-        ) as Venue;
+          (v: any) =>
+            v.venueId === foundGround?.venueId || v.id === foundGround?.venueId
+        );
 
-        setGround(foundGround);
-        setVenue(foundVenue);
+        if (foundVenue) {
+          setVenue(foundVenue);
+        }
         setAccount(accountData);
       } catch (error) {
         console.error("Error loading data:", error);
