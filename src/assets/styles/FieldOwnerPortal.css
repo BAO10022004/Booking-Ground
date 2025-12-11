@@ -1,0 +1,74 @@
+.field-owner-portal {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.portal-header {
+  background: white;
+  padding: 20px 32px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.portal-header h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0;
+}
+
+.portal-user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.portal-user-info p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.portal-logout-btn {
+  padding: 8px 16px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.portal-logout-btn:hover {
+  background: #b91c1c;
+}
+
+.portal-content {
+  padding: 40px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.portal-placeholder {
+  background: white;
+  padding: 60px 40px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.portal-placeholder h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.portal-placeholder p {
+  font-size: 16px;
+  color: #64748b;
+}

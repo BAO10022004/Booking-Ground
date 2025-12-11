@@ -1,11 +1,11 @@
-/* Header.css - Neon Style */
+/* Header.css */
 
 /* Container chính */
 .header {
-  background: linear-gradient(to right, #10b981, #14b8a6);
+  background: #22c55e;
   color: white;
-  padding: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-container {
@@ -27,393 +27,90 @@
   gap: 0.75rem;
 }
 
-/* Logo với hiệu ứng neon */
 .header-logo {
   width: 2.5rem;
   height: 2.5rem;
-  background: white;
+  background: #22c55e;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #e5e7eb;
   position: relative;
-  transition: all 0.3s ease;
 }
 
-.header-logo::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  padding: 3px;
-  background: linear-gradient(
-    135deg,
-    #ff00ff,
-    #00ffff,
-    #ff00ff
-  );
-  background-size: 200% 200%;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  animation: logoRotate 6s linear infinite;
-}
-
-.header-logo:hover::before {
-  opacity: 1;
-}
-
-@keyframes logoRotate {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-.header-logo::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 0, 255, 0.6),
-    rgba(0, 255, 255, 0.6),
-    rgba(255, 0, 255, 0.6)
-  );
-  background-size: 200% 200%;
-  opacity: 0;
-  filter: blur(12px);
-  pointer-events: none;
-  z-index: -1;
-  transition: opacity 0.3s ease;
-  animation: logoRotate 6s linear infinite;
-}
-
-.header-logo:hover::after {
-  opacity: 1;
-}
-
-.header-logo-icon {
-  color: #10b981;
-  font-weight: bold;
-  font-size: 1.25rem;
-  position: relative;
-  z-index: 1;
-  transition: all 0.3s ease;
-}
-
-.header-logo:hover .header-logo-icon {
-  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.8));
-  transform: scale(1.1);
+.header-shuttlecock-icon {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .header-date {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: white;
   font-weight: 500;
 }
 
-/* Bell button với hiệu ứng neon */
-.header-bell-button {
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  cursor: pointer;
-  color: white;
-  transition: all 0.3s ease;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.header-bell-button::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  padding: 3px;
-  background: linear-gradient(
-    135deg,
-    #ff00ff,
-    #00ffff,
-    #ff00ff
-  );
-  background-size: 200% 200%;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  animation: bellRotate 6s linear infinite;
-}
-
-.header-bell-button:hover::before {
-  opacity: 1;
-}
-
-@keyframes bellRotate {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-.header-bell-button::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 0, 255, 0.6),
-    rgba(0, 255, 255, 0.6),
-    rgba(255, 0, 255, 0.6)
-  );
-  background-size: 200% 200%;
-  opacity: 0;
-  filter: blur(12px);
-  pointer-events: none;
-  z-index: -1;
-  transition: opacity 0.3s ease;
-  animation: bellRotate 6s linear infinite;
-}
-
-.header-bell-button:hover::after {
-  opacity: 1;
-}
-
-.header-bell-button:hover {
-  border-color: transparent;
-  background: rgba(255, 255, 255, 0.1);
-  color: #00ffff;
-  transform: translateY(-2px);
-  box-shadow: 
-    0 0 20px rgba(255, 0, 255, 0.4),
-    0 0 40px rgba(0, 255, 255, 0.3);
-}
-
-.header-bell-button:hover svg {
-  filter: drop-shadow(0 0 8px rgba(255, 0, 255, 0.8));
-  animation: bellRing 0.5s ease-in-out;
-}
-
-@keyframes bellRing {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-15deg); }
-  75% { transform: rotate(15deg); }
-}
-
-/* Buttons section */
 .header-buttons {
   display: flex;
   gap: 0.75rem;
+  margin-top: 1rem;
 }
 
 .header-btn {
   flex: 1;
   padding: 0.875rem 1.25rem;
-  border-radius: 2rem;
-  font-weight: 600;
+  border-radius: 0.5rem;
+  font-weight: 700;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid #e5e7eb;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
+  border: none;
 }
 
-/* Login button với hiệu ứng neon khi hover */
 .header-btn-login {
-  background: white;
-  color: #059669;
-}
-
-.header-btn-login::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 2rem;
-  padding: 2px;
-  background: linear-gradient(
-    90deg,
-    #ff00ff,
-    #00ffff,
-    #ff00ff,
-    #00ffff
-  );
-  background-size: 400% 100%;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.header-btn-login:hover::before {
-  opacity: 1;
-  animation: buttonNeon 8s linear infinite;
-}
-
-@keyframes buttonNeon {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 400% 50%;
-  }
-}
-
-.header-btn-login::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 2rem;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 0, 255, 0.6),
-    rgba(0, 255, 255, 0.6),
-    rgba(255, 0, 255, 0.6),
-    rgba(0, 255, 255, 0.6)
-  );
-  background-size: 400% 100%;
-  opacity: 0;
-  filter: blur(15px);
-  pointer-events: none;
-  z-index: -1;
-  transition: opacity 0.3s ease;
-}
-
-.header-btn-login:hover::after {
-  opacity: 1;
-  animation: buttonNeon 8s linear infinite;
+  background: #22c55e;
+  color: white;
 }
 
 .header-btn-login:hover {
-  border-color: transparent;
-  color: #00ffff;
-  transform: translateY(-2px);
-  box-shadow: 
-    0 0 20px rgba(255, 0, 255, 0.2),
-    0 0 40px rgba(0, 255, 255, 0.15);
+  background: #16a34a;
+  transform: translateY(-1px);
 }
 
-/* Register button với hiệu ứng neon khi hover */
 .header-btn-register {
-  background: #059669;
+  background: #22c55e;
   color: white;
-  border: 2px solid white;
-}
-
-.header-btn-register::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 2rem;
-  padding: 2px;
-  background: linear-gradient(
-    90deg,
-    #00ffff,
-    #ff00ff,
-    #00ffff,
-    #ff00ff
-  );
-  background-size: 400% 100%;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.header-btn-register:hover::before {
-  opacity: 1;
-  animation: buttonNeon 8s linear infinite;
-}
-
-.header-btn-register::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 2rem;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 255, 255, 0.6),
-    rgba(255, 0, 255, 0.6),
-    rgba(0, 255, 255, 0.6),
-    rgba(255, 0, 255, 0.6)
-  );
-  background-size: 400% 100%;
-  opacity: 0;
-  filter: blur(15px);
-  pointer-events: none;
-  z-index: -1;
-  transition: opacity 0.3s ease;
-}
-
-.header-btn-register:hover::after {
-  opacity: 1;
-  animation: buttonNeon 8s linear infinite;
 }
 
 .header-btn-register:hover {
-  border-color: transparent;
-  color: #ff00ff;
-  transform: translateY(-2px);
-  box-shadow: 
-    0 0 20px rgba(0, 255, 255, 0.2),
-    0 0 40px rgba(255, 0, 255, 0.15);
+  background: #16a34a;
+  transform: translateY(-1px);
 }
 
 .header-btn:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0);
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   .header {
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
   }
-  
+
   .header-logo {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2rem;
+    height: 2rem;
   }
-  
-  .header-logo-icon {
-    font-size: 1.125rem;
+
+  .header-shuttlecock-icon {
+    width: 1.25rem;
+    height: 1.25rem;
   }
-  
+
   .header-date {
     font-size: 0.75rem;
   }
-  
-  .header-bell-button {
-    padding: 0.625rem;
-  }
-  
+
   .header-btn {
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
   }
-}
-
-/* Focus visible for accessibility */
-.header-bell-button:focus-visible,
-.header-btn:focus-visible {
-  outline: 2px solid #ff00ff;
-  outline-offset: 2px;
 }

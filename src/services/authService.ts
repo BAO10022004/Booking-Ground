@@ -31,9 +31,11 @@ export interface User {
 }
 
 export interface AuthResponse {
-  message: string;
+  message?: string;
   user: User;
-  token: string;
+  access_token?: string;
+  token?: string;
+  token_type?: string;
 }
 
 export const authService = {
@@ -43,11 +45,15 @@ export const authService = {
       data
     );
 
-    if (response.data && response.data.token) {
-      apiClient.setAuthToken(response.data.token);
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const authData = (response.data || response) as AuthResponse;
+    const token = authData?.access_token || authData?.token;
+
+    if (token) {
+      apiClient.setAuthToken(token);
     }
 
-    return response.data as AuthResponse;
+    return authData;
   },
 
   async login(data: LoginData): Promise<AuthResponse> {
@@ -56,11 +62,21 @@ export const authService = {
       data
     );
 
-    if (response.data && response.data.token) {
-      apiClient.setAuthToken(response.data.token);
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const authData = (response.data || response) as AuthResponse;
+
+    if (!authData || !authData.user) {
+      console.error("Invalid auth response:", authData);
+      throw new Error("Invalid response from server: missing user data");
     }
 
-    return response.data as AuthResponse;
+    const token = authData?.access_token || authData?.token;
+
+    if (token) {
+      apiClient.setAuthToken(token);
+    }
+
+    return authData;
   },
 
   async logout(): Promise<void> {
@@ -75,7 +91,8 @@ export const authService = {
 
   async getCurrentUser(): Promise<User> {
     const response = await apiClient.get<User>(API_ENDPOINTS.AUTH.ME);
-    return response.data as User;
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as User;
   },
 
   isAuthenticated(): boolean {

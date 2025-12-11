@@ -1,0 +1,362 @@
+.player-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: #22c55e;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
+  padding: 20px;
+}
+
+.player-login-container {
+  background: white;
+  border-radius: 16px;
+  padding: 40px 32px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: fadeInScale 0.5s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.player-login-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.player-login-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.player-tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.player-tab.active {
+  background: white;
+  color: #1e293b;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.player-login-error {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.player-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.player-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.player-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.player-input-wrapper:focus-within {
+  background: white;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+.player-input {
+  flex: 1;
+  padding: 14px 16px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  color: #1e293b;
+  font-family: inherit;
+}
+
+.player-input::placeholder {
+  color: #94a3b8;
+}
+
+.player-phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.player-phone-input-wrapper:focus-within {
+  background: white;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+.player-phone-prefix {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-right: 2px solid #e2e8f0;
+}
+
+.player-flag {
+  font-size: 20px;
+}
+
+.player-country-code {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.player-phone-input {
+  flex: 1;
+  padding: 14px 16px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  color: #1e293b;
+  font-family: inherit;
+}
+
+.player-phone-input::placeholder {
+  color: #94a3b8;
+}
+
+.player-clear-btn,
+.player-password-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.player-clear-btn:hover,
+.player-password-toggle:hover {
+  color: #22c55e;
+}
+
+.player-login-btn {
+  width: 100%;
+  padding: 16px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.player-login-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
+}
+
+.player-login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.player-login-btn.loading {
+  pointer-events: none;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.player-forgot-password {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.player-forgot-password p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.player-forgot-link {
+  background: none;
+  border: none;
+  color: #22c55e;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.player-forgot-link:hover {
+  color: #16a34a;
+  text-decoration: underline;
+}
+
+.player-register-link {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.player-register-link p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.player-register-link-btn {
+  background: none;
+  border: none;
+  color: #22c55e;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.player-register-link-btn:hover {
+  color: #16a34a;
+  text-decoration: underline;
+}
+
+.player-google-login {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.player-google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.player-google-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.player-field-owner-banner {
+  margin-top: 24px;
+  padding: 16px;
+  background: #fef3c7;
+  border: 2px dashed #f59e0b;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.player-field-owner-banner p {
+  font-size: 13px;
+  color: #92400e;
+  line-height: 1.6;
+}
+
+.player-field-owner-link {
+  background: none;
+  border: none;
+  color: #d97706;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.player-field-owner-link:hover {
+  color: #b45309;
+}
+
+@media (max-width: 640px) {
+  .player-login-container {
+    padding: 32px 24px;
+  }
+
+  .player-login-title {
+    font-size: 24px;
+  }
+}

@@ -16,6 +16,17 @@ export const categoryService = {
       API_ENDPOINTS.CATEGORIES.LIST
     );
 
-    return (response.data as CategoriesResponse)?.data || [];
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const data = (response.data as CategoriesResponse)?.data || (response as any)?.data || [];
+    return Array.isArray(data) ? data : [];
+  },
+
+  async getCategoryById(id: string): Promise<Category> {
+    const response = await apiClient.get<Category>(
+      API_ENDPOINTS.CATEGORIES.DETAIL(id)
+    );
+
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Category;
   },
 };

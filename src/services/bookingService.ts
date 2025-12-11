@@ -6,7 +6,7 @@ export interface CreateBookingData {
   start_time: string;
   end_time: string;
   ground_id: string;
-  is_event: boolean;
+  is_event?: boolean;
   event_id?: string | null;
   target?: string;
   customer_note?: string;
@@ -40,17 +40,37 @@ export interface Booking {
   };
 }
 
+export interface BookingFilters {
+  user_id?: string;
+  venue_id?: string;
+  date?: string;
+  status?: string;
+}
+
 export interface BookingsResponse {
   data: Booking[];
 }
 
 export const bookingService = {
-  async getAllBookings(): Promise<Booking[]> {
+  async getAllBookings(filters?: BookingFilters): Promise<Booking[]> {
+    const params: Record<string, string> = {};
+
+    if (filters?.user_id) params.user_id = filters.user_id;
+    if (filters?.venue_id) params.venue_id = filters.venue_id;
+    if (filters?.date) params.date = filters.date;
+    if (filters?.status) params.status = filters.status;
+
     const response = await apiClient.get<BookingsResponse>(
-      API_ENDPOINTS.BOOKINGS.LIST
+      API_ENDPOINTS.BOOKINGS.LIST,
+      Object.keys(params).length > 0 ? params : undefined
     );
 
-    return (response.data as BookingsResponse)?.data || [];
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const data =
+      (response.data as BookingsResponse)?.data ||
+      (response as any)?.data ||
+      [];
+    return Array.isArray(data) ? data : [];
   },
 
   async getMyBookings(): Promise<Booking[]> {
@@ -58,7 +78,12 @@ export const bookingService = {
       API_ENDPOINTS.BOOKINGS.MY_BOOKINGS
     );
 
-    return (response.data as BookingsResponse)?.data || [];
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const data =
+      (response.data as BookingsResponse)?.data ||
+      (response as any)?.data ||
+      [];
+    return Array.isArray(data) ? data : [];
   },
 
   async createBooking(data: CreateBookingData): Promise<Booking> {
@@ -67,7 +92,8 @@ export const bookingService = {
       data
     );
 
-    return response.data as Booking;
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Booking;
   },
 
   async updateBooking(
@@ -79,7 +105,8 @@ export const bookingService = {
       data
     );
 
-    return response.data as Booking;
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Booking;
   },
 
   async deleteBooking(id: string): Promise<void> {

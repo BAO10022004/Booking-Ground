@@ -25,17 +25,42 @@ export interface Payment {
   };
 }
 
+export interface PaymentFilters {
+  booking_id?: string;
+  status?: string;
+}
+
 export interface PaymentsResponse {
   data: Payment[];
 }
 
 export const paymentService = {
-  async getMyPayments(): Promise<Payment[]> {
+  async getMyPayments(filters?: PaymentFilters): Promise<Payment[]> {
+    const params: Record<string, string> = {};
+
+    if (filters?.booking_id) params.booking_id = filters.booking_id;
+    if (filters?.status) params.status = filters.status;
+
     const response = await apiClient.get<PaymentsResponse>(
-      API_ENDPOINTS.PAYMENTS.LIST
+      API_ENDPOINTS.PAYMENTS.LIST,
+      Object.keys(params).length > 0 ? params : undefined
     );
 
-    return (response.data as PaymentsResponse)?.data || [];
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const data =
+      (response.data as PaymentsResponse)?.data ||
+      (response as any)?.data ||
+      [];
+    return Array.isArray(data) ? data : [];
+  },
+
+  async getPaymentById(id: string): Promise<Payment> {
+    const response = await apiClient.get<Payment>(
+      API_ENDPOINTS.PAYMENTS.DETAIL(id)
+    );
+
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Payment;
   },
 
   async createPayment(data: CreatePaymentData): Promise<Payment> {
@@ -44,6 +69,20 @@ export const paymentService = {
       data
     );
 
-    return response.data as Payment;
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Payment;
+  },
+
+  async updatePayment(
+    id: string,
+    data: Partial<CreatePaymentData & { status?: string }>
+  ): Promise<Payment> {
+    const response = await apiClient.put<Payment>(
+      API_ENDPOINTS.PAYMENTS.UPDATE(id),
+      data
+    );
+
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Payment;
   },
 };

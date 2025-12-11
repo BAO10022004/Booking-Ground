@@ -1,129 +1,123 @@
 import { useState, useEffect } from "react";
 import {
   Calendar,
-  Heart,
-  LogOut,
-  Shield,
-  HelpCircle,
-  FileText,
-  Share2,
+  Bell,
+  GraduationCap,
+  Gift,
+  Users,
   ChevronRight,
-  TicketPercent,
-  User,
+  ArrowLeft,
   Settings,
+  Info,
+  Shield,
+  Sparkles,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import "../assets/styles/AccountPage.css";
 import BookingsPage from "../components/AccountPage/BookingsPage";
-import GetAccount from "../utils/get_account";
-import HeaderProfileCard from "../components/HeaderProfileCard";
-import ProfilePage from "../components/AccountPage/ProfilePage";
+import { useAuth } from "../hooks";
+import getAvatarForUser from "../utils/get_image";
+
 function AccountPage() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { user, loading, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    const fetchAccount = async () => {
-      try {
-        const account = await GetAccount();
-        setUser(account);
-      } catch (error) {
-        console.error("Error loading account:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAccount();
-  }, []);
-  const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
+    if (!loading && !isAuthenticated) {
+      navigate("/player/login", { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate]);
+  const [selectedMenu, setSelectedMenu] = useState<string | null>("booked");
 
-  const stats = [
+  const memberButtons = [
     {
       id: "booked",
-      label: "Đã đặt",
-      value: "12",
+      label: "Lịch đã đặt",
       icon: Calendar,
-      color: "blue",
     },
-    { id: "liked", label: "Yêu thích", value: "8", icon: Heart, color: "red" },
     {
-      id: "rating",
-      label: "Đánh giá",
-      value: "5",
-      icon: "⭐",
-      color: "yellow",
+      id: "notifications",
+      label: "Thông báo",
+      icon: Bell,
+    },
+    {
+      id: "courses",
+      label: "Khoá học",
+      icon: GraduationCap,
+    },
+    {
+      id: "offers",
+      label: "Ưu đãi",
+      icon: Gift,
     },
   ];
 
-  const menuItems = [
-    { id: "profile", title: "Thông tin cá nhân", icon: User, color: "emerald" },
-    { id: "voucher", title: "Ưu đãi", icon: TicketPercent, color: "red" },
-  ];
-
-  const supportItems = [
-    { id: "settings", title: "Cài đặt", icon: Settings, color: "gray" },
+  const activityItems = [
     {
-      id: "privacy",
-      title: "Bảo mật & Quyền riêng tư",
-      icon: Shield,
-      color: "emerald",
+      id: "my-group",
+      title: "Nhóm của tôi",
+      icon: Users,
     },
     {
-      id: "help",
-      title: "Trung tâm trợ giúp",
-      icon: HelpCircle,
-      color: "blue",
+      id: "class-schedule",
+      title: "Danh sách lịch học",
+      icon: GraduationCap,
+    },
+  ];
+
+  const systemItems = [
+    {
+      id: "settings",
+      title: "Cài đặt",
+      icon: Settings,
+    },
+    {
+      id: "version",
+      title: "Thông tin phiên bản",
+      icon: Info,
     },
     {
       id: "terms",
-      title: "Điều khoản & Chính sách",
-      icon: FileText,
-      color: "gray",
+      title: "Điều khoản và chính sách",
+      icon: Shield,
     },
-    { id: "share", title: "Chia sẻ ứng dụng", icon: Share2, color: "purple" },
+    {
+      id: "whats-new",
+      title: "Ứng dụng có gì mới",
+      icon: Sparkles,
+      badge: "NEW",
+    },
   ];
-
-  // Add ripple effect
-  const handleClick = (
-    e: React.MouseEvent<HTMLElement>,
-    callback: () => void
-  ) => {
-    const element = e.currentTarget;
-    element.classList.add("ripple-effect");
-
-    setTimeout(() => {
-      element.classList.remove("ripple-effect");
-      callback();
-    }, 300);
-  };
 
   const handleMenuClick = (menuId: string) => {
     setSelectedMenu(menuId);
   };
 
   const renderContent = () => {
-    if (!selectedMenu) {
+    try {
+      switch (selectedMenu) {
+        case "booked": {
+          return <BookingsPage />;
+        }
+        default: {
+          return (
+            <div className="account-empty-state">
+              <div className="account-empty-icon">💧</div>
+              <p className="account-empty-text">Bạn chưa có lịch đặt</p>
+            </div>
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error rendering content:", error);
       return (
-        <div className="empty-state">
-          <div className="empty-icon">👈</div>
-          <h3 className="empty-title">Chọn một mục để xem chi tiết</h3>
-          <p className="empty-text">
-            Vui lòng chọn một mục từ menu bên trái để xem nội dung tương ứng
+        <div className="account-empty-state">
+          <div className="account-empty-icon">⚠️</div>
+          <p className="account-empty-text">
+            Có lỗi xảy ra. Vui lòng thử lại sau.
           </p>
         </div>
       );
-    }
-
-    const selectedItem = [...menuItems, ...supportItems].find(
-      (m) => m.id === selectedMenu
-    );
-
-    switch (selectedItem?.id ?? selectedMenu) {
-      case "profile": {
-        return <ProfilePage />;
-      }
-      case "booked": {
-        return <BookingsPage />;
-      }
     }
   };
 
@@ -135,110 +129,114 @@ function AccountPage() {
     );
   }
 
+  if (!isAuthenticated || !user) {
+    return null;
+  }
+
   return (
     <div className="account-page">
-      {/* Left Sidebar */}
       <div className="account-sidebar">
-        <div className="profile-header">
-          {user ? <HeaderProfileCard user={user} /> : null}
+        <button
+          className="account-back-button"
+          onClick={() => navigate("/home")}
+        >
+          <ArrowLeft size={20} />
+        </button>
 
-          {/* Stats with ripple effect */}
-          <div className="profile-stats">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className={`stat-card stat-${stat.color}`}
-                onClick={(e) =>
-                  handleClick(e, () => {
-                    setSelectedMenu(stat.id);
-                  })
-                }
-              >
-                <div className="stat-icon-wrapper">
-                  {typeof stat.icon === "string" ? (
-                    <span className="stat-emoji">{stat.icon}</span>
-                  ) : (
-                    <stat.icon className="stat-icon" />
-                  )}
-                </div>
-                <div className="stat-info">
-                  <div className="stat-value">{stat.value}</div>
-                  <div className="stat-label">{stat.label}</div>
-                </div>
-              </div>
-            ))}
+        <div className="account-profile-section">
+          <div className="account-avatar-wrapper">
+            <img
+              src={getAvatarForUser(user)}
+              alt={user.fullName}
+              className="account-avatar"
+            />
           </div>
-        </div>
-
-        {/* Menu Items with ripple effect */}
-        <div className="menu-section">
-          <h3 className="section-title">Tài khoản của tôi</h3>
-          <div className="menu-list">
-            {menuItems.map((item, index) => (
-              <button
-                key={index}
-                className={`menu-item ${
-                  selectedMenu === item.id ? "active" : ""
-                }`}
-                onClick={(e) => handleClick(e, () => handleMenuClick(item.id))}
-              >
-                <div className="menu-item-left">
-                  <div className={`menu-icon menu-icon-${item.color}`}>
-                    <item.icon className="w-5 h-5" />
-                  </div>
-                  <span className="menu-title">{item.title}</span>
-                </div>
-                <div className="menu-item-right">
-                  {/* {item.icon && <span className="menu-badge">{item.icon}</span>} */}
-                  <ChevronRight className="menu-arrow" />
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Support Section */}
-        <div className="menu-section">
-          <h3 className="section-title">Hỗ trợ</h3>
-          <div className="menu-list">
-            {supportItems.map((item, index) => (
-              <button
-                key={index}
-                className={`menu-item ${
-                  selectedMenu === item.id ? "active" : ""
-                }`}
-                onClick={(e) => handleClick(e, () => handleMenuClick(item.id))}
-              >
-                <div className="menu-item-left">
-                  <div className={`menu-icon menu-icon-${item.color}`}>
-                    <item.icon className="w-5 h-5" />
-                  </div>
-                  <span className="menu-title">{item.title}</span>
-                </div>
-                <ChevronRight className="menu-arrow" />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Logout Button with ripple effect */}
-        <div className="logout-section">
-          <button
-            className="logout-button"
-            onClick={(e) => handleClick(e, () => console.log("Logout"))}
-          >
-            <LogOut className="w-5 h-5" />
-            <span>Đăng xuất</span>
+          <div className="account-profile-name">{user.fullName}</div>
+          <button className="account-edit-button">
+            <span>☰</span>
           </button>
         </div>
 
-        <div className="version-info">
-          <p>Phiên bản 1.0.0</p>
+        <div className="account-member-rank-section">
+          <div className="account-member-rank-card">
+            <span className="account-member-rank-icon">💎</span>
+            <span className="account-member-rank-text">Hạng thành viên</span>
+            <ChevronRight size={16} />
+          </div>
+          <div className="account-member-buttons">
+            {memberButtons.map((button) => (
+              <button
+                key={button.id}
+                className={`account-member-button ${
+                  selectedMenu === button.id ? "active" : ""
+                }`}
+                onClick={() => handleMenuClick(button.id)}
+              >
+                <button.icon size={20} />
+                <span>{button.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="account-activity-section">
+          <h3 className="account-section-title">Hoạt động</h3>
+          <div className="account-menu-list">
+            {activityItems.map((item) => (
+              <button
+                key={item.id}
+                className="account-menu-item"
+                onClick={() => handleMenuClick(item.id)}
+              >
+                <item.icon size={20} />
+                <span>{item.title}</span>
+                <ChevronRight size={16} />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="account-system-section">
+          <h3 className="account-section-title">Hệ thống</h3>
+          <div className="account-menu-list">
+            {systemItems.map((item) => (
+              <button
+                key={item.id}
+                className="account-menu-item"
+                onClick={() => handleMenuClick(item.id)}
+              >
+                <item.icon size={20} />
+                <span>{item.title}</span>
+                {item.badge && (
+                  <span className="account-menu-badge">{item.badge}</span>
+                )}
+                <ChevronRight size={16} />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="account-version-info">
+          <p>Thông tin phiên bản: 2.8.1</p>
         </div>
       </div>
 
-      {/* Right Content Area - Desktop Only */}
-      <div className="account-content">{renderContent()}</div>
+      <div className="account-content">
+        <div className="account-content-header">
+          <button
+            className="account-content-back"
+            onClick={() => navigate("/home")}
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="account-content-title">Danh sách đặt lịch</h2>
+          <button className="account-content-view-all">
+            <Calendar size={16} />
+            <span>Xem tất cả</span>
+          </button>
+        </div>
+        <div className="account-content-body">{renderContent()}</div>
+      </div>
     </div>
   );
 }

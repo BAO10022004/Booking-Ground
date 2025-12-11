@@ -3,6 +3,7 @@ import { API_ENDPOINTS } from "../config/api";
 
 export interface RatingFilters {
   venue_id?: string;
+  user_id?: string;
 }
 
 export interface CreateRatingData {
@@ -12,13 +13,21 @@ export interface CreateRatingData {
 }
 
 export interface Rating {
+  id?: string;
   user_id: string;
   venue_id: string;
   star_number: number;
   review?: string;
+  created_at?: string;
   user?: {
     id: string;
     name: string;
+    email?: string;
+    phone_number?: string;
+    avatar?: {
+      image_url?: string;
+      full_url?: string;
+    };
   };
   venue?: {
     id: string;
@@ -35,13 +44,17 @@ export const ratingService = {
     const params: Record<string, string> = {};
 
     if (filters?.venue_id) params.venue_id = filters.venue_id;
+    if (filters?.user_id) params.user_id = filters.user_id;
 
     const response = await apiClient.get<RatingsResponse>(
       API_ENDPOINTS.RATINGS.LIST,
       Object.keys(params).length > 0 ? params : undefined
     );
 
-    return (response.data as RatingsResponse)?.data || [];
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const data =
+      (response.data as RatingsResponse)?.data || (response as any)?.data || [];
+    return Array.isArray(data) ? data : [];
   },
 
   async getRatingById(id: string): Promise<Rating> {
@@ -49,7 +62,8 @@ export const ratingService = {
       API_ENDPOINTS.RATINGS.DETAIL(id)
     );
 
-    return response.data as Rating;
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Rating;
   },
 
   async createRating(data: CreateRatingData): Promise<Rating> {
@@ -58,7 +72,8 @@ export const ratingService = {
       data
     );
 
-    return response.data as Rating;
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Rating;
   },
 
   async updateRating(
@@ -70,7 +85,8 @@ export const ratingService = {
       data
     );
 
-    return response.data as Rating;
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Rating;
   },
 
   async deleteRating(id: string): Promise<void> {

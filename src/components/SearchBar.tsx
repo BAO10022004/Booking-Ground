@@ -1,28 +1,53 @@
-import { useState } from 'react';
-import { Search, Menu, X } from 'lucide-react';
-import '../assets/styles/SearchBar.css';
+import { useState } from "react";
+import { X } from "lucide-react";
+import "../assets/styles/SearchBar.css";
 
-function SearchBar() {
-  const [searchText, setSearchText] = useState('');
+interface SearchBarProps {
+  searchText?: string;
+  setSearchText?: (text: string) => void;
+}
+
+function SearchBar({
+  searchText: externalSearchText,
+  setSearchText: externalSetSearchText,
+}: SearchBarProps = {}) {
+  const [internalSearchText, setInternalSearchText] = useState("");
+  const searchText =
+    externalSearchText !== undefined ? externalSearchText : internalSearchText;
+  const setSearchText = externalSetSearchText || setInternalSearchText;
 
   const handleClear = () => {
-    setSearchText('');
+    setSearchText("");
   };
 
   return (
     <div className="search-bar">
       <div className="search-bar-container">
+        <label className="search-label">Tìm kiếm</label>
         <div className="search-input-wrapper">
-          <Search className="search-icon" />
+          <svg
+            className="search-shuttlecock-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2L15 8L12 14L9 8L12 2Z"
+              fill="white"
+              stroke="#22c55e"
+              strokeWidth="1"
+            />
+            <circle cx="12" cy="8" r="2" fill="#22c55e" />
+          </svg>
           <input
             type="text"
-            placeholder="Tìm kiếm sân thể thao..."
+            placeholder="Tìm kiếm..."
             className="search-input"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           {searchText && (
-            <button 
+            <button
               onClick={handleClear}
               className="clear-button"
               aria-label="Xóa tìm kiếm"
@@ -31,9 +56,6 @@ function SearchBar() {
             </button>
           )}
         </div>
-        <button className="menu-button" aria-label="Menu">
-          <Menu className="menu-icon" />
-        </button>
       </div>
     </div>
   );

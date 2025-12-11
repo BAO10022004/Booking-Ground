@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Venue from "../models/Venue";
-import GetGroundByVenue from "../utils/GetGround";
+import { useGrounds } from "../hooks";
 import Ground from "../models/Ground";
 
 class Cell {
@@ -38,22 +38,7 @@ function ScheduleGrid({
   selectedCells,
   setSelectedCells,
 }: ScheduleGridProps) {
-  const [grounds, setGrounds] = useState<Ground[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchGrounds = async () => {
-      try {
-        const fetchedGrounds = await GetGroundByVenue(venue.venueId);
-        setGrounds(fetchedGrounds);
-      } catch (error) {
-        console.error("Error loading grounds:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchGrounds();
-  }, [venue.venueId]);
+  const { grounds, loading } = useGrounds(venue.venueId);
 
   const timeSlots = [
     "6:00",

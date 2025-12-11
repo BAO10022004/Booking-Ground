@@ -9,67 +9,76 @@ import PaymentInfoSection from "../components/PaymentInfoSection";
 import CustomerInfoSection from "../components/CustomerInfoSection";
 import TermsInfoSection from "../components/TermsInfoSection";
 import PaymentMethodSection from "../components/PaymentMethodSection";
-import getBooking from "../utils/getBooking";
-import getVenues from "../utils/getVenues";
-import GetGroundById from "../utils/GetGroundById";
-import { GetAccount } from "../utils/get_account";
+import Toast from "../components/Toast";
+import { useVenue, useAuth, useMyBookings } from "../hooks";
+import { getGroundById } from "../utils/selectors";
 import type Venue from "../models/Venue";
 
 export default function BookingConfirmationPage() {
   const { bookingId } = useParams<{ bookingId: string }>();
   const navigate = useNavigate();
-  const booking = getBooking.getBookingsById(bookingId || "")[0];
+  const { bookings, loading: bookingsLoading } = useMyBookings();
+  const booking = bookings.find((b) => b.bookingId === bookingId) || null;
   const [ground, setGround] = useState<any>(null);
-  const [venue, setVenue] = useState<Venue | null>(null);
-  const [account, setAccount] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [venueId, setVenueId] = useState<string | undefined>(undefined);
+  const { venue, loading: venueLoading } = useVenue(venueId);
+  const { user: account, loading: authLoading } = useAuth();
   const [showBookingInfo, setShowBookingInfo] = useState(true);
   const [customerName, setCustomerName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [notes, setNotes] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [selectedMethod, setSelectedMethod] = useState("vnpay");
+  const [toast, setToast] = useState<{
+    type: "success" | "error" | "warning" | "info";
+    message: string;
+  } | null>(null);
+  const loading = venueLoading || authLoading || bookingsLoading;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [venuesData, accountData] = await Promise.all([
-          getVenues(),
-          GetAccount(),
-        ]);
-
-        const foundGround = GetGroundById(booking?.groundId || "")[0];
-        const foundVenue = venuesData.find(
-          (v: any) => v.venueId === foundGround?.venueId
-        ) as Venue;
-
+    const fetchGround = async () => {
+      if (booking?.groundId) {
+        const foundGround = await getGroundById(booking.groundId);
         setGround(foundGround);
-        setVenue(foundVenue);
-        setAccount(accountData);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      } finally {
-        setLoading(false);
+        if (foundGround) {
+          setVenueId(foundGround.venueId);
+        }
       }
     };
 
     if (booking) {
-      fetchData();
+      fetchGround();
     }
   }, [booking]);
 
   const handleBack = () => navigate(-1);
 
+  const showToast = (
+    type: "success" | "error" | "warning" | "info",
+    message: string
+  ) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 4000);
+  };
+
   const handleSubmit = () => {
     if (!customerName.trim()) {
-      alert("Vui lòng nhập tên của bạn");
+      showToast("warning", "Vui lòng nhập tên của bạn");
       return;
     }
     if (!phoneNumber.trim()) {
-      alert("Vui lòng nhập số điện thoại");
+      showToast("warning", "Vui lòng nhập số điện thoại");
       return;
     }
+    // TODO: Implement payment processing
+    showToast("info", "Chức năng thanh toán đang được phát triển");
   };
+
+  useEffect(() => {
+    if (!authLoading && !account) {
+      navigate("/player/login");
+    }
+  }, [account, authLoading, navigate]);
 
   if (loading) {
     return (
@@ -79,18 +88,43 @@ export default function BookingConfirmationPage() {
     );
   }
 
-  if (!venue || !account) {
+  if (!account) {
     return (
       <div className="booking-confirmation-page">
         <div style={{ padding: "40px", textAlign: "center" }}>
-          Không tìm thấy dữ liệu
+          Vui lòng đăng nhập để xem xác nhận đặt sân
         </div>
+      </div>
+    );
+  }
+
+  if (!venue || !booking) {
+    return (
+      <div className="booking-confirmation-page">
+        <div style={{ padding: "40px", textAlign: "center" }}>
+          Không tìm thấy thông tin đặt sân
+        </div>
+        <button
+          onClick={() => navigate("/")}
+          style={{
+            padding: "12px 24px",
+            backgroundColor: "#1890ff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            marginTop: "16px",
+          }}
+        >
+          Về trang chủ
+        </button>
       </div>
     );
   }
 
   return (
     <div className="booking-confirmation-page">
+      {toast && <Toast {...toast} onClose={() => setToast(null)} />}
       <header className="booking-header">
         <div className="booking-header-container">
           <div className="booking-header-left">
