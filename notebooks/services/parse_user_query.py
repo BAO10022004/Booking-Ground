@@ -87,7 +87,19 @@ class ParseUtils:
         venue_city = str(venue_city).strip()      
         query_city = parsed_query.get("city").strip() 
         city_match = 1 if  venue_city == query_city else 0
-        features['location_match'] =1 if (district_match == 1 or phuong_match ==1 or city_match ==1)  == True else 0
+
+        # Weighted location score
+        if query_phuong:
+            # User specified ward → most accurate
+            location_match = phuong_match * 3
+        elif query_district:
+            # No ward → fallback to district
+            location_match = district_match * 2
+        else:
+            # Only city → lowest accuracy
+            location_match = city_match * 1
+
+        features['location_match'] = location_match
 
 
         # Time match - try different possible column names

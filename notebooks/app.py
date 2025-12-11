@@ -95,8 +95,9 @@ def predict(request: QueryRequest):
     df_test_sorted = df_test.sort_values(by="pred", ascending=False)
     
     # Lấy top 3 kết quả
-    top_results = df_test_sorted.head(3)[["venue_id", "query", "sport_match", "location_match", "time_match", "pred"]].to_dict(orient="records")
-    
+    top_results = df_test_sorted[["venue_id", "query", "sport_match", "location_match", "time_match", "pred"]].to_dict(orient="records")
+    top_results = [i for i in top_results if i['pred'] == top_results[0]['pred']]
+    print(top_results)
     # 5. Return top 3
     return {
         "query": query,

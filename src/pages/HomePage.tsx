@@ -20,7 +20,7 @@ function HomePage() {
         <>
           <Header />
           <SearchBar setListView={setListView}/>
-          <FilterTabs />
+          {/* <FilterTabs /> */}
           <VenueGridView listView={listView}/>
         </>
       ) : activeTab === 'account' ? (
