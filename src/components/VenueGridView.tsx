@@ -5,11 +5,13 @@ import '../assets/styles/VenueGridView.css';
 import GetRating from '../utils/getRating';
 import GetTimePeriodVenue from '../utils/getTimeVenue';
 import BookingTypeModal from '../pages/BookingTypeModal';
-function VenueGridView() {
-  const sportsVenues = getGrounds();
+import { Venue } from '../models/Venue';
+function VenueGridView({listView  }: {listView: Venue[]}) {
+  
   const [favorites, setFavorites] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [venue, setVenue] = useState<any | null>(null);
+  const sportsVenues = listView.length !== 0 ? listView : getGrounds();
 
   
   const toggleFavorite = (id: unknown) => {
@@ -30,7 +32,7 @@ function VenueGridView() {
             <div key={venue.venueId} className="venue-card">
               <div className="venue-image-container">
                 <img 
-                  src={venue.image} 
+                  // src={venue.} 
                   alt={venue.name}
                   className="venue-image"
                 />

@@ -2,7 +2,7 @@ import { X, ArrowRight } from 'lucide-react';
 import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/BookingTypeModal.css';
-import Venue from '../models/Venue';
+import {Venue} from '../models/Venue';
 interface BookingTypeModalProps {
   isOpen: boolean;
   onClose: () => void;

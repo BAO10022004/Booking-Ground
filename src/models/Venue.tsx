@@ -1,42 +1,17 @@
 class Venue {
-  // ///////////////////////// Properties /////////////////////////
-  
-  readonly venueId: string; 
-
-  /** (Not Null) Tên sân/CLB (VD: Sân Cầu lông Hoàng Mai) */
-  name: string; 
-
-  /** (Not Null) Số nhà, tên đường */
-  subAddress: string; 
-
-  /** (Not Null) Quận, huyện */
-  district: string; 
-
-  /** (Not Null) Tỉnh, thành phố */
-  city: string; 
-
-  /** (Not Null) Địa chỉ cụ thể (chuỗi đầy đủ) */
-  address: string; 
-
-  /** (Not Null) Giờ hoạt động (VD: 6:00 – 22:00) */
-  operatingTime: string; 
-
-  /** (Not Null, Unique) Số điện thoại liên hệ 1 */
-  phoneNumber1: string; 
-
-  /** (Null, Unique) Số điện thoại liên hệ 2 */
-  phoneNumber2: string | null; 
-
-  /** (Null) Website chính thức (nếu có) */
-  website: string | null; 
-
-  /** (Not Null, Default=0) Phần trăm tiền đặt cọc */
+  readonly venueId: string;
+  name: string;
+  subAddress: string;
+  district: string;
+  city: string;
+  address: string;
+  operatingTime: string;
+  phoneNumber1: string;
+  phoneNumber2: string | null;
+  website: string | null;
   deposit: number;
+  ownerId: string;
 
-  /** (Not Null, Foreign Key) Tham chiếu đến Users.UserID (Role = OWNER) */
-  ownerId: string; 
-
-  // ///////////////////////// Constructor /////////////////////////
   constructor({
     venueId,
     name,
@@ -79,4 +54,70 @@ class Venue {
   }
 }
 
-export default Venue;
+// Interface cho raw JSON data
+interface VenueRawData {
+  venueId: string;
+  name: string;
+  subAddress: string;
+  phuong?: string;
+  district: string;
+  Quận?: string;
+  city: string;
+  Thành?: string;
+  address: string;
+  Phường?: string;
+  operatingTime: string;
+  phoneNumber1: string;
+  phoneNumber2: string | null;
+  website: string | null;
+  deposit: number;
+  ownerId: string;
+  image?: string;
+  Pickleball?: string;
+}
+
+interface VenuesJSON {
+  venues: VenueRawData[];
+}
+
+/**
+ * Parse danh sách venues từ JSON data
+ * @param jsonData - Object chứa mảng venues
+ * @returns Mảng các Venue objects
+ */
+function parseVenuesFromJSON(jsonData: VenuesJSON): Venue[] {
+  return jsonData.venues.map((venueData) => {
+    return new Venue({
+      venueId: venueData.venueId,
+      name: venueData.name,
+      subAddress: venueData.subAddress,
+      district: venueData.district,
+      city: venueData.city,
+      address: venueData.address,
+      operatingTime: venueData.operatingTime,
+      phoneNumber1: venueData.phoneNumber1,
+      phoneNumber2: venueData.phoneNumber2,
+      website: venueData.website,
+      deposit: venueData.deposit,
+      ownerId: venueData.ownerId,
+    });
+  });
+}
+
+/**
+ * Parse venues từ JSON string
+ * @param jsonString - Chuỗi JSON
+ * @returns Mảng Venue objects
+ */
+function parseVenuesFromString(jsonString: string): Venue[] {
+  try {
+    const jsonData: VenuesJSON = JSON.parse(jsonString);
+    return parseVenuesFromJSON(jsonData);
+  } catch (error) {
+    console.error('Error parsing venues from string:', error);
+    throw error;
+  }
+}
+
+export { Venue, parseVenuesFromJSON, parseVenuesFromString };
+export type { VenueRawData, VenuesJSON };

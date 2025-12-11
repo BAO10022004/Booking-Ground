@@ -1,4 +1,4 @@
-import Venue from "../models/Venue";
+import {Venue} from "../models/Venue";
 import GetGroundByVenue from "../utils/GetGround";
 
 // ✅ Import hoặc định nghĩa Cell class

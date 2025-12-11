@@ -17,7 +17,7 @@ import getVenues from '../utils/getVenues';
 import GetGroundById from '../utils/GetGroundById';
 import { GetAccount } from '../utils/get_account';
 /////////////////////////////// import models //////////////////////////////////////
-import type Venue from '../models/Venue';
+import type {Venue} from '../models/Venue';
 
 export default function BookingConfirmationPage() {
   const { bookingId } = useParams<{ bookingId: string }>();

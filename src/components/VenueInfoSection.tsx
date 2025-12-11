@@ -1,4 +1,4 @@
-import Venue from '../models/Venue';
+import {Venue} from '../models/Venue';
 import { useState } from 'react';
 import {  MapPin} from 'lucide-react';
 
