@@ -5,6 +5,9 @@ import "../assets/styles/VenueGridView.css";
 import { useVenues, useRatings, useAuth } from "../hooks";
 import { getTimePeriodVenue } from "../utils/helpers";
 import BookingTypeModal from "../pages/BookingTypeModal";
+
+function VenueGridView() {
+  const [sportsVenues, setSportsVenues] = useState<any[]>([]);
 import VenueDetailModal from "./VenueDetailModal";
 
 interface VenueGridViewProps {
@@ -32,6 +35,22 @@ function VenueGridView({
   const [favorites, setFavorites] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [venue, setVenue] = useState<any | null>(null);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVenues = async () => {
+      try {
+        const venues = await getGrounds();
+        setSportsVenues(venues);
+      } catch (error) {
+        console.error("Error loading venues:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVenues();
+  }, []);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
 

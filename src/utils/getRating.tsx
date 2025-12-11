@@ -1,3 +1,8 @@
+import { Venue } from "../models/Venue";
+
+function GetRating(venue: Venue) {
+  return 5;
+}
 import Venue from "../models/Venue";
 import { ratingService } from "../services";
 

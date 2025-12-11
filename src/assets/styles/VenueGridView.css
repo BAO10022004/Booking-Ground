@@ -19,8 +19,7 @@
   }
 }
 
-/* Venue Grid */
-/* Venue Grid - Luôn 2 cột trừ mobile */
+
 .venue-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

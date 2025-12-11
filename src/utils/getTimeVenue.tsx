@@ -1,4 +1,4 @@
-import Venue from "../models/Venue";
+import {Venue} from "../models/Venue";
 function GetTimePeriodVenue(venue : Venue){
     return '6:00 - 22:00'
 }

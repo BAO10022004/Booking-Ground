@@ -1,4 +1,4 @@
-import { venueService, type Venue } from "../services";
+import { venueService } from "../services";
 
 async function getVenues(filters?: {
   category_id?: string;

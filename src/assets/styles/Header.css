@@ -4,6 +4,9 @@
 .header {
   background: #22c55e;
   color: white;
+  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  /* position: sticky; */
   padding: 1rem 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -11,6 +14,7 @@
 .header-container {
   max-width: 1280px;
   margin: 0 auto;
+  position: sticky;
 }
 
 /* Top section - Logo và Bell */

@@ -9,6 +9,11 @@ import PaymentInfoSection from "../components/PaymentInfoSection";
 import CustomerInfoSection from "../components/CustomerInfoSection";
 import TermsInfoSection from "../components/TermsInfoSection";
 import PaymentMethodSection from "../components/PaymentMethodSection";
+import getBooking from "../utils/getBooking";
+import getVenues from "../utils/getVenues";
+import GetGroundById from "../utils/GetGroundById";
+import { GetAccount } from "../utils/get_account";
+import type { Venue as VenueModel } from "../models/Venue";
 import Toast from "../components/Toast";
 import { useVenue, useAuth, useMyBookings } from "../hooks";
 import { getGroundById } from "../utils/selectors";
@@ -17,6 +22,10 @@ import type Venue from "../models/Venue";
 export default function BookingConfirmationPage() {
   const { bookingId } = useParams<{ bookingId: string }>();
   const navigate = useNavigate();
+  const booking = getBooking.getBookingsById(bookingId || "")[0];
+  const [venue, setVenue] = useState<VenueModel | any>(null);
+  const [account, setAccount] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const { bookings, loading: bookingsLoading } = useMyBookings();
   const booking = bookings.find((b) => b.bookingId === bookingId) || null;
   const [ground, setGround] = useState<any>(null);
@@ -36,6 +45,27 @@ export default function BookingConfirmationPage() {
   const loading = venueLoading || authLoading || bookingsLoading;
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [venuesData, accountData] = await Promise.all([
+          getVenues(),
+          GetAccount(),
+        ]);
+
+        const foundGround = GetGroundById(booking?.groundId || "")[0];
+        const foundVenue = venuesData.find(
+          (v: any) =>
+            v.venueId === foundGround?.venueId || v.id === foundGround?.venueId
+        );
+
+        if (foundVenue) {
+          setVenue(foundVenue);
+        }
+        setAccount(accountData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
     const fetchGround = async () => {
       if (booking?.groundId) {
         const foundGround = await getGroundById(booking.groundId);

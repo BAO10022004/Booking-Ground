@@ -2,6 +2,11 @@ import { X, ArrowRight } from "lucide-react";
 import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/BookingTypeModal.css";
+import { Venue } from "../models/Venue";
+import { X, ArrowRight } from "lucide-react";
+import ReactDOM from "react-dom";
+import { useNavigate } from "react-router-dom";
+import "../assets/styles/BookingTypeModal.css";
 import Venue from "../models/Venue";
 import { useAuth } from "../hooks";
 

@@ -1,3 +1,15 @@
+import { useState } from "react";
+import "../assets/styles/App.css";
+
+// import component
+import BottomNav from "../components/BottomNavigation";
+import AccountPage from "../pages/AccountPage";
+import Header from "../components/Header";
+import SearchBar from "../components/SearchBar";
+import FilterTabs from "../components/FilterTabs";
+import VenueGridView from "../components/VenueGridView";
+import PromotionSlider from "./PromotionSlider";
+import { Venue } from "../models/Venue";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
@@ -12,6 +24,9 @@ import VenueGridView from "../components/VenueGridView";
 import PromotionSlider from "./PromotionSlider";
 import MapPage from "./MapPage";
 function HomePage() {
+  const [activeTab, setActiveTab] = useState("home");
+  const [listView, setListView] = useState<Venue[]>([]);
+
   const navigate = useNavigate();
   const { isAuthenticated, loading } = useAuth();
   const [activeTab, setActiveTab] = useState("home");
@@ -32,6 +47,9 @@ function HomePage() {
       {activeTab === "home" ? (
         <>
           <Header />
+          <SearchBar setListView={setListView} />
+          {/* <FilterTabs /> */}
+          <VenueGridView listView={listView} />
           <SearchBar searchText={searchText} setSearchText={setSearchText} />
           <FilterTabs
             selectedCategory={selectedCategory}
