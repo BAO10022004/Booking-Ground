@@ -1,3 +1,23 @@
+////////////////////////////////// imports lab//////////////////////////////////////
+import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import "../assets/styles/BookingConfirmationPage.css";
+////////////////////////////////// imports compunent//////////////////////////////////////
+import AuthInfoSection from "../components/AuthInfoSection";
+import BookingInfoSection from "../components/BookingInfoSection";
+import VenueInfoSection from "../components/VenueInfoSection";
+import PaymentInfoSection from "../components/PaymentInfoSection";
+import CustomerInfoSection from "../components/CustomerInfoSection";
+import TermsInfoSection from "../components/TermsInfoSection";
+import PaymentMethodSection from "../components/PaymentMethodSection";
+/////////////////////////////////// import function //////////////////////////////////////
+import getBooking from "../utils/getBooking";
+import getVenues from "../utils/getVenues";
+import GetGroundById from "../utils/GetGroundById";
+import { GetAccount } from "../utils/get_account";
+/////////////////////////////// import models //////////////////////////////////////
+import type { Venue } from "../models/Venue";
 import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";

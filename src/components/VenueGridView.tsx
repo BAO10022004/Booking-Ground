@@ -1,3 +1,13 @@
+import { Heart, Share2, Star, MapPin, Clock } from 'lucide-react';
+import getGrounds from '../utils/getVenues';
+import { useState } from 'react';
+import '../assets/styles/VenueGridView.css';
+import GetRating from '../utils/getRating';
+import GetTimePeriodVenue from '../utils/getTimeVenue';
+import BookingTypeModal from '../pages/BookingTypeModal';
+import { Venue } from '../models/Venue';
+function VenueGridView({listView  }: {listView: Venue[]}) {
+  
 import { Heart, Share2, Star, MapPin, Clock } from "lucide-react";
 import getGrounds from "../utils/getVenues";
 import { useState, useEffect } from "react";
@@ -10,6 +20,9 @@ function VenueGridView() {
   const [favorites, setFavorites] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [venue, setVenue] = useState<any | null>(null);
+  const sportsVenues = listView.length !== 0 ? listView : getGrounds();
+
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,6 +66,8 @@ function VenueGridView() {
           {sportsVenues.map((venue) => (
             <div key={venue.venueId} className="venue-card">
               <div className="venue-image-container">
+                <img 
+                  // src={venue.} 
                 <img
                   src={venue.image}
                   alt={venue.name}

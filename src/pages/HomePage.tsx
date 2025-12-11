@@ -9,17 +9,19 @@ import SearchBar from '../components/SearchBar';
 import FilterTabs from '../components/FilterTabs';
 import VenueGridView from '../components/VenueGridView';
 import PromotionSlider from './PromotionSlider';
+import { Venue } from '../models/Venue';
 function HomePage() {
   const [activeTab, setActiveTab] = useState('home');
-  
+  const [listView, setListView] = useState<Venue[]>([]);
+
   return (
     <div className="app-container">  
       {activeTab === 'home' ? (
         <>
           <Header />
-          <SearchBar />
-          <FilterTabs />
-          <VenueGridView />
+          <SearchBar setListView={setListView}/>
+          {/* <FilterTabs /> */}
+          <VenueGridView listView={listView}/>
         </>
       ) : activeTab === 'account' ? (
         <AccountPage />

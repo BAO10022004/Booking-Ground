@@ -1,634 +1,712 @@
 {
-    "query": [
-  {
-    "query": "sân Pickleball ở Quận 7 vào buổi sáng",
-    "viewed_venues": [
-      "v-001",
-      "v-081",
-      "v-029",
-      "v-217"
-    ],
-    "clicked_venue_id": "v-001",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Huyện Nhà Bè buổi chiều",
-    "viewed_venues": [
-      "v-002",
-      "v-081",
-      "v-014"
-    ],
-    "clicked_venue_id": "v-002",
-    "booked": false
-  },
-  {
-    "query": "sân Tennis ở Quận 8 vào buổi sáng",
-    "viewed_venues": [
-      "v-003",
-      "v-024",
-      "v-079",
-      "v-080"
-    ],
-    "clicked_venue_id": "v-003",
-    "booked": true
-  },
-  {
-    "query": "tìm sân Bóng Rổ Quận Tân Bình buổi chiều",
-    "viewed_venues": [
-      "v-004",
-      "v-008",
-      "v-009",
-      "v-055"
-    ],
-    "clicked_venue_id": "v-004",
-    "booked": true
-  },
-  {
-    "query": "sân Pickleball Huyện Hóc Môn sáng nay",
-    "viewed_venues": [
-      "v-005",
-      "v-006",
-      "v-007"
-    ],
-    "clicked_venue_id": "v-005",
-    "booked": false
-  },
-  {
-    "query": "sân Bóng chuyền Quận Gò Vấp buổi chiều",
-    "viewed_venues": [
-      "v-042",
-      "v-044",
-      "v-095",
-      "v-096"
-    ],
-    "clicked_venue_id": "v-096",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Quận Tân Phú vào buổi sáng",
-    "viewed_venues": [
-      "v-046",
-      "v-051",
-      "v-053",
-      "v-104"
-    ],
-    "clicked_venue_id": "v-046",
-    "booked": true
-  },
-  {
-    "query": "tìm sân Pickleball Quận 12 vào buổi chiều",
-    "viewed_venues": [
-      "v-015",
-      "v-016",
-      "v-018",
-      "v-083"
-    ],
-    "clicked_venue_id": "v-018",
-    "booked": false
-  },
-  {
-    "query": "sân Tennis Quận 11 sáng",
-    "viewed_venues": [
-      "v-032",
-      "v-074"
-    ],
-    "clicked_venue_id": "v-074",
-    "booked": true
-  },
-  {
-    "query": "sân Pickleball Quận 1 vào buổi chiều",
-    "viewed_venues": [
-      "v-027",
-      "v-091",
-      "v-092"
-    ],
-    "clicked_venue_id": "v-027",
-    "booked": false
-  },
-  {
-    "query": "sân Cầu lông Đống Đa buổi sáng",
-    "viewed_venues": [
-      "v-194",
-      "v-195",
-      "v-198",
-      "v-244"
-    ],
-    "clicked_venue_id": "v-198",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng Rổ Hà Đông buổi chiều",
-    "viewed_venues": [
-      "v-186",
-      "v-187",
-      "v-188"
-    ],
-    "clicked_venue_id": "v-186",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng chuyền Tây Hồ sáng",
-    "viewed_venues": [
-      "v-197",
-      "v-215",
-      "v-219"
-    ],
-    "clicked_venue_id": "v-219",
-    "booked": false
-  },
-  {
-    "query": "sân Pickleball Quận Hoàng Mai buổi sáng",
-    "viewed_venues": [
-      "v-120",
-      "v-123",
-      "v-125",
-      "v-196"
-    ],
-    "clicked_venue_id": "v-125",
-    "booked": true
-  },
-  {
-    "query": "sân Tennis Long Biên chiều nay",
-    "viewed_venues": [
-      "v-107",
-      "v-109",
-      "v-177",
-      "v-243"
-    ],
-    "clicked_venue_id": "v-109",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Quận 9 buổi chiều",
-    "viewed_venues": [
-      "v-030",
-      "v-077",
-      "v-078"
-    ],
-    "clicked_venue_id": "v-078",
-    "booked": false
-  },
-  {
-    "query": "tìm sân Bóng chuyền Quận 8 sáng sớm",
-    "viewed_venues": [
-      "v-003",
-      "v-025",
-      "v-079",
-      "v-080"
-    ],
-    "clicked_venue_id": "v-080",
-    "booked": true
-  },
-  {
-    "query": "sân Pickleball Quận 5 buổi chiều",
-    "viewed_venues": [
-      "v-026"
-    ],
-    "clicked_venue_id": "v-026",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Quận Tân Phú sáng",
-    "viewed_venues": [
-      "v-047",
-      "v-048",
-      "v-049",
-      "v-050"
-    ],
-    "clicked_venue_id": "v-049",
-    "booked": false
-  },
-  {
-    "query": "sân Tennis Quận 6 buổi chiều",
-    "viewed_venues": [
-      "v-038",
-      "v-103"
-    ],
-    "clicked_venue_id": "v-038",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng Rổ Thủ Đức sáng",
-    "viewed_venues": [
-      "v-023",
-      "v-073"
-    ],
-    "clicked_venue_id": "v-023",
-    "booked": false
-  },
-  {
-    "query": "sân Pickleball Hoài Đức buổi chiều",
-    "viewed_venues": [
-      "v-217",
-      "v-218",
-      "v-223"
-    ],
-    "clicked_venue_id": "v-217",
-    "booked": true
-  },
-  {
-    "query": "sân Tennis Nam Từ Liêm sáng",
-    "viewed_venues": [
-      "v-131",
-      "v-149",
-      "v-171",
-      "v-202"
-    ],
-    "clicked_venue_id": "v-202",
-    "booked": false
-  },
-  {
-    "query": "sân Cầu lông Hà Đông buổi chiều",
-    "viewed_venues": [
-      "v-150",
-      "v-183",
-      "v-186",
-      "v-187"
-    ],
-    "clicked_venue_id": "v-183",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng chuyền Đông Anh sáng",
-    "viewed_venues": [
-      "v-143",
-      "v-144",
-      "v-145",
-      "v-147",
-      "v-148"
-    ],
-    "clicked_venue_id": "v-144",
-    "booked": false
-  },
-  {
-    "query": "sân Pickleball Đống Đa buổi chiều",
-    "viewed_venues": [
-      "v-195",
-      "v-199",
-      "v-228",
-      "v-240"
-    ],
-    "clicked_venue_id": "v-195",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Hai Bà Trưng sáng",
-    "viewed_venues": [
-      "v-141",
-      "v-185",
-      "v-201",
-      "v-247"
-    ],
-    "clicked_venue_id": "v-201",
-    "booked": true
-  },
-  {
-    "query": "sân Tennis Ba Đình buổi chiều",
-    "viewed_venues": [
-      "v-136",
-      "v-137",
-      "v-138",
-      "v-231"
-    ],
-    "clicked_venue_id": "v-137",
-    "booked": false
-  },
-  {
-    "query": "sân Bóng Rổ Hoàn Kiếm sáng",
-    "viewed_venues": [
-      "v-151",
-      "v-152",
-      "v-203"
-    ],
-    "clicked_venue_id": "v-203",
-    "booked": true
-  },
-  {
-    "query": "sân Pickleball Long Biên buổi chiều",
-    "viewed_venues": [
-      "v-163",
-      "v-167",
-      "v-170",
-      "v-233"
-    ],
-    "clicked_venue_id": "v-163",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Thanh Xuân sáng",
-    "viewed_venues": [
-      "v-113",
-      "v-114",
-      "v-146",
-      "v-209"
-    ],
-    "clicked_venue_id": "v-209",
-    "booked": false
-  },
-  {
-    "query": "sân Tennis Thanh Trì buổi chiều",
-    "viewed_venues": [
-      "v-113",
-      "v-165",
-      "v-189",
-      "v-191"
-    ],
-    "clicked_venue_id": "v-189",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng Rổ Cầu Giấy sáng",
-    "viewed_venues": [
-      "v-108",
-      "v-216",
-      "v-237",
-      "v-248"
-    ],
-    "clicked_venue_id": "v-108",
-    "booked": false
-  },
-  {
-    "query": "sân Pickleball Quận 4 buổi chiều",
-    "viewed_venues": [
-      "v-028",
-      "v-031",
-      "v-082",
-      "v-085"
-    ],
-    "clicked_venue_id": "v-031",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Hóc Môn sáng",
-    "viewed_venues": [
-      "v-005",
-      "v-006",
-      "v-007"
-    ],
-    "clicked_venue_id": "v-007",
-    "booked": false
-  },
-  {
-    "query": "sân Tennis Quận 12 buổi chiều",
-    "viewed_venues": [
-      "v-015",
-      "v-016",
-      "v-018",
-      "v-090"
-    ],
-    "clicked_venue_id": "v-016",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng chuyền Quận Gò Vấp sáng",
-    "viewed_venues": [
-      "v-042",
-      "v-044",
-      "v-095",
-      "v-096"
-    ],
-    "clicked_venue_id": "v-042",
-    "booked": false
-  },
-  {
-    "query": "sân Pickleball Quận Tân Phú buổi chiều",
-    "viewed_venues": [
-      "v-046",
-      "v-051",
-      "v-053",
-      "v-104"
-    ],
-    "clicked_venue_id": "v-053",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Bình Thạnh sáng",
-    "viewed_venues": [
-      "v-058",
-      "v-059",
-      "v-060",
-      "v-061"
-    ],
-    "clicked_venue_id": "v-061",
-    "booked": false
-  },
-  {
-    "query": "sân Tennis Quận 7 buổi chiều",
-    "viewed_venues": [
-      "v-001",
-      "v-081",
-      "v-217"
-    ],
-    "clicked_venue_id": "v-081",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng Rổ Quận 8 sáng",
-    "viewed_venues": [
-      "v-003",
-      "v-024",
-      "v-079",
-      "v-080"
-    ],
-    "clicked_venue_id": "v-079",
-    "booked": false
-  },
-  {
-    "query": "sân Pickleball Long Biên buổi sáng",
-    "viewed_venues": [
-      "v-139",
-      "v-160",
-      "v-161",
-      "v-162"
-    ],
-    "clicked_venue_id": "v-161",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Tây Hồ chiều",
-    "viewed_venues": [
-      "v-116",
-      "v-117",
-      "v-133",
-      "v-215"
-    ],
-    "clicked_venue_id": "v-133",
-    "booked": false
-  },
-  {
-    "query": "sân Tennis Hà Đông sáng",
-    "viewed_venues": [
-      "v-150",
-      "v-183",
-      "v-186",
-      "v-187"
-    ],
-    "clicked_venue_id": "v-150",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng chuyền Quận Đống Đa buổi chiều",
-    "viewed_venues": [
-      "v-194",
-      "v-195",
-      "v-198",
-      "v-240"
-    ],
-    "clicked_venue_id": "v-240",
-    "booked": true
-  },
-  {
-    "query": "sân Pickleball Quận 1 sáng",
-    "viewed_venues": [
-      "v-027",
-      "v-029",
-      "v-091",
-      "v-092"
-    ],
-    "clicked_venue_id": "v-091",
-    "booked": false
-  },
-  {
-    "query": "sân Cầu lông Hai Bà Trưng buổi chiều",
-    "viewed_venues": [
-      "v-141",
-      "v-185",
-      "v-201",
-      "v-247"
-    ],
-    "clicked_venue_id": "v-141",
-    "booked": true
-  },
-  {
-    "query": "sân Tennis Quận Thanh Xuân sáng",
-    "viewed_venues": [
-      "v-113",
-      "v-114",
-      "v-146",
-      "v-209"
-    ],
-    "clicked_venue_id": "v-114",
-    "booked": false
-  },
-  {
-    "query": "sân Bóng Rổ Long Biên buổi chiều",
-    "viewed_venues": [
-      "v-107",
-      "v-135",
-      "v-160",
-      "v-162"
-    ],
-    "clicked_venue_id": "v-107",
-    "booked": true
-  },
-  {
-    "query": "sân Pickleball Huyện Thanh Trì sáng",
-    "viewed_venues": [
-      "v-113",
-      "v-165",
-      "v-189",
-      "v-191"
-    ],
-    "clicked_venue_id": "v-191",
-    "booked": false
-  },
-  {
-    "query": "sân Cầu lông Quận 10 buổi chiều",
-    "viewed_venues": [
-      "v-036",
-      "v-037",
-      "v-075",
-      "v-076"
-    ],
-    "clicked_venue_id": "v-076",
-    "booked": true
-  },
-  {
-    "query": "sân Tennis Quận Gò Vấp sáng",
-    "viewed_venues": [
-      "v-043",
-      "v-044",
-      "v-095",
-      "v-097"
-    ],
-    "clicked_venue_id": "v-044",
-    "booked": false
-  },
-  {
-    "query": "sân Bóng chuyền Quận 4 buổi chiều",
-    "viewed_venues": [
-      "v-028",
-      "v-031",
-      "v-082",
-      "v-085"
-    ],
-    "clicked_venue_id": "v-082",
-    "booked": true
-  },
-  {
-    "query": "sân Pickleball Quận Tân Bình sáng",
-    "viewed_venues": [
-      "v-004",
-      "v-008",
-      "v-009",
-      "v-055"
-    ],
-    "clicked_venue_id": "v-055",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Huyện Đông Anh buổi chiều",
-    "viewed_venues": [
-      "v-143",
-      "v-144",
-      "v-145",
-      "v-147",
-      "v-148"
-    ],
-    "clicked_venue_id": "v-147",
-    "booked": false
-  },
-  {
-    "query": "sân Tennis Quận 7 sáng",
-    "viewed_venues": [
-      "v-001",
-      "v-081",
-      "v-217"
-    ],
-    "clicked_venue_id": "v-217",
-    "booked": true
-  },
-  {
-    "query": "sân Bóng Rổ Quận 12 buổi chiều",
-    "viewed_venues": [
-      "v-015",
-      "v-016",
-      "v-018",
-      "v-083"
-    ],
-    "clicked_venue_id": "v-015",
-    "booked": false
-  },
-  {
-    "query": "sân Pickleball Quận Hoàng Mai sáng",
-    "viewed_venues": [
-      "v-120",
-      "v-123",
-      "v-125",
-      "v-196"
-    ],
-    "clicked_venue_id": "v-123",
-    "booked": true
-  },
-  {
-    "query": "sân Cầu lông Hoàn Kiếm buổi chiều",
-    "viewed_venues": [
-      "v-151",
-      "v-152",
-      "v-203"
-    ],
-    "clicked_venue_id": "v-151",
-    "booked": false
-  }
-]
+  "query": [
+    {
+      "query": "sân Pickleball ở Quận 7 vào buổi sáng",
+      "viewed_venues": [
+        "v-001",
+        "v-003",
+        "v-025",
+        "v-091",
+        "v-092"
+      ],
+      "clicked_venue_id": "v-001",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Huyện Nhà Bè buổi chiều",
+      "viewed_venues": [
+        "v-002",
+        "v-023",
+        "v-073",
+        "v-016",
+        "v-080"
+      ],
+      "clicked_venue_id": "v-002",
+      "booked": true
+    },
+    {
+      "query": "sân Tennis ở Quận 8 vào buổi sáng",
+      "viewed_venues": [
+        "v-024",
+        "v-025",
+        "v-026",
+        "v-223",
+        "v-217"
+      ],
+      "clicked_venue_id": "v-024",
+      "booked": true
+    },
+    {
+      "query": "tìm sân Bóng Rổ Quận Tân Bình buổi chiều",
+      "viewed_venues": [
+        "v-009",
+        "v-011",
+        "v-055",
+        "v-057",
+        "v-005"
+      ],
+      "clicked_venue_id": "v-009",
+      "booked": false
+    },
+    {
+      "query": "sân Pickleball Huyện Hóc Môn sáng nay",
+      "viewed_venues": [
+        "v-006",
+        "v-004",
+        "v-010",
+        "v-053",
+        "v-054"
+      ],
+      "clicked_venue_id": "v-006",
+      "booked": true
+    },
+    {
+      "query": "sân Bóng chuyền Quận Gò Vấp buổi chiều",
+      "viewed_venues": [
+        "v-134",
+        "v-216",
+        "v-156",
+        "v-246",
+        "v-013"
+      ],
+      "clicked_venue_id": "v-134",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Quận Tân Phú vào buổi sáng",
+      "viewed_venues": [
+        "v-046",
+        "v-049",
+        "v-050",
+        "v-052",
+        "v-192"
+      ],
+      "clicked_venue_id": "v-046",
+      "booked": true
+    },
+    {
+      "query": "tìm sân Pickleball Quận 12 vào buổi chiều",
+      "viewed_venues": [
+        "v-016",
+        "v-019",
+        "v-020",
+        "v-021",
+        "v-022"
+      ],
+      "clicked_venue_id": "v-016",
+      "booked": true
+    },
+    {
+      "query": "sân Tennis Quận 11 sáng",
+      "viewed_venues": [
+        "v-027",
+        "v-029",
+        "v-024",
+        "v-025",
+        "v-066"
+      ],
+      "clicked_venue_id": "v-027",
+      "booked": true
+    },
+    {
+      "query": "sân Pickleball Quận 1 vào buổi chiều",
+      "viewed_venues": [
+        "v-091",
+        "v-092",
+        "v-001",
+        "v-003",
+        "v-025"
+      ],
+      "clicked_venue_id": "v-091",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Đống Đa buổi sáng",
+      "viewed_venues": [
+        "v-008",
+        "v-205",
+        "v-160",
+        "v-011",
+        "v-219"
+      ],
+      "clicked_venue_id": "v-008",
+      "booked": false
+    },
+    {
+      "query": "sân Bóng Rổ Hà Đông buổi chiều",
+      "viewed_venues": [
+        "v-236",
+        "v-200",
+        "v-015",
+        "v-202",
+        "v-208"
+      ],
+      "clicked_venue_id": "v-236",
+      "booked": true
+    },
+    {
+      "query": "sân Bóng chuyền Tây Hồ sáng",
+      "viewed_venues": [
+        "v-008",
+        "v-022",
+        "v-157",
+        "v-073",
+        "v-196"
+      ],
+      "clicked_venue_id": "v-008",
+      "booked": true
+    },
+    {
+      "query": "sân Pickleball Quận Hoàng Mai buổi sáng",
+      "viewed_venues": [
+        "v-112",
+        "v-118",
+        "v-119",
+        "v-120",
+        "v-121"
+      ],
+      "clicked_venue_id": "v-112",
+      "booked": false
+    },
+    {
+      "query": "sân Tennis Long Biên chiều nay",
+      "viewed_venues": [
+        "v-090",
+        "v-126",
+        "v-071",
+        "v-244",
+        "v-175"
+      ],
+      "clicked_venue_id": "v-090",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Quận 9 buổi chiều",
+      "viewed_venues": [
+        "v-030",
+        "v-077",
+        "v-078",
+        "v-081",
+        "v-042"
+      ],
+      "clicked_venue_id": "v-030",
+      "booked": true
+    },
+    {
+      "query": "tìm sân Bóng chuyền Quận 8 sáng sớm",
+      "viewed_venues": [
+        "v-110",
+        "v-052",
+        "v-186",
+        "v-227",
+        "v-145"
+      ],
+      "clicked_venue_id": "v-110",
+      "booked": true
+    },
+    {
+      "query": "sân Pickleball Quận 5 buổi chiều",
+      "viewed_venues": [
+        "v-001",
+        "v-003",
+        "v-025",
+        "v-091",
+        "v-092"
+      ],
+      "clicked_venue_id": "v-001",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Quận Tân Phú sáng",
+      "viewed_venues": [
+        "v-046",
+        "v-049",
+        "v-050",
+        "v-052",
+        "v-057"
+      ],
+      "clicked_venue_id": "v-046",
+      "booked": true
+    },
+    {
+      "query": "sân Tennis Quận 6 buổi chiều",
+      "viewed_venues": [
+        "v-038",
+        "v-024",
+        "v-025",
+        "v-026",
+        "v-090"
+      ],
+      "clicked_venue_id": "v-038",
+      "booked": false
+    },
+    {
+      "query": "sân Bóng Rổ Thủ Đức sáng",
+      "viewed_venues": [
+        "v-210",
+        "v-093",
+        "v-038",
+        "v-233",
+        "v-025"
+      ],
+      "clicked_venue_id": "v-210",
+      "booked": true
+    },
+    {
+      "query": "sân Pickleball Hoài Đức buổi chiều",
+      "viewed_venues": [
+        "v-034",
+        "v-248",
+        "v-243",
+        "v-212",
+        "v-198"
+      ],
+      "clicked_venue_id": "v-034",
+      "booked": true
+    },
+    {
+      "query": "sân Tennis Nam Từ Liêm sáng",
+      "viewed_venues": [
+        "v-159",
+        "v-072",
+        "v-057",
+        "v-069",
+        "v-199"
+      ],
+      "clicked_venue_id": "v-159",
+      "booked": true
+    },
+    {
+      "query": "sân Cầu lông Hà Đông buổi chiều",
+      "viewed_venues": [
+        "v-212",
+        "v-091",
+        "v-213",
+        "v-071",
+        "v-138"
+      ],
+      "clicked_venue_id": "v-212",
+      "booked": false
+    },
+    {
+      "query": "sân Bóng chuyền Đông Anh sáng",
+      "viewed_venues": [
+        "v-214",
+        "v-221",
+        "v-179",
+        "v-203",
+        "v-159"
+      ],
+      "clicked_venue_id": "v-214",
+      "booked": false
+    },
+    {
+      "query": "sân Pickleball Đống Đa buổi chiều",
+      "viewed_venues": [
+        "v-055",
+        "v-105",
+        "v-155",
+        "v-151",
+        "v-179"
+      ],
+      "clicked_venue_id": "v-055",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Hai Bà Trưng sáng",
+      "viewed_venues": [
+        "v-156",
+        "v-105",
+        "v-074",
+        "v-136",
+        "v-037"
+      ],
+      "clicked_venue_id": "v-156",
+      "booked": false
+    },
+    {
+      "query": "sân Tennis Ba Đình buổi chiều",
+      "viewed_venues": [
+        "v-155",
+        "v-198",
+        "v-148",
+        "v-011",
+        "v-185"
+      ],
+      "clicked_venue_id": "v-155",
+      "booked": false
+    },
+    {
+      "query": "sân Bóng Rổ Hoàn Kiếm sáng",
+      "viewed_venues": [
+        "v-213",
+        "v-127",
+        "v-146",
+        "v-120",
+        "v-068"
+      ],
+      "clicked_venue_id": "v-213",
+      "booked": true
+    },
+    {
+      "query": "sân Pickleball Long Biên buổi chiều",
+      "viewed_venues": [
+        "v-213",
+        "v-147",
+        "v-140",
+        "v-011",
+        "v-229"
+      ],
+      "clicked_venue_id": "v-213",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Thanh Xuân sáng",
+      "viewed_venues": [
+        "v-115",
+        "v-071",
+        "v-185",
+        "v-184",
+        "v-189"
+      ],
+      "clicked_venue_id": "v-115",
+      "booked": false
+    },
+    {
+      "query": "sân Tennis Thanh Trì buổi chiều",
+      "viewed_venues": [
+        "v-234",
+        "v-232",
+        "v-174",
+        "v-016",
+        "v-178"
+      ],
+      "clicked_venue_id": "v-234",
+      "booked": false
+    },
+    {
+      "query": "sân Bóng Rổ Cầu Giấy sáng",
+      "viewed_venues": [
+        "v-049",
+        "v-103",
+        "v-199",
+        "v-214",
+        "v-157"
+      ],
+      "clicked_venue_id": "v-049",
+      "booked": true
+    },
+    {
+      "query": "sân Pickleball Quận 4 buổi chiều",
+      "viewed_venues": [
+        "v-028",
+        "v-085",
+        "v-001",
+        "v-190",
+        "v-092"
+      ],
+      "clicked_venue_id": "v-028",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Hóc Môn sáng",
+      "viewed_venues": [
+        "v-169",
+        "v-227",
+        "v-062",
+        "v-034",
+        "v-157"
+      ],
+      "clicked_venue_id": "v-169",
+      "booked": false
+    },
+    {
+      "query": "sân Tennis Quận 12 buổi chiều",
+      "viewed_venues": [
+        "v-015",
+        "v-016",
+        "v-018",
+        "v-019",
+        "v-021"
+      ],
+      "clicked_venue_id": "v-015",
+      "booked": false
+    },
+    {
+      "query": "sân Bóng chuyền Quận Gò Vấp sáng",
+      "viewed_venues": [
+        "v-218",
+        "v-127",
+        "v-026",
+        "v-071",
+        "v-032"
+      ],
+      "clicked_venue_id": "v-218",
+      "booked": false
+    },
+    {
+      "query": "sân Pickleball Quận Tân Phú buổi chiều",
+      "viewed_venues": [
+        "v-046",
+        "v-048",
+        "v-050",
+        "v-052",
+        "v-073"
+      ],
+      "clicked_venue_id": "v-046",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Bình Thạnh sáng",
+      "viewed_venues": [
+        "v-156",
+        "v-196",
+        "v-164",
+        "v-205",
+        "v-128"
+      ],
+      "clicked_venue_id": "v-156",
+      "booked": true
+    },
+    {
+      "query": "sân Tennis Quận 7 buổi chiều",
+      "viewed_venues": [
+        "v-024",
+        "v-025",
+        "v-026",
+        "v-147",
+        "v-215"
+      ],
+      "clicked_venue_id": "v-024",
+      "booked": true
+    },
+    {
+      "query": "sân Bóng Rổ Quận 8 sáng",
+      "viewed_venues": [
+        "v-003",
+        "v-079",
+        "v-080",
+        "v-183",
+        "v-129"
+      ],
+      "clicked_venue_id": "v-003",
+      "booked": false
+    },
+    {
+      "query": "sân Pickleball Long Biên buổi sáng",
+      "viewed_venues": [
+        "v-135",
+        "v-230",
+        "v-226",
+        "v-192",
+        "v-212"
+      ],
+      "clicked_venue_id": "v-135",
+      "booked": true
+    },
+    {
+      "query": "sân Cầu lông Tây Hồ chiều",
+      "viewed_venues": [
+        "v-036",
+        "v-119",
+        "v-151",
+        "v-184",
+        "v-157"
+      ],
+      "clicked_venue_id": "v-036",
+      "booked": true
+    },
+    {
+      "query": "sân Tennis Hà Đông sáng",
+      "viewed_venues": [
+        "v-247",
+        "v-212",
+        "v-205",
+        "v-166",
+        "v-165"
+      ],
+      "clicked_venue_id": "v-247",
+      "booked": true
+    },
+    {
+      "query": "sân Bóng chuyền Quận Đống Đa buổi chiều",
+      "viewed_venues": [
+        "v-231",
+        "v-021",
+        "v-161",
+        "v-194",
+        "v-073"
+      ],
+      "clicked_venue_id": "v-231",
+      "booked": true
+    },
+    {
+      "query": "sân Pickleball Quận 1 sáng",
+      "viewed_venues": [
+        "v-091",
+        "v-092",
+        "v-001",
+        "v-003",
+        "v-025"
+      ],
+      "clicked_venue_id": "v-091",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Hai Bà Trưng buổi chiều",
+      "viewed_venues": [
+        "v-219",
+        "v-086",
+        "v-135",
+        "v-028",
+        "v-218"
+      ],
+      "clicked_venue_id": "v-219",
+      "booked": true
+    },
+    {
+      "query": "sân Tennis Quận Thanh Xuân sáng",
+      "viewed_venues": [
+        "v-115",
+        "v-059",
+        "v-068",
+        "v-069",
+        "v-071"
+      ],
+      "clicked_venue_id": "v-115",
+      "booked": true
+    },
+    {
+      "query": "sân Bóng Rổ Long Biên buổi chiều",
+      "viewed_venues": [
+        "v-236",
+        "v-077",
+        "v-004",
+        "v-007",
+        "v-192"
+      ],
+      "clicked_venue_id": "v-236",
+      "booked": false
+    },
+    {
+      "query": "sân Pickleball Huyện Thanh Trì sáng",
+      "viewed_venues": [
+        "v-189",
+        "v-191",
+        "v-221",
+        "v-059",
+        "v-060"
+      ],
+      "clicked_venue_id": "v-189",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Quận 10 buổi chiều",
+      "viewed_venues": [
+        "v-027",
+        "v-091",
+        "v-092",
+        "v-081",
+        "v-221"
+      ],
+      "clicked_venue_id": "v-027",
+      "booked": true
+    },
+    {
+      "query": "sân Tennis Quận Gò Vấp sáng",
+      "viewed_venues": [
+        "v-042",
+        "v-044",
+        "v-045",
+        "v-094",
+        "v-095"
+      ],
+      "clicked_venue_id": "v-042",
+      "booked": false
+    },
+    {
+      "query": "sân Bóng chuyền Quận 4 buổi chiều",
+      "viewed_venues": [
+        "v-109",
+        "v-098",
+        "v-215",
+        "v-034",
+        "v-188"
+      ],
+      "clicked_venue_id": "v-109",
+      "booked": true
+    },
+    {
+      "query": "sân Pickleball Quận Tân Bình sáng",
+      "viewed_venues": [
+        "v-004",
+        "v-010",
+        "v-053",
+        "v-054",
+        "v-055"
+      ],
+      "clicked_venue_id": "v-004",
+      "booked": false
+    },
+    {
+      "query": "sân Cầu lông Huyện Đông Anh buổi chiều",
+      "viewed_venues": [
+        "v-144",
+        "v-145",
+        "v-148",
+        "v-166",
+        "v-033"
+      ],
+      "clicked_venue_id": "v-144",
+      "booked": false
+    },
+    {
+      "query": "sân Tennis Quận 7 sáng",
+      "viewed_venues": [
+        "v-024",
+        "v-025",
+        "v-026",
+        "v-003",
+        "v-210"
+      ],
+      "clicked_venue_id": "v-024",
+      "booked": true
+    },
+    {
+      "query": "sân Bóng Rổ Quận 12 buổi chiều",
+      "viewed_venues": [
+        "v-015",
+        "v-016",
+        "v-017",
+        "v-018",
+        "v-021"
+      ],
+      "clicked_venue_id": "v-015",
+      "booked": false
+    },
+    {
+      "query": "sân Pickleball Quận Hoàng Mai sáng",
+      "viewed_venues": [
+        "v-112",
+        "v-118",
+        "v-119",
+        "v-120",
+        "v-121"
+      ],
+      "clicked_venue_id": "v-112",
+      "booked": true
+    },
+    {
+      "query": "sân Cầu lông Hoàn Kiếm buổi chiều",
+      "viewed_venues": [
+        "v-195",
+        "v-080",
+        "v-072",
+        "v-151",
+        "v-126"
+      ],
+      "clicked_venue_id": "v-195",
+      "booked": false
+    }
+  ]
 }
