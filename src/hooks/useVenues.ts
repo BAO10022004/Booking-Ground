@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { venueService, type Venue as ApiVenue } from "../services";
-import Venue from "../models/Venue";
+import { Venue } from "../models/Venue";
 
 interface VenueFilters {
   category_id?: string;
   city?: string;
+  district?: string;
   search?: string;
 }
 
@@ -46,7 +47,7 @@ export function useVenues(filters?: VenueFilters) {
     };
 
     fetchVenues();
-  }, [filters?.category_id, filters?.city, filters?.search]);
+  }, [filters?.category_id, filters?.city, filters?.district, filters?.search]);
 
   return { venues, loading, error };
 }

@@ -1,20 +1,19 @@
 import { Heart, Share2, Star, MapPin, Clock } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/VenueGridView.css";
 import { useVenues, useRatings, useAuth } from "../hooks";
 import { getTimePeriodVenue } from "../utils/helpers";
 import BookingTypeModal from "../pages/BookingTypeModal";
-
-function VenueGridView() {
-  const [sportsVenues, setSportsVenues] = useState<any[]>([]);
 import VenueDetailModal from "./VenueDetailModal";
+import type { Venue } from "../models/Venue";
 
 interface VenueGridViewProps {
   search?: string;
   categoryId?: string;
   city?: string;
   district?: string;
+  listView?: Venue[];
 }
 
 function VenueGridView({
@@ -22,37 +21,29 @@ function VenueGridView({
   categoryId,
   city,
   district,
+  listView,
 }: VenueGridViewProps = {}) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const { venues: sportsVenues, loading } = useVenues({
-    search,
-    category_id: categoryId,
-    city,
-    district,
-  });
+  const { venues: sportsVenues, loading } = useVenues(
+    listView && listView.length > 0
+      ? undefined
+      : {
+          search,
+          category_id: categoryId,
+          city,
+          district,
+        }
+  );
   const { getAverageRating } = useRatings();
   const [favorites, setFavorites] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [venue, setVenue] = useState<any | null>(null);
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchVenues = async () => {
-      try {
-        const venues = await getGrounds();
-        setSportsVenues(venues);
-      } catch (error) {
-        console.error("Error loading venues:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchVenues();
-  }, []);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
+
+  const displayVenues =
+    listView && listView.length > 0 ? listView : sportsVenues;
 
   const toggleFavorite = (id: unknown) => {
     if (!isAuthenticated) {
@@ -82,25 +73,25 @@ function VenueGridView({
     <>
       <main className="home-page">
         <div className="venue-grid">
-          {sportsVenues.map((venue) => (
+          {displayVenues.map((venue) => (
             <div
-              key={venue.venueId}
+              key={venue.venueId || venue.id}
               className="venue-card"
               onClick={() => {
-                setSelectedVenueId(venue.venueId);
+                setSelectedVenueId(venue.venueId || venue.id);
                 setIsDetailModalOpen(true);
               }}
               style={{ cursor: "pointer" }}
             >
               <div className="venue-image-container">
                 <img
-                  src={venue.image}
+                  src={venue.image || venue.images?.[0]?.image_url}
                   alt={venue.name}
                   className="venue-image"
                 />
 
                 {(() => {
-                  const rating = getAverageRating(venue.venueId);
+                  const rating = getAverageRating(venue.venueId || venue.id);
                   return rating !== null ? (
                     <div className="venue-rating">
                       <Star className="rating-star" />
@@ -110,17 +101,26 @@ function VenueGridView({
                 })()}
                 <div className="venue-actions">
                   <button
-                    onClick={() => toggleFavorite(venue.venueId)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(venue.venueId || venue.id);
+                    }}
                     className="action-button"
                     aria-label="Yêu thích"
                   >
                     <Heart
                       className={`action-icon ${
-                        favorites.has(venue.venueId) ? "favorite" : ""
+                        favorites.has(venue.venueId || venue.id)
+                          ? "favorite"
+                          : ""
                       }`}
                     />
                   </button>
-                  <button className="action-button" aria-label="Chia sẻ">
+                  <button
+                    className="action-button"
+                    aria-label="Chia sẻ"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <Share2 className="action-icon" />
                   </button>
                 </div>
@@ -169,8 +169,8 @@ function VenueGridView({
         venueId={selectedVenueId}
         onBookClick={() => {
           setIsDetailModalOpen(false);
-          const selectedVenue = sportsVenues.find(
-            (v) => v.venueId === selectedVenueId
+          const selectedVenue = displayVenues.find(
+            (v) => (v.venueId || v.id) === selectedVenueId
           );
           if (selectedVenue) {
             setVenue(selectedVenue);

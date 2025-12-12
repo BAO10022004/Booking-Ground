@@ -1,7 +1,7 @@
 import { groundService } from "../services";
 import Ground from "../models/Ground";
 
-async function GetGroundByVenue(venueId: string) {
+export async function getGroundByVenue(venueId: string) {
   try {
     const grounds = await groundService.getAllGrounds({ venue_id: venueId });
     return grounds.map(
@@ -19,4 +19,4 @@ async function GetGroundByVenue(venueId: string) {
   }
 }
 
-export default GetGroundByVenue;
+export default getGroundByVenue;

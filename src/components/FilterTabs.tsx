@@ -2,7 +2,15 @@ import "../assets/styles/FilterTabs.css";
 import { useState } from "react";
 import { Heart, Building2, User, MapPin, Check } from "lucide-react";
 
-function FilterTabs() {
+interface FilterTabsProps {
+  selectedCategory?: string;
+  setSelectedCategory?: (category: string | undefined) => void;
+}
+
+function FilterTabs({
+  selectedCategory,
+  setSelectedCategory,
+}: FilterTabsProps = {}) {
   const [bookedChecked, setBookedChecked] = useState(false);
   const [favoriteActive, setFavoriteActive] = useState(false);
 

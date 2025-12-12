@@ -6,9 +6,12 @@ import "../assets/styles/BookingEventPage.css";
 import BottomContinueButton from "../components/BottomContinueButton";
 import ScheduleGrid from "../components/ScheduleGrid";
 import DatePickerModal from "../components/DatePickerModal";
+import CategorySelectionModal from "../components/CategorySelectionModal";
 import Toast from "../components/Toast";
 import { useVenue, useAuth, useMyBookings, useGrounds } from "../hooks";
 import { getCurrentDate } from "../utils/helpers";
+import { venueService } from "../services";
+import getCategoriesByVenue from "../utils/getCategoriesByVenue";
 
 interface BookingSchedulePageProps {
   venueId: string;
@@ -74,6 +77,17 @@ export default function BookingSchedulePage({
     message: string;
   } | null>(null);
   const [showCourtsModal, setShowCourtsModal] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  );
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string>("");
+  const [categories, setCategories] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalHours, setTotalHours] = useState(0);
+  const [priceLoading, setPriceLoading] = useState(false);
 
   useEffect(() => {
     if (!venue) {
@@ -83,6 +97,88 @@ export default function BookingSchedulePage({
       console.error("Account not found");
     }
   }, [venue, venueId, account]);
+
+  // Load categories for venue
+  useEffect(() => {
+    const loadCategories = async () => {
+      if (!venueId) return;
+      try {
+        const venueCategories = await getCategoriesByVenue(venueId);
+        const transformed = venueCategories.map((cat) => ({
+          id: cat.categoryId,
+          name: cat.name,
+        }));
+        setCategories(transformed);
+
+        // Show category modal if categories exist and none selected
+        if (transformed.length > 0 && !selectedCategoryId) {
+          setShowCategoryModal(true);
+        }
+      } catch (error) {
+        console.error("Error loading categories:", error);
+      }
+    };
+    loadCategories();
+  }, [venueId]);
+
+  // Calculate price when selection changes
+  useEffect(() => {
+    const calculatePrice = async () => {
+      if (
+        selectedCells.length === 0 ||
+        !venue?.venueId ||
+        !selectedDate ||
+        !selectedCategoryId
+      ) {
+        setTotalPrice(0);
+        setTotalHours(0);
+        return;
+      }
+
+      try {
+        setPriceLoading(true);
+        const validation = validateContinuousTimeSlots(selectedCells);
+        if (!validation.isValid || validation.bookings.length === 0) {
+          setTotalPrice(0);
+          setTotalHours(0);
+          return;
+        }
+
+        const booking = validation.bookings[0];
+        const [day, month, year] = selectedDate.split("/").map(Number);
+        const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(
+          day
+        ).padStart(2, "0")}`;
+
+        const result = await venueService.calculatePrice({
+          venueId: venue.venueId,
+          date: dateStr,
+          startTime: booking.startTime,
+          endTime: booking.endTime,
+          groundId: booking.ground,
+          categoryId: selectedCategoryId,
+          target: selectedCategoryName,
+        });
+
+        setTotalPrice(result.totalPrice);
+        setTotalHours(result.totalHours);
+      } catch (error) {
+        console.error("Error calculating price:", error);
+        setTotalPrice(0);
+        setTotalHours(0);
+      } finally {
+        setPriceLoading(false);
+      }
+    };
+
+    calculatePrice();
+  }, [
+    selectedCells,
+    venue?.venueId,
+    selectedDate,
+    selectedCategoryId,
+    selectedCategoryName,
+  ]);
 
   // //////////////////////////////////////////////// CONSTANTS ////////////////////////////////////////////////
   const timeSlots = [
@@ -248,6 +344,7 @@ export default function BookingSchedulePage({
         ground_id: groundId,
         is_event: false,
         quantity: 1,
+        target: selectedCategoryName || undefined,
       });
 
       showToast(
@@ -432,6 +529,8 @@ export default function BookingSchedulePage({
           venue={venue}
           selectedCells={selectedCells}
           setSelectedCells={setSelectedCells}
+          selectedDate={selectedDate}
+          categoryId={selectedCategoryId || undefined}
         />
       </div>
 
@@ -439,6 +538,30 @@ export default function BookingSchedulePage({
       <BottomContinueButton
         handleSubmit={handleSubmit}
         selectedCells={selectedCells}
+        totalHours={totalHours}
+        totalPrice={totalPrice}
+        loading={priceLoading}
+      />
+
+      {/* Category Selection Modal */}
+      <CategorySelectionModal
+        isOpen={showCategoryModal}
+        onClose={() => {
+          // Don't allow closing without selection if categories exist
+          if (categories.length > 0 && !selectedCategoryId) {
+            showToast("warning", "Vui lòng chọn đối tượng áp dụng");
+            return;
+          }
+          setShowCategoryModal(false);
+        }}
+        categories={categories}
+        selectedCategoryId={selectedCategoryId}
+        onSelectCategory={(categoryId, categoryName) => {
+          setSelectedCategoryId(categoryId);
+          setSelectedCategoryName(categoryName);
+          setShowCategoryModal(false);
+        }}
+        sportName={venue?.name || "Cầu Lông"}
       />
 
       {/* Date Picker Modal */}

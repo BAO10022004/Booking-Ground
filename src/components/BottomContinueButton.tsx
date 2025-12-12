@@ -1,4 +1,4 @@
-import '../assets/styles/BottomContinueButton.css';
+import "../assets/styles/BottomContinueButton.css";
 
 // ✅ Import hoặc định nghĩa Cell class
 class Cell {
@@ -26,21 +26,51 @@ class Cell {
 }
 
 interface BottomContinueButtonProps {
-  handleSubmit: (selectedCells: Cell[]) => void; // ✅ Đổi từ Set<string> sang Cell[]
-  selectedCells: Cell[]; // ✅ Đổi từ Set<string> sang Cell[]
+  handleSubmit: (selectedCells: Cell[]) => void;
+  selectedCells: Cell[];
+  totalHours?: number;
+  totalPrice?: number;
+  loading?: boolean;
 }
 
-function BottomContinueButton({ handleSubmit, selectedCells }: BottomContinueButtonProps) {
+function BottomContinueButton({
+  handleSubmit,
+  selectedCells,
+  totalHours = 0,
+  totalPrice = 0,
+  loading = false,
+}: BottomContinueButtonProps) {
+  const hasSelection = selectedCells.length > 0;
+
   return (
     <div className="booking-bottom-bar">
       <div className="booking-bottom-container">
-        <button 
-          className="booking-submit-btn" 
+        {hasSelection && (
+          <div className="booking-summary">
+            <div className="booking-summary-item">
+              <span className="booking-summary-label">Tổng giờ:</span>
+              <span className="booking-summary-value">
+                {totalHours > 0
+                  ? `${totalHours}h${totalHours % 1 === 0.5 ? "30" : ""}`
+                  : "0h"}
+              </span>
+            </div>
+            <div className="booking-summary-item">
+              <span className="booking-summary-label">Tổng tiền:</span>
+              <span className="booking-summary-value price">
+                {totalPrice > 0
+                  ? `${totalPrice.toLocaleString("vi-VN")} ₫`
+                  : "0 ₫"}
+              </span>
+            </div>
+          </div>
+        )}
+        <button
+          className="booking-submit-btn"
           onClick={() => handleSubmit(selectedCells)}
-          disabled={selectedCells.length === 0} // ✅ Đổi từ size sang length
+          disabled={!hasSelection || loading}
         >
-          TIẾP THEO {selectedCells.length > 0 && `(${selectedCells.length})`} 
-          {/* ✅ Đổi từ size sang length */}
+          {loading ? "Đang tính..." : "TIẾP THEO"}
         </button>
       </div>
     </div>

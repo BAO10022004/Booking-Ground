@@ -3,11 +3,6 @@ import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/BookingTypeModal.css";
 import { Venue } from "../models/Venue";
-import { X, ArrowRight } from "lucide-react";
-import ReactDOM from "react-dom";
-import { useNavigate } from "react-router-dom";
-import "../assets/styles/BookingTypeModal.css";
-import Venue from "../models/Venue";
 import { useAuth } from "../hooks";
 
 interface BookingTypeModalProps {
@@ -32,10 +27,11 @@ export default function BookingTypeModal({
       onClose();
       return;
     }
-    if (!venue?.venueId) {
+    const venueId = (venue as any)?.venueId || (venue as any)?.id;
+    if (!venueId) {
       return;
     }
-    navigate(`/booking/${venue.venueId}`);
+    navigate(`/booking/${venueId}`);
     onClose();
   };
 

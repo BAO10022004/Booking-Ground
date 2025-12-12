@@ -1,5 +1,5 @@
 import { venueService } from "../../services";
-import Venue from "../../models/Venue";
+import { Venue } from "../../models/Venue";
 
 export async function getVenueById(venueId: string): Promise<Venue | null> {
   try {

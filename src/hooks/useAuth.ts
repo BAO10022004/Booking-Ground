@@ -25,8 +25,8 @@ export function useAuth() {
             role: userData.role ?? false,
             isAdmin: userData.is_admin ?? false,
             isActive: userData.is_active ?? true,
-            avatarId: userData.avatar_id || false,
-            coverImageId: userData.cover_image_id || false,
+            avatarId: !!userData.avatar_id,
+            coverImageId: !!userData.cover_image_id,
           });
           setUser(account);
           setIsAuthenticated(true);
@@ -63,8 +63,8 @@ export function useAuth() {
         role: response.user.role ?? false,
         isAdmin: response.user.is_admin ?? false,
         isActive: response.user.is_active ?? true,
-        avatarId: response.user.avatar_id || false,
-        coverImageId: response.user.cover_image_id || false,
+        avatarId: !!response.user.avatar_id,
+        coverImageId: !!response.user.cover_image_id,
       });
       setUser(account);
       setIsAuthenticated(true);
@@ -114,8 +114,8 @@ export function useAuth() {
         role: response.user.role ?? false,
         isAdmin: response.user.is_admin ?? false,
         isActive: response.user.is_active ?? true,
-        avatarId: response.user.avatar_id || false,
-        coverImageId: response.user.cover_image_id || false,
+        avatarId: !!response.user.avatar_id,
+        coverImageId: !!response.user.cover_image_id,
       });
       setUser(account);
       setIsAuthenticated(true);

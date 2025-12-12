@@ -17,6 +17,8 @@ export const API_ENDPOINTS = {
     TERMS: (id: string) => `/venues/${id}/terms`,
     PRICE_LISTS: (id: string) => `/venues/${id}/price-lists`,
     IMAGES: (id: string) => `/venues/${id}/images`,
+    SCHEDULE: (id: string) => `/venues/${id}/schedule`,
+    CALCULATE_PRICE: (id: string) => `/venues/${id}/calculate-price`,
   },
   CATEGORIES: {
     LIST: "/categories",
@@ -54,5 +56,8 @@ export const API_ENDPOINTS = {
     UPLOAD: "/images/upload",
     GET: (id: string) => `/images/${id}`,
     DELETE: (id: string) => `/images/${id}`,
+  },
+  THINKING_SEARCH: {
+    PREDICT: "/predict",
   },
 };

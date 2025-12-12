@@ -13,7 +13,7 @@ function App() {
   return (
     <BrowserRouter basename="/Booking-Ground">
       <Routes>
-        {/* Field Owner Login Page - Initial page */}
+        {/* Landing Page - Initial page with Login or Guest options */}
         <Route path="/" element={<FieldOwnerLoginPage />} />
 
         {/* Field Owner Portal */}
