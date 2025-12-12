@@ -1,34 +1,48 @@
-import React, { useState } from 'react';
-import { User, Mail, Calendar, Phone } from 'lucide-react';
-import '../../assets/styles/ProfilePage.css';
-
-// Mock data dựa trên cấu trúc ACCOUNTS table
-const mockUser = {
-  UserID: "123e4567-e89b-12d3-a456-426614174000",
-  PhoneNumber: "0912345678",
-  Email: "nguyenvana@email.com",
-  FullName: "Nguyễn Văn A",
-  Gender: false, // 0 = nam
-  Birthday: "1990-01-15",
-  Role: true,
-  IsAdmin: false,
-  IsActive: true,
-  AvatarID: null,
-  CoverImageID: null
-};
+import React, { useState } from "react";
+import { User, Mail, Calendar, Phone } from "lucide-react";
+import "../../assets/styles/ProfilePage.css";
+import { useAuth } from "../../hooks";
 
 const ProfilePage = () => {
-  const [user] = useState(mockUser);
+  const { user: account, loading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
 
-  const formatDate = (dateString: string ) => {
+  if (loading) {
+    return (
+      <div style={{ padding: "40px", textAlign: "center" }}>Đang tải...</div>
+    );
+  }
+
+  if (!account) {
+    return (
+      <div style={{ padding: "40px", textAlign: "center" }}>
+        Vui lòng đăng nhập
+      </div>
+    );
+  }
+
+  const user = {
+    UserID: account.userId,
+    PhoneNumber: account.phoneNumber,
+    Email: account.email,
+    FullName: account.fullName,
+    Gender: account.gender,
+    Birthday: account.birthday.toISOString().split("T")[0],
+    Role: account.role,
+    IsAdmin: account.isAdmin,
+    IsActive: account.isActive,
+    AvatarID: account.avatarId || null,
+    CoverImageID: account.coverImageId || null,
+  };
+
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN');
+    return date.toLocaleDateString("vi-VN");
   };
 
   const handleSave = () => {
     // Logic lưu thông tin
-    console.log('Saving user data...');
+    // Saving user data...
     setIsEditing(false);
   };
 
@@ -41,10 +55,12 @@ const ProfilePage = () => {
       <div className="profile-header-section">
         <div>
           <h1 className="profile-content-title">Thông tin cá nhân</h1>
-          <p className="profile-content-subtitle">Chi tiết và cài đặt tài khoản</p>
+          <p className="profile-content-subtitle">
+            Chi tiết và cài đặt tài khoản
+          </p>
         </div>
         {!isEditing && (
-          <button 
+          <button
             className="edit-profile-button"
             onClick={() => setIsEditing(true)}
           >
@@ -56,7 +72,9 @@ const ProfilePage = () => {
       <div className="profile-form-section">
         {/* Profile Description */}
         <div className="profile-description-section">
-          <label className="profile-input-label-small">Nội dung cho profile</label>
+          <label className="profile-input-label-small">
+            Nội dung cho profile
+          </label>
           <div className="profile-description-placeholder">
             Nội dung cho profile
           </div>
@@ -65,7 +83,7 @@ const ProfilePage = () => {
         {/* Personal Information */}
         <div className="profile-info-section">
           <h3 className="profile-section-title">Thông tin chi tiết</h3>
-          
+
           <div className="profile-input-grid">
             {/* Full Name */}
             <div className="profile-input-group">
@@ -73,8 +91,8 @@ const ProfilePage = () => {
                 <User size={16} className="profile-label-icon" />
                 Họ và tên
               </label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={user.FullName}
                 readOnly={!isEditing}
                 className="profile-input-field"
@@ -87,8 +105,8 @@ const ProfilePage = () => {
                 <Mail size={16} className="profile-label-icon" />
                 Email
               </label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 value={user.Email}
                 readOnly={!isEditing}
                 className="profile-input-field"
@@ -101,8 +119,8 @@ const ProfilePage = () => {
                 <Phone size={16} className="profile-label-icon" />
                 Số điện thoại
               </label>
-              <input 
-                type="tel" 
+              <input
+                type="tel"
                 value={user.PhoneNumber}
                 readOnly={!isEditing}
                 className="profile-input-field"
@@ -115,8 +133,8 @@ const ProfilePage = () => {
                 <Calendar size={16} className="profile-label-icon" />
                 Ngày sinh
               </label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={formatDate(user.Birthday)}
                 readOnly={!isEditing}
                 className="profile-input-field"
@@ -128,9 +146,9 @@ const ProfilePage = () => {
               <label className="profile-input-label">Giới tính</label>
               <div className="profile-radio-group">
                 <label className="profile-radio-label">
-                  <input 
-                    type="radio" 
-                    name="gender" 
+                  <input
+                    type="radio"
+                    name="gender"
                     checked={!user.Gender}
                     disabled={!isEditing}
                     className="profile-radio-input"
@@ -138,9 +156,9 @@ const ProfilePage = () => {
                   <span className="profile-radio-text">Nam</span>
                 </label>
                 <label className="profile-radio-label">
-                  <input 
-                    type="radio" 
-                    name="gender" 
+                  <input
+                    type="radio"
+                    name="gender"
                     checked={user.Gender}
                     disabled={!isEditing}
                     className="profile-radio-input"
@@ -154,9 +172,21 @@ const ProfilePage = () => {
             <div className="profile-input-group">
               <label className="profile-input-label">Trạng thái</label>
               <div className="profile-status-wrapper">
-                <span className={`profile-status-badge ${user.IsActive ? 'profile-status-active' : 'profile-status-inactive'}`}>
-                  <span className={`profile-status-dot ${user.IsActive ? 'profile-dot-active' : 'profile-dot-inactive'}`}></span>
-                  {user.IsActive ? 'Đang hoạt động' : 'Ngừng hoạt động'}
+                <span
+                  className={`profile-status-badge ${
+                    user.IsActive
+                      ? "profile-status-active"
+                      : "profile-status-inactive"
+                  }`}
+                >
+                  <span
+                    className={`profile-status-dot ${
+                      user.IsActive
+                        ? "profile-dot-active"
+                        : "profile-dot-inactive"
+                    }`}
+                  ></span>
+                  {user.IsActive ? "Đang hoạt động" : "Ngừng hoạt động"}
                 </span>
               </div>
             </div>

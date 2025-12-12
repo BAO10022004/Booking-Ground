@@ -1,0 +1,30 @@
+.map-page {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  padding: 2rem;
+}
+
+.map-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.map-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.map-empty-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.map-empty-text {
+  font-size: 1rem;
+  color: #6b7280;
+}

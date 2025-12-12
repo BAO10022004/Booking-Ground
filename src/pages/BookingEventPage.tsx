@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { ArrowLeft, Calendar, X } from "lucide-react";
+import ReactDOM from "react-dom";
+import { useNavigate } from "react-router-dom";
 import "../assets/styles/BookingEventPage.css";
 import BottomContinueButton from "../components/BottomContinueButton";
 import ScheduleGrid from "../components/ScheduleGrid";
 import DatePickerModal from "../components/DatePickerModal";
-import { getCurrentDate } from "../utils/getCurrentDate";
+import CategorySelectionModal from "../components/CategorySelectionModal";
 import Toast from "../components/Toast";
-import getGrounds from "../utils/getVenues";
-import Booking from "../models/booking";
-import GetAccount from "../utils/get_account";
-import Account from "../models/account";
-import bookingTool from "../utils/getBooking";
+import { useVenue, useAuth, useMyBookings, useGrounds } from "../hooks";
+import { getCurrentDate } from "../utils/helpers";
+import { venueService } from "../services";
+import getCategoriesByVenue from "../utils/getCategoriesByVenue";
 
 interface BookingSchedulePageProps {
   venueId: string;
@@ -52,10 +52,20 @@ export default function BookingSchedulePage({
   venueId,
 }: BookingSchedulePageProps) {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [venue, setVenue] = useState<any>(null);
-  const [account, setAccount] = useState<Account | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { venue: apiVenue, loading: venueLoading } = useVenue(venueId);
+  const { user: account, loading: authLoading } = useAuth();
+  const { createBooking } = useMyBookings();
+  const { grounds, loading: groundsLoading } = useGrounds(venueId);
+
+  const venue = apiVenue
+    ? {
+        ...apiVenue,
+        venueId: apiVenue.venueId,
+        name: apiVenue.name,
+      }
+    : null;
+
+  const loading = venueLoading || authLoading;
 
   const defaultDate = getCurrentDate();
   const [selectedDate, setSelectedDate] = useState(defaultDate);
@@ -66,38 +76,109 @@ export default function BookingSchedulePage({
     type: "success" | "error" | "warning" | "info";
     message: string;
   } | null>(null);
+  const [showCourtsModal, setShowCourtsModal] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  );
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string>("");
+  const [categories, setCategories] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalHours, setTotalHours] = useState(0);
+  const [priceLoading, setPriceLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [venuesData, accountData] = await Promise.all([
-          getGrounds(),
-          GetAccount(),
-        ]);
+    if (!venue) {
+      console.error("Venue not found for venueId:", venueId);
+    }
+    if (!account) {
+      console.error("Account not found");
+    }
+  }, [venue, venueId, account]);
 
-        const foundVenue = venuesData.find((v: any) => v.venueId === venueId);
-        setVenue(foundVenue);
-        setAccount(accountData);
+  // Load categories for venue
+  useEffect(() => {
+    const loadCategories = async () => {
+      if (!venueId) return;
+      try {
+        const venueCategories = await getCategoriesByVenue(venueId);
+        const transformed = venueCategories.map((cat) => ({
+          id: cat.categoryId,
+          name: cat.name,
+        }));
+        setCategories(transformed);
+
+        // Show category modal if categories exist and none selected
+        if (transformed.length > 0 && !selectedCategoryId) {
+          setShowCategoryModal(true);
+        }
       } catch (error) {
-        console.error("Error loading data:", error);
+        console.error("Error loading categories:", error);
+      }
+    };
+    loadCategories();
+  }, [venueId]);
+
+  // Calculate price when selection changes
+  useEffect(() => {
+    const calculatePrice = async () => {
+      if (
+        selectedCells.length === 0 ||
+        !venue?.venueId ||
+        !selectedDate ||
+        !selectedCategoryId
+      ) {
+        setTotalPrice(0);
+        setTotalHours(0);
+        return;
+      }
+
+      try {
+        setPriceLoading(true);
+        const validation = validateContinuousTimeSlots(selectedCells);
+        if (!validation.isValid || validation.bookings.length === 0) {
+          setTotalPrice(0);
+          setTotalHours(0);
+          return;
+        }
+
+        const booking = validation.bookings[0];
+        const [day, month, year] = selectedDate.split("/").map(Number);
+        const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(
+          day
+        ).padStart(2, "0")}`;
+
+        const result = await venueService.calculatePrice({
+          venueId: venue.venueId,
+          date: dateStr,
+          startTime: booking.startTime,
+          endTime: booking.endTime,
+          groundId: booking.ground,
+          categoryId: selectedCategoryId,
+          target: selectedCategoryName,
+        });
+
+        setTotalPrice(result.totalPrice);
+        setTotalHours(result.totalHours);
+      } catch (error) {
+        console.error("Error calculating price:", error);
+        setTotalPrice(0);
+        setTotalHours(0);
       } finally {
-        setLoading(false);
+        setPriceLoading(false);
       }
     };
 
-    fetchData();
-  }, [venueId]);
-
-  useEffect(() => {
-    console.log("📍 Selected Cells:", selectedCells);
-    if (!venue) {
-      console.error("❌ Venue not found for venueId:", venueId);
-    }
-
-    if (!account) {
-      console.error("❌ Account not found");
-    }
-  }, [venue, venueId, account, navigate, location.state, selectedCells]);
+    calculatePrice();
+  }, [
+    selectedCells,
+    venue?.venueId,
+    selectedDate,
+    selectedCategoryId,
+    selectedCategoryName,
+  ]);
 
   // //////////////////////////////////////////////// CONSTANTS ////////////////////////////////////////////////
   const timeSlots = [
@@ -137,7 +218,6 @@ export default function BookingSchedulePage({
     "22:30",
   ];
 
-  // //////////////////////////////////////////////// HANDLERS ////////////////////////////////////////////////
   const showToast = (
     type: "success" | "error" | "warning" | "info",
     message: string
@@ -210,53 +290,7 @@ export default function BookingSchedulePage({
     };
   };
 
-  // ✅ Create booking từ Cell[]
-  const createBookingFromSelection = (
-    bookingDetails: BookingDetail[]
-  ): Booking => {
-    console.log("🔄 Submitting booking...", { selectedDate, selectedCells });
-
-    const booking = new Booking();
-
-    if (!venue || !account) {
-      console.error("Missing venue or account data");
-      return booking;
-    }
-
-    // Parse selected date
-    const [day, month, year] = selectedDate.split("/").map(Number);
-    const bookingDate = new Date(year, month - 1, day);
-
-    // Generate unique booking ID
-    const bookingId = `bkg-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-
-    // Set booking properties
-    booking.bookingId = bookingId;
-    booking.userId = account.userId;
-    booking.date = bookingDate;
-    booking.groundId = selectedCells[0].groundId;
-
-    // Calculate total duration
-    booking.amountTime = bookingDetails.reduce(
-      (sum, detail) => sum + detail.duration,
-      0
-    );
-
-    // Calculate first start time and last end time
-    if (bookingDetails.length > 0) {
-      const sortedByTime = [...bookingDetails].sort(
-        (a, b) =>
-          timeSlots.indexOf(a.startTime) - timeSlots.indexOf(b.startTime)
-      );
-      booking.startTime = sortedByTime[0].startTime;
-      booking.endTime = sortedByTime[sortedByTime.length - 1].endTime;
-    }
-
-    return booking;
-  };
-
-  // ✅ Handle submit với Cell[]
-  const handleSubmit = (cells: Cell[]) => {
+  const handleSubmit = async (cells: Cell[]) => {
     if (cells.length === 0) {
       showToast(
         "warning",
@@ -282,15 +316,52 @@ export default function BookingSchedulePage({
       return;
     }
 
-    const booking = createBookingFromSelection(validation.bookings);
-    bookingTool.addBooking(booking);
-    console.log("✅ Booking created:", booking);
+    try {
+      const bookingDetails = validation.bookings;
+      if (bookingDetails.length === 0) {
+        showToast("error", "Không có thông tin đặt sân hợp lệ.");
+        return;
+      }
 
-    showToast("success", "Đang chuyển đến trang xác nhận...");
+      const sortedByTime = [...bookingDetails].sort(
+        (a, b) =>
+          timeSlots.indexOf(a.startTime) - timeSlots.indexOf(b.startTime)
+      );
 
-    setTimeout(() => {
-      navigate(`/booking-confirmation/${booking?.bookingId}/`);
-    }, 500);
+      const startTime = sortedByTime[0].startTime;
+      const endTime = sortedByTime[sortedByTime.length - 1].endTime;
+      const groundId = selectedCells[0].groundId;
+
+      const [day, month, year] = selectedDate.split("/").map(Number);
+      const bookingDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+
+      const createdBooking = await createBooking({
+        date: bookingDate,
+        start_time: startTime,
+        end_time: endTime,
+        ground_id: groundId,
+        is_event: false,
+        quantity: 1,
+        target: selectedCategoryName || undefined,
+      });
+
+      showToast(
+        "success",
+        "Đặt sân thành công! Đang chuyển đến trang xác nhận..."
+      );
+
+      setTimeout(() => {
+        navigate(`/booking-confirmation/${createdBooking.bookingId}/`);
+      }, 500);
+    } catch (error: any) {
+      console.error("Error creating booking:", error);
+      showToast(
+        "error",
+        error?.message || "Đặt sân thất bại. Vui lòng thử lại."
+      );
+    }
   };
 
   const handleDateClick = () => {
@@ -397,7 +468,6 @@ export default function BookingSchedulePage({
     );
   }
 
-  // //////////////////////////////////////////////// RENDER ////////////////////////////////////////////////
   return (
     <div className="booking-schedule-page">
       {/* Toast Notification */}
@@ -439,7 +509,10 @@ export default function BookingSchedulePage({
             <div className="booking-legend-box legend-event"></div>
             <span>Sự kiện</span>
           </div>
-          <button className="booking-view-courts-btn">
+          <button
+            className="booking-view-courts-btn"
+            onClick={() => setShowCourtsModal(true)}
+          >
             Xem sân & bảng giá
           </button>
         </div>
@@ -456,6 +529,8 @@ export default function BookingSchedulePage({
           venue={venue}
           selectedCells={selectedCells}
           setSelectedCells={setSelectedCells}
+          selectedDate={selectedDate}
+          categoryId={selectedCategoryId || undefined}
         />
       </div>
 
@@ -463,6 +538,30 @@ export default function BookingSchedulePage({
       <BottomContinueButton
         handleSubmit={handleSubmit}
         selectedCells={selectedCells}
+        totalHours={totalHours}
+        totalPrice={totalPrice}
+        loading={priceLoading}
+      />
+
+      {/* Category Selection Modal */}
+      <CategorySelectionModal
+        isOpen={showCategoryModal}
+        onClose={() => {
+          // Don't allow closing without selection if categories exist
+          if (categories.length > 0 && !selectedCategoryId) {
+            showToast("warning", "Vui lòng chọn đối tượng áp dụng");
+            return;
+          }
+          setShowCategoryModal(false);
+        }}
+        categories={categories}
+        selectedCategoryId={selectedCategoryId}
+        onSelectCategory={(categoryId, categoryName) => {
+          setSelectedCategoryId(categoryId);
+          setSelectedCategoryName(categoryName);
+          setShowCategoryModal(false);
+        }}
+        sportName={venue?.name || "Cầu Lông"}
       />
 
       {/* Date Picker Modal */}
@@ -476,6 +575,106 @@ export default function BookingSchedulePage({
 
       {/* Bottom spacing */}
       <div className="booking-bottom-spacing"></div>
+
+      {/* Courts & Price Modal */}
+      {showCourtsModal &&
+        ReactDOM.createPortal(
+          <div
+            className="booking-modal-backdrop"
+            onClick={() => setShowCourtsModal(false)}
+          >
+            <div
+              className="booking-modal-container"
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: "600px", maxHeight: "80vh", overflow: "auto" }}
+            >
+              <button
+                onClick={() => setShowCourtsModal(false)}
+                className="booking-modal-close"
+                aria-label="Đóng"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="booking-modal-header">
+                <h2 className="booking-modal-title">Sân & Bảng giá</h2>
+              </div>
+
+              <div style={{ padding: "1rem" }}>
+                {groundsLoading ? (
+                  <div style={{ padding: "2rem", textAlign: "center" }}>
+                    Đang tải...
+                  </div>
+                ) : grounds.length === 0 ? (
+                  <div style={{ padding: "2rem", textAlign: "center" }}>
+                    Chưa có thông tin sân
+                  </div>
+                ) : (
+                  <div>
+                    <h3
+                      style={{
+                        marginBottom: "1rem",
+                        fontSize: "1.1rem",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Danh sách sân
+                    </h3>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.75rem",
+                      }}
+                    >
+                      {grounds.map((ground) => (
+                        <div
+                          key={ground.groundId}
+                          style={{
+                            padding: "1rem",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "8px",
+                            backgroundColor: "#f9fafb",
+                          }}
+                        >
+                          <div
+                            style={{ fontWeight: 600, marginBottom: "0.5rem" }}
+                          >
+                            {ground.name}
+                          </div>
+                          <div style={{ fontSize: "0.9rem", color: "#6b7280" }}>
+                            Mã sân: {ground.groundId.slice(0, 8)}...
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div
+                      style={{
+                        marginTop: "2rem",
+                        padding: "1rem",
+                        backgroundColor: "#fef3c7",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "0.9rem",
+                          color: "#92400e",
+                          margin: 0,
+                        }}
+                      >
+                        <strong>Lưu ý:</strong> Để xem bảng giá chi tiết theo
+                        khung giờ, vui lòng liên hệ trực tiếp với sân hoặc chọn
+                        khung giờ trên lịch để xem giá.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

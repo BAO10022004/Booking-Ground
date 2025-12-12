@@ -7,6 +7,10 @@
   top: 0;
   z-index: 10;
   box-shadow: 0 8px 32px rgba(16, 185, 129, 0.25);
+.search-bar {
+  background: white;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .search-wrapper {
@@ -19,6 +23,8 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .search-title {
@@ -30,6 +36,16 @@
   gap: 0.5rem;
   flex: 1;
   margin: 0;
+.search-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .sparkle-icon {
@@ -78,6 +94,12 @@
   display: flex;
   gap: 1rem;
   position: relative;
+.search-shuttlecock-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  z-index: 1;
 }
 
 .search-input-container {
@@ -101,11 +123,18 @@
 .search-input::placeholder {
   color: #10b981;
   font-weight: 400;
+  padding: 0.75rem 2.5rem 0.75rem 2.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background: #f8fafc;
 }
 
 .search-input:focus {
   outline: none;
   border-color: #10b981;
+  border-color: #22c55e;
   background: white;
   box-shadow: 0 8px 32px rgba(16, 185, 129, 0.25),
               0 0 0 4px rgba(16, 185, 129, 0.15),
@@ -215,11 +244,23 @@
   to { transform: rotate(360deg); }
 }
 
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
 .search-status {
   margin-top: 1rem;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 12px;
+.clear-button {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.25rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -242,6 +283,8 @@
 .status-dots {
   display: flex;
   gap: 0.25rem;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .status-dot {
@@ -269,6 +312,8 @@
     transform: scale(1);
     opacity: 1;
   }
+.clear-button:hover {
+  color: #22c55e;
 }
 
 /* Responsive */
@@ -294,11 +339,16 @@
 @media (max-width: 640px) {
   .search-header {
     margin-bottom: 1rem;
+  .search-bar {
+    padding: 0.75rem 1rem;
   }
+
 
   .search-input {
     padding: 1rem 3rem 1rem 3rem;
     font-size: 0.9rem;
+    padding: 0.625rem 2rem 0.625rem 2.5rem;
+    font-size: 0.875rem;
   }
 
   .search-btn {
@@ -308,5 +358,12 @@
 
   .search-title {
     font-size: 1.125rem;
+  }
+}
+
+  .search-shuttlecock-icon {
+    width: 1rem;
+    height: 1rem;
+    left: 0.625rem;
   }
 }

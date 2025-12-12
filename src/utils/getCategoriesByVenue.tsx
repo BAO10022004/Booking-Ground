@@ -1,9 +1,9 @@
 import Category from "../models/Category";
-import GetListCategory from "./getCategory";
+import { getListCategory } from "./getCategory";
 
 async function getCategoriesByVenue(venueId: string): Promise<Category[]> {
   try {
-    const categories = await GetListCategory();
+    const categories = await getListCategory();
     const venue = await import("../services").then((m) =>
       m.venueService.getVenueById(venueId)
     );

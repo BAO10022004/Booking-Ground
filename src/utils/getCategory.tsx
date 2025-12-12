@@ -1,6 +1,6 @@
 import { categoryService } from "../services";
 
-async function GetListCategory() {
+export async function getListCategory() {
   try {
     const categories = await categoryService.getAllCategories();
     return categories.map((cat) => ({
@@ -13,4 +13,4 @@ async function GetListCategory() {
   }
 }
 
-export default GetListCategory;
+export default getListCategory;

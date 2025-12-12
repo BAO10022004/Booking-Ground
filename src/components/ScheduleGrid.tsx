@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Venue } from "../models/Venue";
-import GetGroundByVenue from "../utils/GetGround";
-import Ground from "../models/Ground";
+import { useGrounds } from "../hooks";
+import { venueService } from "../services";
 
 class Cell {
   cellId: string;
@@ -31,29 +31,22 @@ interface ScheduleGridProps {
   venue: Venue;
   selectedCells: Cell[];
   setSelectedCells: (cells: Cell[]) => void;
+  selectedDate: string;
+  categoryId?: string;
 }
 
 function ScheduleGrid({
   venue,
   selectedCells,
   setSelectedCells,
+  selectedDate,
+  categoryId,
 }: ScheduleGridProps) {
-  const [grounds, setGrounds] = useState<Ground[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchGrounds = async () => {
-      try {
-        const fetchedGrounds = await GetGroundByVenue(venue.venueId);
-        setGrounds(fetchedGrounds);
-      } catch (error) {
-        console.error("Error loading grounds:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchGrounds();
-  }, [venue.venueId]);
+  const { grounds, loading } = useGrounds(venue.venueId);
+  const [bookedSlots, setBookedSlots] = useState<Set<string>>(new Set());
+  const [lockedSlots, setLockedSlots] = useState<Set<string>>(new Set());
+  const [eventSlots, setEventSlots] = useState<Set<string>>(new Set());
+  const [scheduleLoading, setScheduleLoading] = useState(false);
 
   const timeSlots = [
     "6:00",
@@ -92,17 +85,40 @@ function ScheduleGrid({
     "22:30",
   ];
 
-  // ✅ Giữ nguyên dạng Set<string> cho booked và locked (để dễ check)
-  const bookedSlots = new Set([
-    "A-8:00",
-    "A-8:30",
-    "A-9:00",
-    "A-9:30",
-    "A-10:00",
-    "A-10:30",
-  ]);
+  // Fetch schedule data from API
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      if (!venue?.venueId || !selectedDate) return;
 
-  const lockedSlots = new Set(["A-6:00", "A-6:30", "A-7:00", "A-7:30"]);
+      try {
+        setScheduleLoading(true);
+        const [day, month, year] = selectedDate.split("/").map(Number);
+        const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(
+          day
+        ).padStart(2, "0")}`;
+
+        const schedule = await venueService.getVenueSchedule(
+          venue.venueId,
+          dateStr,
+          categoryId
+        );
+
+        setBookedSlots(new Set(schedule.booked || []));
+        setLockedSlots(new Set(schedule.locked || []));
+        setEventSlots(new Set(schedule.events || []));
+      } catch (error) {
+        console.error("Error fetching schedule:", error);
+        // Fallback to empty sets on error
+        setBookedSlots(new Set());
+        setLockedSlots(new Set());
+        setEventSlots(new Set());
+      } finally {
+        setScheduleLoading(false);
+      }
+    };
+
+    fetchSchedule();
+  }, [venue?.venueId, selectedDate, categoryId]);
 
   /////////////////////////////// handleCellClick ///////////////////////////////
   const handleCellClick = (groundId: string, time: string) => {
@@ -138,6 +154,7 @@ function ScheduleGrid({
 
     if (bookedSlots.has(cellKey)) return "booking-slot-cell slot-booked";
     if (lockedSlots.has(cellKey)) return "booking-slot-cell slot-locked";
+    if (eventSlots.has(cellKey)) return "booking-slot-cell slot-event";
 
     // ✅ Check nếu cell được chọn
     const isSelected = selectedCells.some((cell) =>
@@ -148,11 +165,11 @@ function ScheduleGrid({
     return "booking-slot-cell slot-available";
   };
 
-  if (loading) {
+  if (loading || scheduleLoading) {
     return (
       <div className="booking-schedule-container">
         <div style={{ padding: "20px", textAlign: "center" }}>
-          Đang tải sân...
+          Đang tải lịch đặt sân...
         </div>
       </div>
     );

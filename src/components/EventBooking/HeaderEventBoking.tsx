@@ -1,32 +1,31 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
-import '../../assets/styles/HeaderEventBoking.css'
-function HeaderEventBooking({ 
-    
-  selectedDateRange, 
+import React, { useState } from "react";
+import { ArrowLeft, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import "../../assets/styles/HeaderEventBoking.css";
+function HeaderEventBooking({
+  selectedDateRange,
   setSelectedDateRange,
-  setShowDatePicker
+  setShowDatePicker,
 }: {
   selectedDateRange: string;
   setSelectedDateRange: React.Dispatch<React.SetStateAction<string>>;
-  setShowDatePicker:  React.Dispatch<React.SetStateAction<boolean>>
+  setShowDatePicker: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const handleBack = () => {
-    console.log('Go back');
+    // Navigate back
     window.history.back();
   };
-  
+
   const handleDateRangeClick = () => {
     if (setSelectedDateRange) {
       setSelectedDateRange(selectedDateRange);
     }
   };
-  
-   return (
+
+  return (
     <>
       {/* Header */}
       <div className="events-header">
-        <button 
+        <button
           className="back-button"
           onClick={handleBack}
           aria-label="Quay lại"
@@ -38,16 +37,18 @@ function HeaderEventBooking({
       </div>
 
       {/* Date Range Selector */}
-      <div 
+      <div
         className="date-range-selector"
-        onClick={()=> {setShowDatePicker(true);}}
+        onClick={() => {
+          setShowDatePicker(true);
+        }}
       >
         <span className="date-range-text">
-          {selectedDateRange || 'Chọn khoảng thời gian'}
+          {selectedDateRange || "Chọn khoảng thời gian"}
         </span>
         <Calendar size={20} className="date-range-icon" />
       </div>
     </>
   );
 }
-export default HeaderEventBooking
+export default HeaderEventBooking;

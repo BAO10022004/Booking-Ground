@@ -1,7 +1,7 @@
 import { authService } from "../services";
 import Account from "../models/account";
 
-export async function GetAccount(): Promise<Account | null> {
+export async function getAccount(): Promise<Account | null> {
   try {
     if (!authService.isAuthenticated()) {
       return null;

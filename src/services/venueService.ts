@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from "../config/api";
 export interface VenueFilters {
   category_id?: string;
   city?: string;
+  district?: string;
   search?: string;
 }
 
@@ -67,6 +68,10 @@ export interface Term {
   venue_id?: string;
 }
 
+export interface TermsResponse {
+  data: Term[];
+}
+
 export interface PriceList {
   id: string;
   name: string;
@@ -99,6 +104,7 @@ export const venueService = {
 
     if (filters?.category_id) params.category_id = filters.category_id;
     if (filters?.city) params.city = filters.city;
+    if (filters?.district) params.district = filters.district;
     if (filters?.search) params.search = filters.search;
 
     const response = await apiClient.get<VenuesResponse>(
@@ -106,7 +112,10 @@ export const venueService = {
       Object.keys(params).length > 0 ? params : undefined
     );
 
-    return (response.data as VenuesResponse)?.data || [];
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const data =
+      (response.data as VenuesResponse)?.data || (response as any)?.data || [];
+    return Array.isArray(data) ? data : [];
   },
 
   async getVenueById(id: string): Promise<Venue> {
@@ -114,7 +123,8 @@ export const venueService = {
       API_ENDPOINTS.VENUES.DETAIL(id)
     );
 
-    return response.data as Venue;
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Venue;
   },
 
   async getVenueServices(venueId: string): Promise<ServiceList[]> {
@@ -129,6 +139,17 @@ export const venueService = {
         data = response.data;
       } else if (response.data && Array.isArray(response.data.data)) {
         data = response.data.data;
+      } else if (
+        response.data &&
+        response.data.data &&
+        Array.isArray(response.data.data)
+      ) {
+        data = response.data.data;
+      } else if (
+        (response as any).data &&
+        Array.isArray((response as any).data)
+      ) {
+        data = (response as any).data;
       } else {
         return [];
       }
@@ -174,6 +195,12 @@ export const venueService = {
       if (Array.isArray(response.data)) {
         data = response.data;
       } else if (response.data && Array.isArray(response.data.data)) {
+        data = response.data.data;
+      } else if (
+        response.data &&
+        response.data.data &&
+        Array.isArray(response.data.data)
+      ) {
         data = response.data.data;
       } else {
         return [];
@@ -222,6 +249,17 @@ export const venueService = {
         data = response.data;
       } else if (response.data && Array.isArray(response.data.data)) {
         data = response.data.data;
+      } else if (
+        response.data &&
+        response.data.data &&
+        Array.isArray(response.data.data)
+      ) {
+        data = response.data.data;
+      } else if (
+        (response as any).data &&
+        Array.isArray((response as any).data)
+      ) {
+        data = (response as any).data;
       } else {
         return [];
       }
@@ -275,5 +313,50 @@ export const venueService = {
       (response as any)?.data ||
       [];
     return Array.isArray(data) ? data : [];
+  },
+
+  async getVenueSchedule(
+    venueId: string,
+    date: string,
+    categoryId?: string
+  ): Promise<{
+    booked: string[]; // Format: "groundId-timeSlot" e.g., "A-8:00"
+    locked: string[];
+    events: string[];
+  }> {
+    const params: Record<string, string> = { date };
+    if (categoryId) params.category_id = categoryId;
+
+    const response = await apiClient.get<{
+      booked: string[];
+      locked: string[];
+      events: string[];
+    }>(API_ENDPOINTS.VENUES.SCHEDULE(venueId), params);
+
+    return (response.data || response) as {
+      booked: string[];
+      locked: string[];
+      events: string[];
+    };
+  },
+
+  async calculatePrice(data: {
+    venueId: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    groundId: string;
+    categoryId?: string;
+    target?: string;
+  }): Promise<{ totalPrice: number; totalHours: number }> {
+    const response = await apiClient.post<{
+      totalPrice: number;
+      totalHours: number;
+    }>(API_ENDPOINTS.VENUES.CALCULATE_PRICE(data.venueId), data);
+
+    return (response.data || response) as {
+      totalPrice: number;
+      totalHours: number;
+    };
   },
 };

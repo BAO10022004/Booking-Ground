@@ -17,15 +17,20 @@ export const API_ENDPOINTS = {
     TERMS: (id: string) => `/venues/${id}/terms`,
     PRICE_LISTS: (id: string) => `/venues/${id}/price-lists`,
     IMAGES: (id: string) => `/venues/${id}/images`,
+    SCHEDULE: (id: string) => `/venues/${id}/schedule`,
+    CALCULATE_PRICE: (id: string) => `/venues/${id}/calculate-price`,
   },
   CATEGORIES: {
     LIST: "/categories",
+    DETAIL: (id: string) => `/categories/${id}`,
   },
   GROUNDS: {
     LIST: "/grounds",
+    DETAIL: (id: string) => `/grounds/${id}`,
   },
   EVENTS: {
     LIST: "/events",
+    DETAIL: (id: string) => `/events/${id}`,
   },
   BOOKINGS: {
     LIST: "/bookings",
@@ -37,6 +42,8 @@ export const API_ENDPOINTS = {
   PAYMENTS: {
     LIST: "/payments",
     CREATE: "/payments",
+    DETAIL: (id: string) => `/payments/${id}`,
+    UPDATE: (id: string) => `/payments/${id}`,
   },
   RATINGS: {
     LIST: "/ratings",
@@ -49,5 +56,8 @@ export const API_ENDPOINTS = {
     UPLOAD: "/images/upload",
     GET: (id: string) => `/images/${id}`,
     DELETE: (id: string) => `/images/${id}`,
+  },
+  THINKING_SEARCH: {
+    PREDICT: "/predict",
   },
 };
