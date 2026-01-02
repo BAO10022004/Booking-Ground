@@ -215,19 +215,6 @@ export default function PlayerLoginPage() {
             <span>Google</span>
           </button>
         </div>
-
-        <div className="player-field-owner-banner">
-          <p>
-            Nếu bạn là <strong>CHỦ SÂN</strong> hoặc <strong>NHÂN VIÊN</strong>,{" "}
-            <button
-              type="button"
-              className="player-field-owner-link"
-              onClick={() => navigate("/")}
-            >
-              Bấm vào đây để tải ứng dụng ALOBO - Quản lý sân thể thao!
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );

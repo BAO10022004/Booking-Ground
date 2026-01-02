@@ -11,6 +11,7 @@ import {
   Info,
   Shield,
   Sparkles,
+  LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/AccountPage.css";
@@ -20,7 +21,7 @@ import getAvatarForUser from "../utils/get_image";
 
 function AccountPage() {
   const navigate = useNavigate();
-  const { user, loading, isAuthenticated } = useAuth();
+  const { user, loading, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -93,6 +94,13 @@ function AccountPage() {
     setSelectedMenu(menuId);
   };
 
+  const handleLogout = async () => {
+    if (window.confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+      await logout();
+      navigate("/player/login", { replace: true });
+    }
+  };
+
   const renderContent = () => {
     try {
       switch (selectedMenu) {
@@ -136,12 +144,12 @@ function AccountPage() {
   return (
     <div className="account-page">
       <div className="account-sidebar">
-        <button
+        {/* <button
           className="account-back-button"
           onClick={() => navigate("/home")}
         >
           <ArrowLeft size={20} />
-        </button>
+        </button> */}
 
         <div className="account-profile-section">
           <div className="account-avatar-wrapper">
@@ -219,21 +227,28 @@ function AccountPage() {
         <div className="account-version-info">
           <p>Thông tin phiên bản: 2.8.1</p>
         </div>
+
+        <div className="account-logout-section">
+          <button className="account-logout-button" onClick={handleLogout}>
+            <LogOut size={20} />
+            <span>Đăng xuất</span>
+          </button>
+        </div>
       </div>
 
       <div className="account-content">
         <div className="account-content-header">
-          <button
+          {/* <button
             className="account-content-back"
             onClick={() => navigate("/home")}
           >
             <ArrowLeft size={20} />
-          </button>
+          </button> */}
           <h2 className="account-content-title">Danh sách đặt lịch</h2>
-          <button className="account-content-view-all">
+          {/* <button className="account-content-view-all">
             <Calendar size={16} />
             <span>Xem tất cả</span>
-          </button>
+          </button> */}
         </div>
         <div className="account-content-body">{renderContent()}</div>
       </div>

@@ -15,9 +15,10 @@ function App() {
       <Routes>
         {/* Landing Page - Initial page with Login or Guest options */}
         <Route path="/" element={<FieldOwnerLoginPage />} />
+        {/* <Route path="/" element={<PlayerLoginPage />} /> */}
 
         {/* Field Owner Portal */}
-        <Route path="/portal" element={<FieldOwnerPortal />} />
+        {/* <Route path="/portal" element={<FieldOwnerPortal />} /> */}
 
         {/* Player Login/Register Pages */}
         <Route path="/player/login" element={<PlayerLoginPage />} />

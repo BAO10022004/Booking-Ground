@@ -66,7 +66,6 @@ export const authService = {
     const authData = (response.data || response) as AuthResponse;
 
     if (!authData || !authData.user) {
-      console.error("Invalid auth response:", authData);
       throw new Error("Invalid response from server: missing user data");
     }
 

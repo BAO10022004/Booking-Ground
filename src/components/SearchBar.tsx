@@ -71,7 +71,7 @@ function SearchBar({
           </h1>
         </div>
 
-        <div className="search-box">
+        {/* <div className="search-box">
           <div className="search-input-container">
             <input
               type="text"
@@ -86,34 +86,53 @@ function SearchBar({
             {searchText && (
               <button
                 onClick={handleClear}
-                className={`clear-btn ${searchText ? "show" : ""}`}
-                aria-label="Xóa"
+                className="clear-button"
+                aria-label="Xóa tìm kiếm"
               >
-                <X />
+                <X className="w-4 h-4" />
               </button>
             )}
           </div>
-
-          <button
-            onClick={handleSubmit}
-            className="search-btn"
-            disabled={isSearching || !searchText.trim()}
-            aria-label="Tìm kiếm"
-          >
-            {isSearching ? (
-              <>
-                <Loader2 className="loader-icon" />
-                Đang tìm...
-              </>
-            ) : (
-              <>
-                <Search />
-                Tìm kiếm
-              </>
-            )}
-          </button>
+        </div> */}
+        <div className="search-input-wrapper">
+          {/* <Search className="search-icon" /> */}
+          <input
+            type="text"
+            placeholder="Tìm kiếm sân thể thao... (VD: sân bóng đá ở quận 1)"
+            className="search-input"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={isSearching}
+          />
+          {isSearching ? (
+            <Loader2 className="search-loader" size={20} />
+          ) : (
+            <>
+              {searchText && (
+                <button
+                  onClick={handleClear}
+                  className="clear-button"
+                  aria-label="Xóa tìm kiếm"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+              {searchText && (
+                <button
+                  onClick={handleSubmit}
+                  className="search-submit-button"
+                  aria-label="Tìm kiếm"
+                >
+                  <Search size={18} />
+                </button>
+              )}
+            </>
+          )}
         </div>
-
+        {/* <button className="menu-button" aria-label="Menu">
+          <Menu className="menu-icon" />
+        </button> */}
         {isSearching && (
           <div className="search-status">
             <div className="status-dots">
