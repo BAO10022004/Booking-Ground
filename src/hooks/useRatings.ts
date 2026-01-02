@@ -92,5 +92,30 @@ export function useRatings(venueIds?: string[]) {
     return rounded;
   };
 
-  return { ratings, loading, error, getAverageRating };
+  const refreshRatings = async () => {
+    try {
+      setLoading(true);
+      let data: Rating[] = [];
+      if (venueIds && venueIds.length > 0) {
+        const promises = venueIds.map((venueId) =>
+          ratingService.getAllRatings({ venue_id: venueId })
+        );
+        const results = await Promise.all(promises);
+        data = results.flat();
+      } else {
+        data = await ratingService.getAllRatings();
+      }
+      setRatings(data);
+      setError(null);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err : new Error("Failed to load ratings")
+      );
+      setRatings([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { ratings, loading, error, getAverageRating, refreshRatings };
 }

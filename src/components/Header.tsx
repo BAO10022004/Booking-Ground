@@ -42,22 +42,7 @@ function Header() {
       <div className="header-container">
         <div className="header-top">
           <div className="header-logo-section">
-            <div className="header-logo">
-              <svg
-                className="header-shuttlecock-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L15 8L12 14L9 8L12 2Z"
-                  fill="white"
-                  stroke="#22c55e"
-                  strokeWidth="1"
-                />
-                <circle cx="12" cy="8" r="2" fill="#22c55e" />
-              </svg>
-            </div>
+            {/* <div className="header-logo"></div> */}
             <span className="header-date">{currentDate}</span>
           </div>
         </div>

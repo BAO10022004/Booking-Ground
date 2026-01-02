@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { authService, type User } from "../services";
+import { authService } from "../services";
 import Account from "../models/account";
 
 export function useAuth() {
@@ -12,6 +12,7 @@ export function useAuth() {
       try {
         if (authService.isAuthenticated()) {
           const userData = await authService.getCurrentUser();
+
           const account = new Account({
             fullName: userData.name,
             email: userData.email,

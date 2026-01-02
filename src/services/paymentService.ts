@@ -35,7 +35,7 @@ export interface PaymentsResponse {
 }
 
 export const paymentService = {
-  async getMyPayments(filters?: PaymentFilters): Promise<Payment[]> {
+  async getAllPayments(filters?: PaymentFilters): Promise<Payment[]> {
     const params: Record<string, string> = {};
 
     if (filters?.booking_id) params.booking_id = filters.booking_id;
@@ -43,6 +43,25 @@ export const paymentService = {
 
     const response = await apiClient.get<PaymentsResponse>(
       API_ENDPOINTS.PAYMENTS.LIST,
+      Object.keys(params).length > 0 ? params : undefined
+    );
+
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    const data =
+      (response.data as PaymentsResponse)?.data ||
+      (response as any)?.data ||
+      [];
+    return Array.isArray(data) ? data : [];
+  },
+
+  async getMyPayments(filters?: PaymentFilters): Promise<Payment[]> {
+    const params: Record<string, string> = {};
+
+    if (filters?.booking_id) params.booking_id = filters.booking_id;
+    if (filters?.status) params.status = filters.status;
+
+    const response = await apiClient.get<PaymentsResponse>(
+      API_ENDPOINTS.PAYMENTS.MY_PAYMENTS,
       Object.keys(params).length > 0 ? params : undefined
     );
 

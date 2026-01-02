@@ -19,18 +19,30 @@ export const API_ENDPOINTS = {
     IMAGES: (id: string) => `/venues/${id}/images`,
     SCHEDULE: (id: string) => `/venues/${id}/schedule`,
     CALCULATE_PRICE: (id: string) => `/venues/${id}/calculate-price`,
+    CREATE: "/venues",
+    UPDATE: (id: string) => `/venues/${id}`,
+    DELETE: (id: string) => `/venues/${id}`,
   },
   CATEGORIES: {
     LIST: "/categories",
     DETAIL: (id: string) => `/categories/${id}`,
+    CREATE: "/categories",
+    UPDATE: (id: string) => `/categories/${id}`,
+    DELETE: (id: string) => `/categories/${id}`,
   },
   GROUNDS: {
     LIST: "/grounds",
     DETAIL: (id: string) => `/grounds/${id}`,
+    CREATE: "/grounds",
+    UPDATE: (id: string) => `/grounds/${id}`,
+    DELETE: (id: string) => `/grounds/${id}`,
   },
   EVENTS: {
     LIST: "/events",
     DETAIL: (id: string) => `/events/${id}`,
+    CREATE: "/events",
+    UPDATE: (id: string) => `/events/${id}`,
+    DELETE: (id: string) => `/events/${id}`,
   },
   BOOKINGS: {
     LIST: "/bookings",
@@ -41,6 +53,7 @@ export const API_ENDPOINTS = {
   },
   PAYMENTS: {
     LIST: "/payments",
+    MY_PAYMENTS: "/payments/my-payments",
     CREATE: "/payments",
     DETAIL: (id: string) => `/payments/${id}`,
     UPDATE: (id: string) => `/payments/${id}`,

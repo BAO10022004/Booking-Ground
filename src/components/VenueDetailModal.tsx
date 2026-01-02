@@ -16,7 +16,9 @@ import {
   useVenuePriceLists,
   useVenueImages,
   useCategories,
+  useAuth,
 } from "../hooks";
+import { ratingService } from "../services";
 import "../assets/styles/VenueDetailModal.css";
 
 interface VenueDetailModalProps {
@@ -35,8 +37,13 @@ export default function VenueDetailModal({
   onBookClick,
 }: VenueDetailModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>("info");
+  const [showRatingForm, setShowRatingForm] = useState(false);
+  const [ratingStars, setRatingStars] = useState(0);
+  const [ratingReview, setRatingReview] = useState("");
+  const [isSubmittingRating, setIsSubmittingRating] = useState(false);
+  const { user, isAuthenticated } = useAuth();
   const { venue, loading } = useVenue(venueId || undefined);
-  const { ratings, getAverageRating } = useRatings(
+  const { ratings, getAverageRating, refreshRatings } = useRatings(
     venueId ? [venueId] : undefined
   );
   const {
@@ -409,41 +416,35 @@ export default function VenueDetailModal({
                                 </h4>
                                 {serviceList.details &&
                                 serviceList.details.length > 0 ? (
-                                  <div className="venue-detail-service-items">
-                                    {serviceList.details.map((service) => (
-                                      <div
-                                        key={service.id}
-                                        className="venue-detail-service-item"
-                                      >
-                                        <div className="venue-detail-service-name">
-                                          {service.name}
-                                        </div>
-                                        <div className="venue-detail-service-prices">
-                                          {service.wholesale && (
-                                            <div className="venue-detail-service-price">
-                                              <span className="price-label">
-                                                Sỉ:
-                                              </span>
-                                              <span className="price-value">
-                                                {service.wholesale}{" "}
-                                                {service.unit_wholesale || ""}
-                                              </span>
-                                            </div>
-                                          )}
-                                          {service.retail && (
-                                            <div className="venue-detail-service-price">
-                                              <span className="price-label">
-                                                Lẻ:
-                                              </span>
-                                              <span className="price-value">
-                                                {service.retail}{" "}
-                                                {service.unit_retail || ""}
-                                              </span>
-                                            </div>
-                                          )}
-                                        </div>
-                                      </div>
-                                    ))}
+                                  <div className="venue-detail-service-table-wrapper">
+                                    <table className="venue-detail-service-table">
+                                      <thead>
+                                        <tr>
+                                          <th>Tên dịch vụ</th>
+                                          <th>Giá sỉ</th>
+                                          <th>Đơn vị sỉ</th>
+                                          <th>Giá lẻ</th>
+                                          <th>Đơn vị lẻ</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {serviceList.details.map((service) => (
+                                          <tr key={service.id}>
+                                            <td>{service.name}</td>
+                                            <td>
+                                              {service.wholesale || "-"}
+                                            </td>
+                                            <td>
+                                              {service.unit_wholesale || "-"}
+                                            </td>
+                                            <td>{service.retail || "-"}</td>
+                                            <td>
+                                              {service.unit_retail || "-"}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
                                   </div>
                                 ) : (
                                   <p className="venue-detail-empty-note">
@@ -576,6 +577,93 @@ export default function VenueDetailModal({
 
                 {activeTab === "reviews" && (
                   <div className="venue-detail-reviews">
+                    {/* Rating Form */}
+                    {isAuthenticated && venueId && (
+                      <div className="venue-detail-rating-form-section">
+                        {showRatingForm ? (
+                          <div className="venue-detail-rating-form">
+                            <h4>Đánh giá sân</h4>
+                            <div className="venue-detail-rating-stars-input">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                  key={star}
+                                  type="button"
+                                  className="venue-detail-star-button"
+                                  onClick={() => setRatingStars(star)}
+                                  onMouseEnter={() => setRatingStars(star)}
+                                >
+                                  <Star
+                                    size={24}
+                                    fill={star <= ratingStars ? "currentColor" : "none"}
+                                    color={star <= ratingStars ? "#FFD700" : "#ccc"}
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                            <textarea
+                              className="venue-detail-rating-textarea"
+                              placeholder="Nhập đánh giá của bạn..."
+                              value={ratingReview}
+                              onChange={(e) => setRatingReview(e.target.value)}
+                              rows={4}
+                            />
+                            <div className="venue-detail-rating-form-actions">
+                              <button
+                                className="venue-detail-rating-submit-btn"
+                                onClick={async () => {
+                                  if (ratingStars === 0) {
+                                    alert("Vui lòng chọn số sao đánh giá");
+                                    return;
+                                  }
+                                  setIsSubmittingRating(true);
+                                  try {
+                                    await ratingService.createRating({
+                                      venue_id: venueId,
+                                      star_number: ratingStars,
+                                      review: ratingReview || undefined,
+                                    });
+                                    setRatingStars(0);
+                                    setRatingReview("");
+                                    setShowRatingForm(false);
+                                    // Refresh ratings
+                                    if (refreshRatings) {
+                                      await refreshRatings();
+                                    }
+                                  } catch (err) {
+                                    alert("Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại.");
+                                    console.error("Rating error:", err);
+                                  } finally {
+                                    setIsSubmittingRating(false);
+                                  }
+                                }}
+                                disabled={isSubmittingRating || ratingStars === 0}
+                              >
+                                {isSubmittingRating ? "Đang gửi..." : "Gửi đánh giá"}
+                              </button>
+                              <button
+                                className="venue-detail-rating-cancel-btn"
+                                onClick={() => {
+                                  setShowRatingForm(false);
+                                  setRatingStars(0);
+                                  setRatingReview("");
+                                }}
+                              >
+                                Hủy
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            className="venue-detail-add-rating-btn"
+                            onClick={() => setShowRatingForm(true)}
+                          >
+                            Viết đánh giá
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Ratings List */}
                     {venueRatings.length === 0 ? (
                       <div className="venue-detail-empty">
                         <p>Chưa có đánh giá nào</p>

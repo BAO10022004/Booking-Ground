@@ -6,13 +6,19 @@ import {
   Users,
   FileText,
   AlertCircle,
+  Edit,
+  Trash2,
+  X,
 } from "lucide-react";
 import "../../assets/styles/BookingsPage.css";
 import { useMyBookings } from "../../hooks";
+import { bookingService } from "../../services";
 
 const BookingsPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
-  const { rawBookings, loading, error } = useMyBookings();
+  const [editingBooking, setEditingBooking] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const { rawBookings, loading, error, updateBooking, deleteBooking, refreshBookings } = useMyBookings();
 
   if (loading) {
     return (
@@ -105,6 +111,29 @@ const BookingsPage = () => {
       month: "long",
       day: "numeric",
     });
+  };
+
+  const handleDelete = async (bookingId: string) => {
+    if (window.confirm("Bạn có chắc chắn muốn hủy đặt sân này?")) {
+      try {
+        await deleteBooking(bookingId);
+        setDeleteConfirm(null);
+      } catch (err) {
+        alert("Có lỗi xảy ra khi hủy đặt sân. Vui lòng thử lại.");
+        console.error("Delete booking error:", err);
+      }
+    }
+  };
+
+  const handleUpdate = async (bookingId: string, newNote: string) => {
+    try {
+      await updateBooking(bookingId, { customer_note: newNote });
+      setEditingBooking(null);
+      await refreshBookings();
+    } catch (err) {
+      alert("Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.");
+      console.error("Update booking error:", err);
+    }
   };
 
   return (
@@ -267,18 +296,69 @@ const BookingsPage = () => {
 
                 {/* Card Footer */}
                 <div className="booking-card-footer">
-                  <button className="booking-action-btn btn-detail">
-                    Xem chi tiết
-                  </button>
-                  {booking.Status === "Pending" && (
-                    <button className="booking-action-btn btn-cancel">
-                      Hủy đặt sân
-                    </button>
-                  )}
-                  {booking.Status === "Confirmed" && (
-                    <button className="booking-action-btn btn-modify">
-                      Sửa đổi
-                    </button>
+                  {(booking.Status === "Pending" || booking.Status === "Confirmed") && (
+                    <>
+                      {editingBooking === booking.BookingID ? (
+                        <div style={{ display: "flex", gap: "8px", width: "100%" }}>
+                          <input
+                            type="text"
+                            defaultValue={booking.CustomerNote || ""}
+                            placeholder="Nhập ghi chú..."
+                            style={{
+                              flex: 1,
+                              padding: "8px",
+                              border: "1px solid #ddd",
+                              borderRadius: "4px",
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                handleUpdate(booking.BookingID, e.currentTarget.value);
+                              }
+                              if (e.key === "Escape") {
+                                setEditingBooking(null);
+                              }
+                            }}
+                            autoFocus
+                          />
+                          <button
+                            className="booking-action-btn btn-save"
+                            onClick={() => {
+                              const input = document.querySelector(
+                                `input[defaultValue="${booking.CustomerNote || ""}"]`
+                              ) as HTMLInputElement;
+                              if (input) {
+                                handleUpdate(booking.BookingID, input.value);
+                              }
+                            }}
+                          >
+                            Lưu
+                          </button>
+                          <button
+                            className="booking-action-btn btn-cancel"
+                            onClick={() => setEditingBooking(null)}
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <button
+                            className="booking-action-btn btn-modify"
+                            onClick={() => setEditingBooking(booking.BookingID)}
+                          >
+                            <Edit size={16} />
+                            Sửa ghi chú
+                          </button>
+                          <button
+                            className="booking-action-btn btn-cancel"
+                            onClick={() => handleDelete(booking.BookingID)}
+                          >
+                            <Trash2 size={16} />
+                            Hủy đặt sân
+                          </button>
+                        </>
+                      )}
+                    </>
                   )}
                   {booking.Status === "Completed" && (
                     <button className="booking-action-btn btn-review">

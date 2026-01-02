@@ -55,8 +55,7 @@ export default function FieldOwnerLoginPage() {
       <div className="field-owner-bg-overlay"></div>
 
       <div className="field-owner-login-card">
-        <h1 className="field-owner-title">Đăng nhập - Chủ sân</h1>
-        <p className="field-owner-subtitle">ALOBO - Quản lý sân thể thao</p>
+        <h1 className="field-owner-title">Đăng nhập</h1>
 
         {error && <div className="field-owner-error">{error}</div>}
 
@@ -118,13 +117,13 @@ export default function FieldOwnerLoginPage() {
 
         <div className="field-owner-guest-link">
           <p>
-            Nếu bạn là <strong>KHÁCH CHƠI</strong>,{" "}
+            Nếu bạn là <strong>KHÁCH CHƠI</strong>{" "}
             <button
               type="button"
               className="field-owner-guest-btn"
               onClick={handleGuestClick}
             >
-              bấm vào đây để tải ứng dụng ALOBO - Tìm kiếm và đặt lịch
+              bấm vào đây
             </button>
           </p>
         </div>
@@ -137,7 +136,7 @@ export default function FieldOwnerLoginPage() {
               className="field-owner-register-btn"
               onClick={() => navigate("/player/register")}
             >
-              Xem hướng dẫn
+              Đăng ký ngay
             </button>
           </p>
         </div>
