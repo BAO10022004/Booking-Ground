@@ -16,6 +16,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/AccountPage.css";
 import BookingsPage from "../components/AccountPage/BookingsPage";
+import ProfilePage from "../components/AccountPage/ProfilePage";
+import SettingsPage from "../components/AccountPage/SettingsPage";
+import ComingSoonPage from "../components/ComingSoonPage";
 import { useAuth } from "../hooks";
 import getAvatarForUser from "../utils/get_image";
 
@@ -107,13 +110,24 @@ function AccountPage() {
         case "booked": {
           return <BookingsPage />;
         }
+        case "profile": {
+          return <ProfilePage />;
+        }
+        case "settings": {
+          return <SettingsPage />;
+        }
+        case "notifications":
+        case "courses":
+        case "offers":
+        case "my-group":
+        case "class-schedule":
+        case "version":
+        case "terms":
+        case "whats-new": {
+          return <ComingSoonPage />;
+        }
         default: {
-          return (
-            <div className="account-empty-state">
-              <div className="account-empty-icon">💧</div>
-              <p className="account-empty-text">Bạn chưa có lịch đặt</p>
-            </div>
-          );
+          return <ComingSoonPage />;
         }
       }
     } catch (error) {
@@ -160,8 +174,12 @@ function AccountPage() {
             />
           </div>
           <div className="account-profile-name">{user.fullName}</div>
-          <button className="account-edit-button">
-            <span>☰</span>
+          <button
+            className="account-edit-button"
+            onClick={() => handleMenuClick("profile")}
+            title="Chỉnh sửa thông tin"
+          >
+            <span>✏️</span>
           </button>
         </div>
 
@@ -244,7 +262,15 @@ function AccountPage() {
           >
             <ArrowLeft size={20} />
           </button> */}
-          <h2 className="account-content-title">Danh sách đặt lịch</h2>
+          <h2 className="account-content-title">
+            {selectedMenu === "booked"
+              ? "Danh sách đặt lịch"
+              : selectedMenu === "profile"
+              ? "Thông tin cá nhân"
+              : selectedMenu === "settings"
+              ? "Cài đặt"
+              : "Tài khoản"}
+          </h2>
           {/* <button className="account-content-view-all">
             <Calendar size={16} />
             <span>Xem tất cả</span>

@@ -55,12 +55,6 @@
   letter-spacing: 1px;
   color: white;
   text-transform: uppercase;
-  transition: all 0.3s ease;
-}
-
-.form-group:hover .form-label {
-  color: #fbbf24;
-  transform: translateX(4px);
 }
 
 .form-input,
@@ -72,7 +66,6 @@
   font-size: 15px;
   background: rgba(255, 255, 255, 0.95);
   color: #0a5c3e;
-  transition: all 0.3s ease;
   font-family: inherit;
   box-sizing: border-box;
   position: relative;
@@ -82,15 +75,6 @@
 .form-input::placeholder,
 .form-textarea::placeholder {
   color: rgba(10, 92, 62, 0.5);
-  transition: all 0.3s ease;
-}
-
-.form-input:hover,
-.form-textarea:hover {
-  border-color: rgba(251, 191, 36, 0.4);
-  background: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .form-input:focus,
@@ -99,7 +83,6 @@
   background: white;
   border-color: #fbbf24;
   box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
-  transform: translateY(-2px);
   z-index: 10;
 }
 
@@ -138,13 +121,6 @@
   justify-content: space-between;
   position: relative;
   z-index: 1001;
-}
-
-.country-code:hover {
-  background: white;
-  border-color: rgba(251, 191, 36, 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .country-code.open {
@@ -224,7 +200,11 @@
 .dropdown-search {
   padding: 12px;
   border-bottom: 2px solid rgba(10, 92, 62, 0.1);
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.08) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
   position: sticky;
   top: 0;
   z-index: 10;
@@ -289,13 +269,18 @@
 }
 
 .dropdown-item::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -100%;
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(251, 191, 36, 0.2),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -305,7 +290,6 @@
 
 .dropdown-item:hover {
   background: rgba(251, 191, 36, 0.12);
-  transform: translateX(4px);
 }
 
 .dropdown-item.selected {
@@ -314,7 +298,7 @@
 }
 
 .dropdown-item.selected::after {
-  content: '✓';
+  content: "✓";
   position: absolute;
   right: 16px;
   color: #0a5c3e;

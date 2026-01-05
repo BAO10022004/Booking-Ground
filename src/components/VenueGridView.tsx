@@ -14,6 +14,7 @@ interface VenueGridViewProps {
   city?: string;
   district?: string;
   listView?: Venue[];
+  showFavoritesOnly?: boolean;
 }
 
 function VenueGridView({
@@ -22,6 +23,7 @@ function VenueGridView({
   city,
   district,
   listView,
+  showFavoritesOnly = false,
 }: VenueGridViewProps = {}) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -36,16 +38,22 @@ function VenueGridView({
         }
   );
   const { getAverageRating } = useRatings();
-  const [favorites, setFavorites] = useState(new Set());
+  const [favorites, setFavorites] = useState<Set<string>>(() => {
+    const saved = localStorage.getItem("favorites");
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [venue, setVenue] = useState<any | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
 
-  const displayVenues =
-    listView && listView.length > 0 ? listView : sportsVenues;
+  const allVenues = listView && listView.length > 0 ? listView : sportsVenues;
 
-  const toggleFavorite = (id: unknown) => {
+  const displayVenues = showFavoritesOnly
+    ? allVenues.filter((v) => favorites.has(v.venueId || v.id))
+    : allVenues;
+
+  const toggleFavorite = (id: string) => {
     if (!isAuthenticated) {
       navigate("/player/login");
       return;
@@ -57,6 +65,7 @@ function VenueGridView({
       newFavorites.add(id);
     }
     setFavorites(newFavorites);
+    localStorage.setItem("favorites", JSON.stringify(Array.from(newFavorites)));
   };
 
   if (loading) {
@@ -73,9 +82,9 @@ function VenueGridView({
     <>
       <main className="home-page">
         <div className="venue-grid">
-          {displayVenues.map((venue) => (
+          {displayVenues.map((venue, index) => (
             <div
-              key={venue.venueId || venue.id}
+              key={venue.venueId || venue.id || `venue-${index}`}
               className="venue-card"
               onClick={() => {
                 setSelectedVenueId(venue.venueId || venue.id);

@@ -2,10 +2,18 @@ import React, { useState } from "react";
 import { User, Mail, Calendar, Phone } from "lucide-react";
 import "../../assets/styles/ProfilePage.css";
 import { useAuth } from "../../hooks";
+import { authService } from "../../services";
 
 const ProfilePage = () => {
   const { user: account, loading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone_number: "",
+    gender: false,
+    birthday: "",
+  });
+  const [saving, setSaving] = useState(false);
 
   if (loading) {
     return (
@@ -40,14 +48,43 @@ const ProfilePage = () => {
     return date.toLocaleDateString("vi-VN");
   };
 
-  const handleSave = () => {
-    // Logic lưu thông tin
-    // Saving user data...
-    setIsEditing(false);
+  const handleEdit = () => {
+    setFormData({
+      name: user.FullName,
+      phone_number: user.PhoneNumber,
+      gender: user.Gender,
+      birthday: user.Birthday,
+    });
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await authService.updateProfile({
+        name: formData.name,
+        phone_number: formData.phone_number,
+        gender: formData.gender,
+        birthday: formData.birthday,
+      });
+      setIsEditing(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Có lỗi xảy ra khi cập nhật thông tin");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancel = () => {
     setIsEditing(false);
+    setFormData({
+      name: user.FullName,
+      phone_number: user.PhoneNumber,
+      gender: user.Gender,
+      birthday: user.Birthday,
+    });
   };
 
   return (
@@ -60,10 +97,7 @@ const ProfilePage = () => {
           </p>
         </div>
         {!isEditing && (
-          <button
-            className="edit-profile-button"
-            onClick={() => setIsEditing(true)}
-          >
+          <button className="edit-profile-button" onClick={handleEdit}>
             Chỉnh sửa
           </button>
         )}
@@ -93,8 +127,11 @@ const ProfilePage = () => {
               </label>
               <input
                 type="text"
-                value={user.FullName}
+                value={isEditing ? formData.name : user.FullName}
                 readOnly={!isEditing}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 className="profile-input-field"
               />
             </div>
@@ -121,8 +158,11 @@ const ProfilePage = () => {
               </label>
               <input
                 type="tel"
-                value={user.PhoneNumber}
+                value={isEditing ? formData.phone_number : user.PhoneNumber}
                 readOnly={!isEditing}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone_number: e.target.value })
+                }
                 className="profile-input-field"
               />
             </div>
@@ -134,9 +174,12 @@ const ProfilePage = () => {
                 Ngày sinh
               </label>
               <input
-                type="text"
-                value={formatDate(user.Birthday)}
+                type="date"
+                value={isEditing ? formData.birthday : user.Birthday}
                 readOnly={!isEditing}
+                onChange={(e) =>
+                  setFormData({ ...formData, birthday: e.target.value })
+                }
                 className="profile-input-field"
               />
             </div>
@@ -149,8 +192,9 @@ const ProfilePage = () => {
                   <input
                     type="radio"
                     name="gender"
-                    checked={!user.Gender}
+                    checked={isEditing ? !formData.gender : !user.Gender}
                     disabled={!isEditing}
+                    onChange={() => setFormData({ ...formData, gender: false })}
                     className="profile-radio-input"
                   />
                   <span className="profile-radio-text">Nam</span>
@@ -159,8 +203,9 @@ const ProfilePage = () => {
                   <input
                     type="radio"
                     name="gender"
-                    checked={user.Gender}
+                    checked={isEditing ? formData.gender : user.Gender}
                     disabled={!isEditing}
+                    onChange={() => setFormData({ ...formData, gender: true })}
                     className="profile-radio-input"
                   />
                   <span className="profile-radio-text">Nữ</span>
@@ -195,10 +240,18 @@ const ProfilePage = () => {
           {/* Action Buttons */}
           {isEditing && (
             <div className="profile-button-group">
-              <button className="profile-btn-primary" onClick={handleSave}>
-                Lưu thay đổi
+              <button
+                className="profile-btn-primary"
+                onClick={handleSave}
+                disabled={saving}
+              >
+                {saving ? "Đang lưu..." : "Lưu thay đổi"}
               </button>
-              <button className="profile-btn-secondary" onClick={handleCancel}>
+              <button
+                className="profile-btn-secondary"
+                onClick={handleCancel}
+                disabled={saving}
+              >
                 Hủy
               </button>
             </div>

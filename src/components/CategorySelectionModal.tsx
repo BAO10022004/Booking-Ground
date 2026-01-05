@@ -52,29 +52,46 @@ export default function CategorySelectionModal({
         <div className="category-modal-content">
           <div className="category-sport-label">{sportName}</div>
           <div className="category-options">
-            {categories.map((category) => (
-              <div
-                key={category.id}
-                onClick={() => handleSelect(category.id, category.name)}
-                className={`category-option ${
-                  selectedCategoryId === category.id ? "selected" : ""
-                }`}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    handleSelect(category.id, category.name);
-                  }
-                }}
-              >
-                <div className="category-option-content">
-                  <span className="category-option-name">{category.name}</span>
-                  {selectedCategoryId === category.id && (
-                    <Check className="category-option-check" size={20} />
-                  )}
-                </div>
+            <div
+              onClick={() => handleSelect("student", "Học sinh")}
+              className={`category-option ${
+                selectedCategoryId === "student" ? "selected" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  handleSelect("student", "Học sinh");
+                }
+              }}
+            >
+              <div className="category-option-content">
+                <span className="category-option-name">Học sinh</span>
+                {selectedCategoryId === "student" && (
+                  <Check className="category-option-check" size={20} />
+                )}
               </div>
-            ))}
+            </div>
+            <div
+              onClick={() => handleSelect("adult", "Người lớn")}
+              className={`category-option ${
+                selectedCategoryId === "adult" ? "selected" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  handleSelect("adult", "Người lớn");
+                }
+              }}
+            >
+              <div className="category-option-content">
+                <span className="category-option-name">Người lớn</span>
+                {selectedCategoryId === "adult" && (
+                  <Check className="category-option-check" size={20} />
+                )}
+              </div>
+            </div>
           </div>
         </div>
 

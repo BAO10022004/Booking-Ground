@@ -9,6 +9,9 @@ export const API_ENDPOINTS = {
     LOGIN: "/auth/login",
     LOGOUT: "/auth/logout",
     ME: "/auth/me",
+    UPDATE: "/auth/update",
+    CHANGE_PASSWORD: "/auth/change-password",
+    DELETE_ACCOUNT: "/auth/delete-account",
   },
   VENUES: {
     LIST: "/venues",
@@ -16,6 +19,8 @@ export const API_ENDPOINTS = {
     SERVICES: (id: string) => `/venues/${id}/services`,
     TERMS: (id: string) => `/venues/${id}/terms`,
     PRICE_LISTS: (id: string) => `/venues/${id}/price-lists`,
+    PRICE_INFO: (venueId: string, categoryId: string) =>
+      `/venues/${venueId}/categories/${categoryId}/price-info`,
     IMAGES: (id: string) => `/venues/${id}/images`,
     SCHEDULE: (id: string) => `/venues/${id}/schedule`,
     CALCULATE_PRICE: (id: string) => `/venues/${id}/calculate-price`,
@@ -50,6 +55,8 @@ export const API_ENDPOINTS = {
     CREATE: "/bookings",
     UPDATE: (id: string) => `/bookings/${id}`,
     DELETE: (id: string) => `/bookings/${id}`,
+    CONFIRM: (id: string) => `/bookings/${id}/confirm`,
+    CANCEL: (id: string) => `/bookings/${id}/cancel`,
   },
   PAYMENTS: {
     LIST: "/payments",
@@ -72,5 +79,10 @@ export const API_ENDPOINTS = {
   },
   THINKING_SEARCH: {
     PREDICT: "/predict",
+  },
+  FAVORITES: {
+    LIST: "/favorites",
+    CREATE: "/favorites",
+    DELETE: (venueId: string) => `/favorites/${venueId}`,
   },
 };

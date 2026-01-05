@@ -51,7 +51,17 @@ function BottomContinueButton({
               <span className="booking-summary-label">Tổng giờ:</span>
               <span className="booking-summary-value">
                 {totalHours > 0
-                  ? `${totalHours}h${totalHours % 1 === 0.5 ? "30" : ""}`
+                  ? (() => {
+                      const hours = Math.floor(totalHours);
+                      const minutes = Math.round((totalHours - hours) * 60);
+                      if (minutes === 0) {
+                        return `${hours}h`;
+                      } else if (hours === 0) {
+                        return `${minutes}p`;
+                      } else {
+                        return `${hours}h${minutes}p`;
+                      }
+                    })()
                   : "0h"}
               </span>
             </div>

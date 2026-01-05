@@ -35,9 +35,13 @@ function App() {
           path="/booking-confirmation/:bookingId"
           element={<BookingConfirmationPage />}
         />
+        <Route
+          path="/booking-confirmation"
+          element={<BookingConfirmationPage />}
+        />
         <Route path="/login/:isLoginAgument" element={<LoginPage />} />
         <Route path="/event/" element={<EventsBookingPage />} />
-        <Route path="/services" element={<ServiceSelectionPage />} />
+        <Route path="/services/:venueId" element={<ServiceSelectionPage />} />
         {/* 404 - Not Found (Optional) */}
         <Route
           path="*"
