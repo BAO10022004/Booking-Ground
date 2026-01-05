@@ -1,48 +1,49 @@
 // Định nghĩa các trạng thái Booking (Enum)
-type BookingStatus = 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed';
+type BookingStatus = "Pending" | "Confirmed" | "Cancelled" | "Completed";
 
-class Booking {  
-bookingId!: string; 
+class Booking {
+  bookingId!: string;
 
-  userId!: string; 
+  userId!: string;
 
-  /** (Not Null) Ngày đặt sân */
-  date!: Date; 
+  /** (Nullable) Ngày đặt sân - null nếu là event booking */
+  date?: Date | null;
 
-  /** (Not Null) Giờ bắt đầu (sử dụng string cho Time) */
-  startTime!: string; 
+  /** (Nullable) Giờ bắt đầu (sử dụng string cho Time) - null nếu là event booking */
+  startTime?: string | null;
 
-  /** (Not Null) Giờ kết thúc (sử dụng string cho Time) */
-  endTime!: string; 
+  /** (Nullable) Giờ kết thúc (sử dụng string cho Time) - null nếu là event booking */
+  endTime?: string | null;
 
-  /** (Not Null) Tổng số giờ đặt sân (Int) */
-  amountTime!: number; 
+  /** (Nullable) Tổng số giờ đặt sân (Int) - null nếu là event booking */
+  amountTime?: number | null;
 
   /** (Not Null, Default=0) Loại đặt sân: True=1 (đặt sự kiện), False=0 (đặt bình thường) */
-  isEvent!: boolean; 
+  isEvent!: boolean;
 
-  /** (Not Null, Foreign Key) Tham chiếu Ground.GroundID (sân con cụ thể) */
-  groundId!: string; 
+  /** (Nullable, Foreign Key) Tham chiếu Ground.GroundID (sân con cụ thể) - null nếu là event booking */
+  groundId?: string | null;
 
   /** (Null) Đối tượng (VD: học sinh sinh viên) */
-  target!: string | null; 
+  target!: string | null;
 
   /** (Null) Ghi chú của khách hàng */
-  customerNote!: string | null; 
+  customerNote!: string | null;
 
   /** (Null) Ghi chú của chủ sân */
-  ownerNote!: string | null; 
+  ownerNote!: string | null;
 
   /** (Not Null, Default=30) Số lượng người tham gia tối đa (với event thì là số vé) */
-  quantity!: number; 
+  quantity!: number;
+
+  /** (Nullable) Tổng giá tiền thanh toán */
+  totalPrice?: number | null;
 
   /** (Not Null) Trạng thái booking (VD: Pending, Confirmed, Cancelled, Completed) */
-  status!: BookingStatus; 
+  status!: BookingStatus;
 
   /** (Null, Foreign Key) Tham chiếu Event.EventID (sự kiện cụ thể) */
-  eventId!: string | null; 
-
- 
+  eventId!: string | null;
 }
 
 export default Booking;

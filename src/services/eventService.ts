@@ -7,16 +7,16 @@ export interface Event {
   price: number;
   ticket_number: number;
   level?: string;
-  date?: string;
-  start_time?: string;
-  end_time?: string;
   venue_id?: string;
-  ground_id?: string;
-  description?: string;
+  start_date?: string | null;
+  end_date?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface EventFilters {
   search?: string;
+  venue_id?: string;
 }
 
 export interface EventsResponse {
@@ -28,6 +28,7 @@ export const eventService = {
     const params: Record<string, string> = {};
 
     if (filters?.search) params.search = filters.search;
+    if (filters?.venue_id) params.venue_id = filters.venue_id;
 
     const response = await apiClient.get<EventsResponse>(
       API_ENDPOINTS.EVENTS.LIST,
@@ -38,6 +39,10 @@ export const eventService = {
     const data =
       (response.data as EventsResponse)?.data || (response as any)?.data || [];
     return Array.isArray(data) ? data : [];
+  },
+
+  async getEventsByVenue(venueId: string): Promise<Event[]> {
+    return this.getAllEvents({ venue_id: venueId });
   },
 
   async getEventById(id: string): Promise<Event> {

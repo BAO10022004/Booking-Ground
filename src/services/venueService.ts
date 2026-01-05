@@ -19,24 +19,31 @@ export interface VenuesResponse {
 export interface ServiceList {
   id: string;
   name: string;
-  venue_id?: string;
+  venue_id: string;
+  created_at?: string;
+  updated_at?: string;
   details: Array<{
     id: string;
     name: string;
-    wholesale: string;
+    wholesale: string | null;
     unit_wholesale: string;
     retail: string;
     unit_retail: string;
+    service_list_id: string;
+    created_at?: string;
+    updated_at?: string;
   }>;
 }
 
 export interface Term {
   id: string;
+  update_time: string;
   term_category: number;
-  category_name: string;
   content: string;
-  update_time?: string;
-  venue_id?: string;
+  venue_id: string;
+  created_at?: string;
+  updated_at?: string;
+  category_name?: string;
 }
 
 export interface TermsResponse {

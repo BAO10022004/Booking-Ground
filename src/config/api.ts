@@ -52,6 +52,7 @@ export const API_ENDPOINTS = {
   BOOKINGS: {
     LIST: "/bookings",
     MY_BOOKINGS: "/bookings/my-bookings",
+    DETAIL: (id: string) => `/bookings/${id}`,
     CREATE: "/bookings",
     UPDATE: (id: string) => `/bookings/${id}`,
     DELETE: (id: string) => `/bookings/${id}`,

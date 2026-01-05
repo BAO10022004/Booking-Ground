@@ -1,16 +1,20 @@
-// Shared Venue type definition
+// Shared Venue type definition - based on migration
 export interface Venue {
   id: string;
   name: string;
+  sub_address: string;
+  district: string;
+  city: string;
   address: string;
-  sub_address?: string;
-  district?: string;
-  city?: string;
-  operating_time?: string;
-  phone_number1?: string;
-  phone_number2?: string;
-  website?: string;
-  deposit?: number;
+  operating_time: string;
+  phone_number1: string;
+  phone_number2?: string | null;
+  website?: string | null;
+  deposit: number;
+  owner_id: string;
+  created_at?: string;
+  updated_at?: string;
+  // Relationships (optional, loaded from API)
   owner?: {
     id: string;
     name: string;

@@ -11,6 +11,8 @@ export interface Ground {
   name: string;
   venue_id: string;
   category_id: string;
+  created_at?: string;
+  updated_at?: string;
   venue?: {
     id: string;
     name: string;
@@ -38,7 +40,8 @@ export const groundService = {
     );
 
     // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
-    const data = (response.data as GroundsResponse)?.data || (response as any)?.data || [];
+    const data =
+      (response.data as GroundsResponse)?.data || (response as any)?.data || [];
     return Array.isArray(data) ? data : [];
   },
 

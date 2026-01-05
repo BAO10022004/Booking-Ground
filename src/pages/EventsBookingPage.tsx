@@ -1,51 +1,52 @@
-import React, { useState } from "react";
-import { ArrowLeft, Calendar, Info, ArrowRight, Users } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Info, ArrowRight } from "lucide-react";
 import "../assets/styles/EventsBookingPage.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import HeaderEventBooking from "../components/EventBooking/HeaderEventBoking";
 import DatePicker from "../components/EventBooking/DatePicker";
 import { useEvents } from "../hooks";
-const isDateInRangeIgnoreTime = (
-  date: Date,
-  startDate: Date,
-  endDate: Date
-): boolean => {
-  const resetTime = (d: Date) => {
-    const newDate = new Date(d);
-    newDate.setHours(0, 0, 0, 0);
-    return newDate;
-  };
+import { eventService } from "../services";
+import { useVenues } from "../hooks";
 
-  const checkDate = resetTime(date);
-  const start = resetTime(startDate);
-  const end = resetTime(endDate);
-
-  return checkDate >= start && checkDate <= end;
-};
 const EventsBookingPage = () => {
-  const { events: apiEvents, loading } = useEvents();
+  const { venueId } = useParams<{ venueId?: string }>();
+  const navigate = useNavigate();
+  const { venues } = useVenues();
+  const [selectedVenueId, setSelectedVenueId] = useState<string | undefined>(
+    venueId
+  );
   const [selectedDateRange, setSelectedDateRange] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
 
-  // Transform API events to display format
-  const events = apiEvents.map((e) => ({
-    id: e.id,
-    title: e.name,
-    time:
-      e.start_time && e.end_time ? `${e.start_time} - ${e.end_time}` : "N/A",
-    sport: "Sport", // TODO: Lấy từ venue/ground
-    level: e.level || "N/A",
-    participants: 0, // TODO: Lấy từ API nếu có
-    maxParticipants: e.ticket_number || 0,
-    price: `${e.price}k/Vé`,
-    date: e.date || new Date().toLocaleDateString("vi-VN"),
-    avatars: [], // TODO: Lấy từ API nếu có
-  }));
+  // Load events với filter theo venueId
+  const { events: apiEvents, loading } = useEvents(
+    selectedVenueId ? { venue_id: selectedVenueId } : undefined
+  );
+
+  // Update selectedVenueId khi venueId từ URL thay đổi
+  useEffect(() => {
+    if (venueId) {
+      setSelectedVenueId(venueId);
+    }
+  }, [venueId]);
+
+  // Transform API events to display format - chỉ hiển thị events của venue đã chọn
+  const events = apiEvents
+    .filter((e) => !selectedVenueId || e.venue_id === selectedVenueId)
+    .map((e) => ({
+      id: e.id,
+      venue_id: e.venue_id,
+      title: e.name,
+      time: "N/A", // Event model doesn't have start_time/end_time
+      sport: "Sport", // TODO: Lấy từ venue/ground
+      level: e.level || "N/A",
+      participants: 0, // TODO: Lấy từ API nếu có
+      maxParticipants: e.ticket_number || 0,
+      price: `${e.price}k/Vé`,
+      date: new Date().toLocaleDateString("vi-VN"), // Event model doesn't have date, use current date as placeholder
+      avatars: [], // TODO: Lấy từ API nếu có
+    }));
   const formatDateRange = (start: Date, end: Date) => {
-    setStart(start.toLocaleDateString("vi-VN"));
-    setEnd(end.toLocaleDateString("vi-VN"));
     return `${start.toLocaleDateString("vi-VN")} - ${end.toLocaleDateString(
       "vi-VN"
     )}`;
@@ -55,8 +56,50 @@ const EventsBookingPage = () => {
     setSelectedDateRange(formatDateRange(start, end));
     setShowDatePicker(false);
   };
-  const handleEventClick = (eventId: string) => {
-    // TODO: Navigate to event details page
+  const handleEventClick = async (eventId: string, venueId?: string) => {
+    if (!venueId) {
+      alert("Không tìm thấy thông tin sân cho sự kiện này.");
+      return;
+    }
+
+    try {
+      // Lấy thông tin event đầy đủ
+      const event = await eventService.getEventById(eventId);
+
+      // Tạo tempBookingData với thông tin event
+      const tempBookingData = {
+        date: null, // Event booking không cần date
+        start_time: null, // Event booking không cần start_time
+        end_time: null, // Event booking không cần end_time
+        ground_id: null, // Event booking không cần ground_id
+        is_event: true,
+        event_id: event.id,
+        quantity: 1,
+        target: undefined,
+        venueId: venueId,
+        totalPrice: event.price, // Giá vé event
+        total_price: event.price, // Thêm total_price cho API
+        totalHours: 0, // Event không tính theo giờ
+        event: {
+          id: event.id,
+          name: event.name,
+          price: event.price,
+          ticket_number: event.ticket_number,
+          level: event.level,
+          start_date: event.start_date,
+          end_date: event.end_date,
+        },
+      };
+
+      // Lưu vào localStorage
+      localStorage.setItem("tempBookingData", JSON.stringify(tempBookingData));
+
+      // Navigate thẳng đến booking confirmation
+      navigate("/booking-confirmation");
+    } catch (error) {
+      console.error("Error fetching event:", error);
+      alert("Không thể tải thông tin sự kiện. Vui lòng thử lại.");
+    }
   };
 
   if (loading) {
@@ -69,6 +112,16 @@ const EventsBookingPage = () => {
     );
   }
 
+  const handleVenueChange = (newVenueId: string | undefined) => {
+    setSelectedVenueId(newVenueId);
+    // Update URL nếu có venueId
+    if (newVenueId) {
+      navigate(`/event/${newVenueId}`, { replace: true });
+    } else {
+      navigate(`/event`, { replace: true });
+    }
+  };
+
   return (
     <div className="events-booking-page">
       {/*Header */}
@@ -77,6 +130,44 @@ const EventsBookingPage = () => {
         setSelectedDateRange={setSelectedDateRange}
         setShowDatePicker={setShowDatePicker}
       />
+
+      {/* Venue Selection */}
+      {venues.length > 0 && (
+        <div
+          style={{
+            padding: "16px",
+            backgroundColor: "#f5f5f5",
+            marginBottom: "16px",
+          }}
+        >
+          <label
+            style={{ display: "block", marginBottom: "8px", fontWeight: 600 }}
+          >
+            Chọn sân:
+          </label>
+          <select
+            value={selectedVenueId || ""}
+            onChange={(e) => handleVenueChange(e.target.value || undefined)}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              borderRadius: "8px",
+              border: "1px solid #ddd",
+              fontSize: "14px",
+            }}
+          >
+            <option value="">Tất cả sân</option>
+            {venues.map((venue) => {
+              const venueIdValue = (venue as any).venueId || (venue as any).id;
+              return (
+                <option key={venueIdValue} value={venueIdValue}>
+                  {venue.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      )}
 
       {showDatePicker == true ? (
         <DatePicker
@@ -95,13 +186,8 @@ const EventsBookingPage = () => {
           </div>
         ) : (
           events.map((event) =>
-            (selectedDateRange == ""
-              ? true
-              : isDateInRangeIgnoreTime(
-                  new Date(event.date),
-                  new Date(start),
-                  new Date(end)
-                ) == true) == true ? (
+            // Show all events if no date range selected, otherwise show all (since events don't have dates)
+            (selectedDateRange == "" ? true : true) ? (
               <div key={event.id} className="event-card">
                 {/* Event Header */}
                 <div className="event-card-header">
@@ -153,7 +239,7 @@ const EventsBookingPage = () => {
                   <div className="event-price-badge">{event.price}</div>
                   <button
                     className="event-join-button"
-                    onClick={() => handleEventClick(event.id)}
+                    onClick={() => handleEventClick(event.id, event.venue_id)}
                   >
                     <ArrowRight size={20} />
                   </button>

@@ -7,15 +7,12 @@ export interface Event {
   price: number;
   ticket_number: number;
   level?: string;
-  date?: string;
-  start_time?: string;
-  end_time?: string;
   venue_id?: string;
-  ground_id?: string;
-  description?: string;
+  start_date?: string | null;
+  end_date?: string | null;
 }
 
-export function useEvents(filters?: { search?: string }) {
+export function useEvents(filters?: { search?: string; venue_id?: string }) {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -31,12 +28,9 @@ export function useEvents(filters?: { search?: string }) {
           price: e.price,
           ticket_number: e.ticket_number,
           level: e.level,
-          date: e.date,
-          start_time: e.start_time,
-          end_time: e.end_time,
           venue_id: e.venue_id,
-          ground_id: e.ground_id,
-          description: e.description,
+          start_date: e.start_date,
+          end_date: e.end_date,
         })) as Event[];
         setEvents(transformedEvents);
         setError(null);
@@ -51,7 +45,7 @@ export function useEvents(filters?: { search?: string }) {
     };
 
     fetchEvents();
-  }, [filters?.search]);
+  }, [filters?.search, filters?.venue_id]);
 
   return { events, loading, error };
 }

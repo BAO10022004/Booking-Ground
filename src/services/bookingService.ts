@@ -2,42 +2,57 @@ import { apiClient } from "./apiClient";
 import { API_ENDPOINTS } from "../config/api";
 
 export interface CreateBookingData {
-  date: string;
-  start_time: string;
-  end_time: string;
-  ground_id: string;
+  date?: string | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  ground_id?: string | null;
   is_event?: boolean;
   event_id?: string | null;
   target?: string;
   customer_note?: string;
   quantity?: number;
+  total_price?: number;
 }
 
 export interface Booking {
   id: string;
   user_id: string;
-  date: string;
-  start_time: string;
-  end_time: string;
-  amount_time: number;
+  date?: string | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  amount_time?: number | null;
   is_event: boolean;
-  ground_id: string;
-  target?: string;
-  customer_note?: string;
-  owner_note?: string;
+  ground_id?: string | null;
+  target?: string | null;
+  customer_note?: string | null;
+  owner_note?: string | null;
   quantity: number;
+  total_price?: number;
   status: string;
   event_id?: string | null;
+  created_at?: string;
+  updated_at?: string;
   ground?: {
     id: string;
     name: string;
     venue_id: string;
-  };
+    category_id: string;
+  } | null;
   user?: {
     id: string;
     name: string;
     email: string;
   };
+  event?: {
+    id: string;
+    name: string;
+    price: number;
+    ticket_number: number;
+    level?: string;
+    venue_id?: string;
+    start_date?: string;
+    end_date?: string;
+  } | null;
 }
 
 export interface BookingFilters {
@@ -84,6 +99,15 @@ export const bookingService = {
       (response as any)?.data ||
       [];
     return Array.isArray(data) ? data : [];
+  },
+
+  async getBookingById(id: string): Promise<Booking> {
+    const response = await apiClient.get<Booking>(
+      API_ENDPOINTS.BOOKINGS.DETAIL(id)
+    );
+
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Booking;
   },
 
   async createBooking(data: CreateBookingData): Promise<Booking> {
