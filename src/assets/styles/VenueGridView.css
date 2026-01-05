@@ -5,18 +5,6 @@
   max-width: 1280px;
   margin: 0 auto;
   width: 100%;
-  animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 
@@ -41,38 +29,13 @@
   background-color: white;
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-  overflow: hidden; /* Giữ overflow: hidden mặc định cho thẻ */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: cardFadeIn 0.6s ease-out backwards;
+  overflow: hidden;
   position: relative;
-  z-index: 1; /* Mặc định thấp, sẽ tăng khi hover */
+  z-index: 1;
 }
 
-.venue-card:nth-child(1) { animation-delay: 0.1s; }
-.venue-card:nth-child(2) { animation-delay: 0.15s; }
-.venue-card:nth-child(3) { animation-delay: 0.2s; }
-.venue-card:nth-child(4) { animation-delay: 0.25s; }
-.venue-card:nth-child(5) { animation-delay: 0.3s; }
-.venue-card:nth-child(6) { animation-delay: 0.35s; }
-
-@keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Hover effect với 3D transform */
 .venue-card:hover {
-  box-shadow: 
-    0 20px 25px -5px rgba(16, 185, 129, 0.15),
-    0 10px 10px -5px rgba(16, 185, 129, 0.1);
-  transform: translateY(-8px) scale(1.02);
-  z-index: 10; /* Tăng z-index để thẻ nổi lên trên các thẻ khác */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
 }
 
 .venue-card::before {
@@ -157,27 +120,6 @@
   font-size: 0.75rem;
   font-weight: 600;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  animation: tagSlideIn 0.5s ease-out backwards;
-  transition: all 0.3s ease;
-}
-
-.venue-tag:nth-child(1) { animation-delay: 0.3s; }
-.venue-tag:nth-child(2) { animation-delay: 0.4s; }
-
-@keyframes tagSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.venue-tag:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .tag-immediate {
@@ -207,27 +149,7 @@
   align-items: center;
   gap: 0.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 4; /* Đảm bảo nằm trên ảnh tràn ra */
-  animation: ratingPop 0.6s ease-out 0.5s backwards;
-  transition: all 0.3s ease;
-}
-
-@keyframes ratingPop {
-  0% {
-    opacity: 0;
-    transform: scale(0) rotate(-180deg);
-  }
-  50% {
-    transform: scale(1.2) rotate(10deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-}
-
-.venue-rating:hover {
-  transform: scale(1.1) rotate(-5deg);
+  z-index: 4;
 }
 
 .rating-star {
@@ -235,16 +157,6 @@
   height: 1rem;
   fill: #fbbf24;
   color: #fbbf24;
-  animation: starSpin 0.5s ease-out 0.7s backwards;
-}
-
-@keyframes starSpin {
-  from {
-    transform: rotate(-360deg) scale(0);
-  }
-  to {
-    transform: rotate(0deg) scale(1);
-  }
 }
 
 .rating-text {
@@ -260,15 +172,13 @@
   right: 0.75rem;
   display: flex;
   gap: 0.5rem;
-  z-index: 4; /* Đảm bảo nằm trên ảnh tràn ra */
+  z-index: 4;
   opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.2s;
 }
 
 .venue-card:hover .venue-actions {
   opacity: 1;
-  transform: translateY(0);
 }
 
 .action-button {
@@ -281,59 +191,30 @@
   justify-content: center;
   border: none;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-.action-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(16, 185, 129, 0.1);
-  border-radius: 50%;
-  transform: scale(0);
-  transition: transform 0.3s ease;
-}
-
-.action-button:hover::before {
-  transform: scale(1);
 }
 
 .action-button:hover {
   background: white;
-  transform: translateY(-4px) scale(1.1);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.action-button:active {
-  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .action-icon {
   width: 1.25rem;
   height: 1.25rem;
   color: #4b5563;
-  transition: all 0.3s ease;
   position: relative;
   z-index: 1;
 }
 
 .action-button:hover .action-icon {
   color: #10b981;
-  transform: scale(1.1);
 }
 
 .action-icon.favorite {
   fill: #ef4444;
   color: #ef4444;
-  animation: heartBeat 0.3s ease;
 }
-
-@keyframes heartBeat {
-  0%, 100% {
-    transform: scale(1);
   }
   25% {
     transform: scale(1.3);

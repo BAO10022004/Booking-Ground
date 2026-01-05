@@ -107,8 +107,6 @@ function ScheduleGrid({
         setLockedSlots(new Set(schedule.locked || []));
         setEventSlots(new Set(schedule.events || []));
       } catch (error) {
-        console.error("Error fetching schedule:", error);
-        // Fallback to empty sets on error
         setBookedSlots(new Set());
         setLockedSlots(new Set());
         setEventSlots(new Set());
@@ -120,12 +118,16 @@ function ScheduleGrid({
     fetchSchedule();
   }, [venue?.venueId, selectedDate, categoryId]);
 
-  /////////////////////////////// handleCellClick ///////////////////////////////
   const handleCellClick = (groundId: string, time: string) => {
     const cellKey = `${groundId}-${time}`;
 
-    // Check if slot is booked or locked
-    if (bookedSlots.has(cellKey) || lockedSlots.has(cellKey)) return;
+    if (
+      bookedSlots.has(cellKey) ||
+      lockedSlots.has(cellKey) ||
+      eventSlots.has(cellKey)
+    ) {
+      return;
+    }
 
     // ✅ Tìm cell đã tồn tại trong selectedCells
     const existingCellIndex = selectedCells.findIndex((cell) =>

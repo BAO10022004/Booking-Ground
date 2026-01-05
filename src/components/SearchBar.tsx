@@ -98,7 +98,7 @@ function SearchBar({
           {/* <Search className="search-icon" /> */}
           <input
             type="text"
-            placeholder="Tìm kiếm sân thể thao... (VD: sân bóng đá ở quận 1)"
+            placeholder="Tìm kiếm sân thể thao..."
             className="search-input"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}

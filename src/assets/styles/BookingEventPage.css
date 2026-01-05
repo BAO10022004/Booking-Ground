@@ -233,15 +233,24 @@
 
 .slot-available:hover {
   background-color: #d1d5db;
-  transform: scale(1.05);
-  z-index: 5;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .slot-booked {
-  background-color: #f87171;
+  background-color: #ef4444;
   cursor: not-allowed;
   position: relative;
+  opacity: 0.8;
+}
+
+.slot-booked::after {
+  content: "✕";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .slot-locked {
@@ -253,20 +262,11 @@
 .slot-selected {
   background-color: #22c55e;
   position: relative;
-  animation: slotPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 
-    0 0 0 2px #16a34a,
-    0 4px 12px rgba(34, 197, 94, 0.4);
-}
-
-.slot-selected:hover {
-  background-color: #16a34a;
-  transform: scale(1.05);
-  z-index: 5;
+  box-shadow: 0 0 0 2px #16a34a;
 }
 
 .slot-selected::after {
-  content: '✓';
+  content: "✓";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -274,32 +274,6 @@
   color: white;
   font-weight: bold;
   font-size: 16px;
-  animation: checkmarkAppear 0.3s ease-out;
-}
-
-@keyframes slotPop {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes checkmarkAppear {
-  0% {
-    transform: translate(-50%, -50%) scale(0) rotate(-45deg);
-    opacity: 0;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1) rotate(0deg);
-    opacity: 1;
-  }
 }
 
 /* Bottom Button Container */

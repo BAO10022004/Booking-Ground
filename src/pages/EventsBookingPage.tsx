@@ -37,14 +37,14 @@ const EventsBookingPage = () => {
       id: e.id,
       venue_id: e.venue_id,
       title: e.name,
-      time: "N/A", // Event model doesn't have start_time/end_time
-      sport: "Sport", // TODO: Lấy từ venue/ground
+      time: "N/A",
+      sport: "Thể thao",
       level: e.level || "N/A",
-      participants: 0, // TODO: Lấy từ API nếu có
+      participants: 0,
       maxParticipants: e.ticket_number || 0,
       price: `${e.price}k/Vé`,
-      date: new Date().toLocaleDateString("vi-VN"), // Event model doesn't have date, use current date as placeholder
-      avatars: [], // TODO: Lấy từ API nếu có
+      date: new Date().toLocaleDateString("vi-VN"),
+      avatars: [],
     }));
   const formatDateRange = (start: Date, end: Date) => {
     return `${start.toLocaleDateString("vi-VN")} - ${end.toLocaleDateString(
@@ -97,7 +97,6 @@ const EventsBookingPage = () => {
       // Navigate thẳng đến booking confirmation
       navigate("/booking-confirmation");
     } catch (error) {
-      console.error("Error fetching event:", error);
       alert("Không thể tải thông tin sự kiện. Vui lòng thử lại.");
     }
   };

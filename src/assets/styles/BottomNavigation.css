@@ -10,8 +10,6 @@
   right: 0;
   z-index: 50;
   box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.95);
 }
 
@@ -46,7 +44,7 @@
 
 /* Ripple effect background */
 .nav-button::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -109,7 +107,7 @@
 
 /* Active indicator bar on top */
 .nav-button.active::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 50%;
@@ -140,7 +138,8 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1.1) translateY(0);
   }
   50% {
@@ -150,11 +149,7 @@
 
 /* Active background glow */
 .nav-button.active {
-  background: linear-gradient(
-    to bottom,
-    rgba(16, 185, 129, 0.1),
-    transparent
-  );
+  background: linear-gradient(to bottom, rgba(16, 185, 129, 0.1), transparent);
 }
 
 /* Pulse effect for active button */
@@ -163,7 +158,8 @@
 }
 
 @keyframes pulse-icon {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1.1);
   }
   50% {
@@ -193,7 +189,8 @@
 }
 
 @keyframes badge-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -268,27 +265,62 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
 }
 
 @keyframes swing {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-10deg); }
-  75% { transform: rotate(10deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
 }
 
 @keyframes ring {
-  0%, 100% { transform: rotate(0deg); }
-  10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
-  20%, 40%, 60%, 80% { transform: rotate(10deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: rotate(-10deg);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: rotate(10deg);
+  }
 }
 
 @keyframes wave {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(15deg); }
-  75% { transform: rotate(-15deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  75% {
+    transform: rotate(-15deg);
+  }
 }
 
 /* Responsive */
@@ -296,17 +328,17 @@
   .bottom-nav-container {
     padding: 0.375rem 0.5rem;
   }
-  
+
   .nav-button {
     padding: 0.375rem 0.5rem;
     gap: 0.125rem;
   }
-  
+
   .nav-icon {
     width: 1.375rem;
     height: 1.375rem;
   }
-  
+
   .nav-label {
     font-size: 0.7rem;
   }

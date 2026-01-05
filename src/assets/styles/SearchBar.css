@@ -99,20 +99,6 @@
   transform: scale(0.95);
 }
 
-.sparkle-icon {
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-  0%, 100% { 
-    transform: rotate(0deg) scale(1); 
-    opacity: 1; 
-  }
-  50% { 
-    transform: rotate(180deg) scale(1.2); 
-    opacity: 0.8; 
-  }
-}
 
 .menu-btn {
   background: rgba(255, 255, 255, 0.2);
@@ -373,26 +359,8 @@
   height: 0.5rem;
   background: #059669;
   border-radius: 50%;
-  animation: bounce 1.4s infinite ease-in-out both;
 }
 
-.status-dot:nth-child(1) {
-  animation-delay: -0.32s;
-}
-
-.status-dot:nth-child(2) {
-  animation-delay: -0.16s;
-}
-
-@keyframes bounce {
-  0%, 80%, 100% {
-    transform: scale(0);
-    opacity: 0.5;
-  }
-  40% {
-    transform: scale(1);
-    opacity: 1;
-  }
 .search-input-wrapper .clear-button:hover {
   color: #ef4444;
   transform: scale(1.1);

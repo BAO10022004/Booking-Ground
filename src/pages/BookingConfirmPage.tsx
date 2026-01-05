@@ -96,7 +96,6 @@ export default function BookingConfirmationPage() {
             setTotalHours(calculatedHours);
           }
         } catch (error) {
-          console.error("Error parsing temp booking data:", error);
           showToast("error", "Dữ liệu đặt sân không hợp lệ");
         }
       }
@@ -187,7 +186,6 @@ export default function BookingConfirmationPage() {
         navigate("/");
       }, 1000);
     } catch (error: any) {
-      console.error("Error creating booking:", error);
       showToast(
         "error",
         error?.message || "Đặt sân thất bại. Vui lòng thử lại."
@@ -346,7 +344,7 @@ export default function BookingConfirmationPage() {
               onClick={handleSubmit}
               disabled={isCreating}
             >
-              {isCreating ? "Đang xử lý..." : "XÁC NHẬN & THANH TOÁN"}
+              {isCreating ? "Đang xử lý..." : "XÁC NHẬN"}
             </button>
           </div>
         </div>
@@ -358,17 +356,17 @@ export default function BookingConfirmationPage() {
               totalPrice > 0 ? `${totalPrice.toLocaleString("vi-VN")} ₫` : "0 ₫"
             }
           /> */}
-          <PaymentMethodSection
+          {/* <PaymentMethodSection
             selectedMethod={selectedMethod}
             setSelectedMethod={setSelectedMethod}
-          />
+          /> */}
           {/* Submit button cho desktop - sticky ở cuối right column */}
           <button
             className="submit-btn desktop-only"
             onClick={handleSubmit}
             disabled={isCreating}
           >
-            {isCreating ? "Đang xử lý..." : "XÁC NHẬN & THANH TOÁN"}
+            {isCreating ? "Đang xử lý..." : "XÁC NHẬN"}
           </button>
         </div>
       </div>

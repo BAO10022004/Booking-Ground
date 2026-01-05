@@ -89,13 +89,6 @@ export default function BookingSchedulePage({
   const [priceLoading, setPriceLoading] = useState(false);
 
   useEffect(() => {
-    if (!venue) {
-      console.error("Venue not found for venueId:", venueId);
-    }
-    if (!account) {
-      console.error("Account not found");
-    }
-
     // Load categories from venue
     if (venue && (venue as any).categories) {
       const venueCategories = (venue as any).categories.map((cat: any) => ({
@@ -165,12 +158,10 @@ export default function BookingSchedulePage({
           setTotalPrice(result.totalPrice || 0);
           setTotalHours(result.totalHours || calculatedHours);
         } catch (error) {
-          console.error("API calculatePrice failed, using fallback:", error);
           setTotalHours(calculatedHours);
           setTotalPrice(0);
         }
       } catch (error) {
-        console.error("Error calculating price:", error);
         setTotalPrice(0);
         setTotalHours(0);
       } finally {
