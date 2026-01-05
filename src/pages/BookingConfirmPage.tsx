@@ -12,13 +12,19 @@ import PaymentMethodSection from "../components/PaymentMethodSection";
 import Toast from "../components/Toast";
 import { useVenue, useAuth, useMyBookings } from "../hooks";
 import { getGroundById } from "../utils/selectors";
+import Booking from "../models/booking";
+import { calculateHours } from "../utils/helpers/calculateHelpers";
 
 export default function BookingConfirmationPage() {
   const { bookingId } = useParams<{ bookingId: string }>();
   const navigate = useNavigate();
-  const { bookings, loading: bookingsLoading } = useMyBookings();
-  const booking = bookings.find((b) => b.bookingId === bookingId) || null;
-  const [ground, setGround] = useState<any>(null);
+  const { bookings, loading: bookingsLoading, createBooking } = useMyBookings();
+  const existingBooking = bookingId
+    ? bookings.find((b) => b.bookingId === bookingId) || null
+    : null;
+  const [tempBookingData, setTempBookingData] = useState<any>(null);
+  const [booking, setBooking] = useState<Booking | null>(null);
+  const [, setGround] = useState<any>(null);
   const [venueId, setVenueId] = useState<string | undefined>(undefined);
   const { venue, loading: venueLoading } = useVenue(venueId);
   const { user: account, loading: authLoading } = useAuth();
@@ -28,18 +34,63 @@ export default function BookingConfirmationPage() {
   const [notes, setNotes] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [selectedMethod, setSelectedMethod] = useState("vnpay");
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalHours, setTotalHours] = useState(0);
   const [toast, setToast] = useState<{
     type: "success" | "error" | "warning" | "info";
     message: string;
   } | null>(null);
-  const loading = venueLoading || authLoading || bookingsLoading;
+  const [isCreating, setIsCreating] = useState(false);
+  const loading =
+    venueLoading || authLoading || (bookingId ? bookingsLoading : false);
+
+  useEffect(() => {
+    if (bookingId && existingBooking) {
+      setBooking(existingBooking);
+    } else {
+      const tempDataStr = localStorage.getItem("tempBookingData");
+      if (tempDataStr) {
+        try {
+          const tempData = JSON.parse(tempDataStr);
+          setTempBookingData(tempData);
+          setTotalPrice(tempData.totalPrice || 0);
+          setTotalHours(tempData.totalHours || 0);
+          setVenueId(tempData.venueId);
+
+          const tempBooking = new Booking();
+          tempBooking.date = new Date(tempData.date);
+          tempBooking.startTime = tempData.start_time;
+          tempBooking.endTime = tempData.end_time;
+          tempBooking.groundId = tempData.ground_id;
+          tempBooking.target = tempData.target || null;
+
+          const calculatedHours =
+            tempData.totalHours ||
+            calculateHours(tempData.start_time, tempData.end_time);
+          tempBooking.amountTime = calculatedHours;
+
+          tempBooking.isEvent = false;
+          tempBooking.quantity = tempData.quantity || 1;
+          tempBooking.status = "Pending";
+          setBooking(tempBooking);
+
+          if (!tempData.totalHours) {
+            setTotalHours(calculatedHours);
+          }
+        } catch (error) {
+          console.error("Error parsing temp booking data:", error);
+          showToast("error", "Dữ liệu đặt sân không hợp lệ");
+        }
+      }
+    }
+  }, [bookingId, existingBooking]);
 
   useEffect(() => {
     const fetchGround = async () => {
       if (booking?.groundId) {
         const foundGround = await getGroundById(booking.groundId);
         setGround(foundGround);
-        if (foundGround) {
+        if (foundGround && !venueId) {
           setVenueId(foundGround.venueId);
         }
       }
@@ -48,7 +99,7 @@ export default function BookingConfirmationPage() {
     if (booking) {
       fetchGround();
     }
-  }, [booking]);
+  }, [booking, venueId]);
 
   const handleBack = () => navigate(-1);
 
@@ -60,7 +111,7 @@ export default function BookingConfirmationPage() {
     setTimeout(() => setToast(null), 4000);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!customerName.trim()) {
       showToast("warning", "Vui lòng nhập tên của bạn");
       return;
@@ -69,8 +120,45 @@ export default function BookingConfirmationPage() {
       showToast("warning", "Vui lòng nhập số điện thoại");
       return;
     }
-    // TODO: Implement payment processing
-    showToast("info", "Chức năng thanh toán đang được phát triển");
+
+    if (bookingId && existingBooking) {
+      showToast("info", "Chức năng thanh toán đang được phát triển");
+      return;
+    }
+
+    if (!tempBookingData || !booking) {
+      showToast("error", "Không tìm thấy thông tin đặt sân");
+      return;
+    }
+
+    try {
+      setIsCreating(true);
+      const createdBooking = await createBooking({
+        date: tempBookingData.date,
+        start_time: tempBookingData.start_time,
+        end_time: tempBookingData.end_time,
+        ground_id: tempBookingData.ground_id,
+        is_event: false,
+        quantity: tempBookingData.quantity || 1,
+        target: tempBookingData.target || undefined,
+        customer_note: notes.trim() || undefined,
+      });
+
+      localStorage.removeItem("tempBookingData");
+      showToast("success", "Đặt sân thành công!");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } catch (error: any) {
+      console.error("Error creating booking:", error);
+      showToast(
+        "error",
+        error?.message || "Đặt sân thất bại. Vui lòng thử lại."
+      );
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   useEffect(() => {
@@ -78,6 +166,13 @@ export default function BookingConfirmationPage() {
       navigate("/player/login");
     }
   }, [account, authLoading, navigate]);
+
+  useEffect(() => {
+    if (account) {
+      setCustomerName(account.fullName || "");
+      setPhoneNumber(account.phoneNumber || "");
+    }
+  }, [account]);
 
   if (loading) {
     return (
@@ -98,6 +193,15 @@ export default function BookingConfirmationPage() {
   }
 
   if (!venue || !booking) {
+    if (loading) {
+      return (
+        <div className="booking-confirmation-page">
+          <div style={{ padding: "40px", textAlign: "center" }}>
+            Đang tải...
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="booking-confirmation-page">
         <div style={{ padding: "40px", textAlign: "center" }}>
@@ -137,12 +241,12 @@ export default function BookingConfirmationPage() {
 
       <div className="confirmation-content">
         <div className="left-column">
-          <VenueInfoSection venue={venue} />
-
           <BookingInfoSection
             booking={booking!}
             showBookingInfo={showBookingInfo}
             setShowBookingInfo={setShowBookingInfo}
+            totalPrice={totalPrice}
+            totalHours={totalHours}
           />
           <AuthInfoSection
             account={account}
@@ -164,22 +268,34 @@ export default function BookingConfirmationPage() {
 
           {/* Submit button cho mobile */}
           <div className="mobile-only">
-            <button className="submit-btn" onClick={handleSubmit}>
-              XÁC NHẬN & THANH TOÁN
+            <button
+              className="submit-btn"
+              onClick={handleSubmit}
+              disabled={isCreating}
+            >
+              {isCreating ? "Đang xử lý..." : "XÁC NHẬN & THANH TOÁN"}
             </button>
           </div>
         </div>
 
         {/* Right Column - Summary (Sticky on Desktop) */}
         <div className="right-column">
-          <PaymentInfoSection />
+          <PaymentInfoSection
+            totalAmount={
+              totalPrice > 0 ? `${totalPrice.toLocaleString("vi-VN")} ₫` : "0 ₫"
+            }
+          />
           <PaymentMethodSection
             selectedMethod={selectedMethod}
             setSelectedMethod={setSelectedMethod}
           />
           {/* Submit button cho desktop - sticky ở cuối right column */}
-          <button className="submit-btn desktop-only" onClick={handleSubmit}>
-            XÁC NHẬN & THANH TOÁN
+          <button
+            className="submit-btn desktop-only"
+            onClick={handleSubmit}
+            disabled={isCreating}
+          >
+            {isCreating ? "Đang xử lý..." : "XÁC NHẬN & THANH TOÁN"}
           </button>
         </div>
       </div>

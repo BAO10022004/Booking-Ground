@@ -8,10 +8,11 @@ import ScheduleGrid from "../components/ScheduleGrid";
 import DatePickerModal from "../components/DatePickerModal";
 import CategorySelectionModal from "../components/CategorySelectionModal";
 import Toast from "../components/Toast";
-import { useVenue, useAuth, useMyBookings, useGrounds } from "../hooks";
+import { useVenue, useAuth, useGrounds } from "../hooks";
 import { getCurrentDate } from "../utils/helpers";
 import { venueService } from "../services";
 import getCategoriesByVenue from "../utils/getCategoriesByVenue";
+import { calculateHours } from "../utils/helpers/calculateHelpers";
 
 interface BookingSchedulePageProps {
   venueId: string;
@@ -54,7 +55,6 @@ export default function BookingSchedulePage({
   const navigate = useNavigate();
   const { venue: apiVenue, loading: venueLoading } = useVenue(venueId);
   const { user: account, loading: authLoading } = useAuth();
-  const { createBooking } = useMyBookings();
   const { grounds, loading: groundsLoading } = useGrounds(venueId);
 
   const venue = apiVenue
@@ -98,27 +98,11 @@ export default function BookingSchedulePage({
     }
   }, [venue, venueId, account]);
 
-  // Load categories for venue
+  // Show category modal on mount if no selection
   useEffect(() => {
-    const loadCategories = async () => {
-      if (!venueId) return;
-      try {
-        const venueCategories = await getCategoriesByVenue(venueId);
-        const transformed = venueCategories.map((cat) => ({
-          id: cat.categoryId,
-          name: cat.name,
-        }));
-        setCategories(transformed);
-
-        // Show category modal if categories exist and none selected
-        if (transformed.length > 0 && !selectedCategoryId) {
-          setShowCategoryModal(true);
-        }
-      } catch (error) {
-        console.error("Error loading categories:", error);
-      }
-    };
-    loadCategories();
+    if (!selectedCategoryId && venueId) {
+      setShowCategoryModal(true);
+    }
   }, [venueId]);
 
   // Calculate price when selection changes
@@ -150,18 +134,33 @@ export default function BookingSchedulePage({
           day
         ).padStart(2, "0")}`;
 
-        const result = await venueService.calculatePrice({
-          venueId: venue.venueId,
-          date: dateStr,
-          startTime: booking.startTime,
-          endTime: booking.endTime,
-          groundId: booking.ground,
-          categoryId: selectedCategoryId,
-          target: selectedCategoryName,
-        });
+        const calculatedHours = calculateHours(
+          booking.startTime,
+          booking.endTime
+        );
 
-        setTotalPrice(result.totalPrice);
-        setTotalHours(result.totalHours);
+        try {
+          // Get ground to get categoryId
+          const ground = grounds.find((g) => g.id === booking.ground);
+          const categoryId = ground?.category_id;
+
+          const result = await venueService.calculatePrice({
+            venueId: venue.venueId,
+            date: dateStr,
+            startTime: booking.startTime,
+            endTime: booking.endTime,
+            groundId: booking.ground,
+            categoryId: categoryId,
+            target: selectedCategoryId === "student" ? "student" : "adult",
+          });
+
+          setTotalPrice(result.totalPrice || 0);
+          setTotalHours(result.totalHours || calculatedHours);
+        } catch (error) {
+          console.error("API calculatePrice failed, using fallback:", error);
+          setTotalHours(calculatedHours);
+          setTotalPrice(0);
+        }
       } catch (error) {
         console.error("Error calculating price:", error);
         setTotalPrice(0);
@@ -316,6 +315,12 @@ export default function BookingSchedulePage({
       return;
     }
 
+    if (!selectedCategoryId) {
+      showToast("warning", "Vui lòng chọn đối tượng áp dụng.");
+      setShowCategoryModal(true);
+      return;
+    }
+
     try {
       const bookingDetails = validation.bookings;
       if (bookingDetails.length === 0) {
@@ -337,7 +342,7 @@ export default function BookingSchedulePage({
         day
       ).padStart(2, "0")}`;
 
-      const createdBooking = await createBooking({
+      const tempBookingData = {
         date: bookingDate,
         start_time: startTime,
         end_time: endTime,
@@ -345,22 +350,16 @@ export default function BookingSchedulePage({
         is_event: false,
         quantity: 1,
         target: selectedCategoryName || undefined,
-      });
+        venueId: venue.venueId,
+        totalPrice,
+        totalHours,
+      };
 
-      showToast(
-        "success",
-        "Đặt sân thành công! Đang chuyển đến trang xác nhận..."
-      );
-
-      setTimeout(() => {
-        navigate(`/booking-confirmation/${createdBooking.bookingId}/`);
-      }, 500);
+      localStorage.setItem("tempBookingData", JSON.stringify(tempBookingData));
+      navigate("/booking-confirmation");
     } catch (error: any) {
-      console.error("Error creating booking:", error);
-      showToast(
-        "error",
-        error?.message || "Đặt sân thất bại. Vui lòng thử lại."
-      );
+      console.error("Error preparing booking:", error);
+      showToast("error", error?.message || "Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
 

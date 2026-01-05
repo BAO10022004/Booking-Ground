@@ -1,5 +1,6 @@
 import { apiClient } from "./apiClient";
 import { API_ENDPOINTS } from "../config/api";
+import type { Venue } from "../types/venue";
 
 export interface VenueFilters {
   category_id?: string;
@@ -8,38 +9,8 @@ export interface VenueFilters {
   search?: string;
 }
 
-export interface Venue {
-  id: string;
-  name: string;
-  address: string;
-  sub_address?: string;
-  district?: string;
-  city?: string;
-  operating_time?: string;
-  phone_number1?: string;
-  phone_number2?: string;
-  website?: string;
-  deposit?: number;
-  owner?: {
-    id: string;
-    name: string;
-  };
-  categories?: Array<{
-    id: string;
-    name: string;
-  }>;
-  images?: Array<{
-    id: string;
-    name: string;
-    image_url: string;
-  }>;
-  grounds?: Array<{
-    id: string;
-    name: string;
-    venue_id: string;
-    category_id: string;
-  }>;
-}
+// Re-export Venue type for backward compatibility
+export type { Venue };
 
 export interface VenuesResponse {
   data: Venue[];
@@ -357,6 +328,54 @@ export const venueService = {
     return (response.data || response) as {
       totalPrice: number;
       totalHours: number;
+    };
+  },
+
+  async getPriceInfo(
+    venueId: string,
+    categoryId: string
+  ): Promise<{
+    venueId: string;
+    categoryId: string;
+    priceId: string | null;
+    prices: Array<{
+      id: string;
+      date: string | null;
+      day: string | null;
+      start_time: string;
+      end_time: string;
+      fixed_price: number | null;
+      current_price: number | null;
+    }>;
+  }> {
+    const response = await apiClient.get<{
+      venueId: string;
+      categoryId: string;
+      priceId: string | null;
+      prices: Array<{
+        id: string;
+        date: string | null;
+        day: string | null;
+        start_time: string;
+        end_time: string;
+        fixed_price: number | null;
+        current_price: number | null;
+      }>;
+    }>(API_ENDPOINTS.VENUES.PRICE_INFO(venueId, categoryId));
+
+    return (response.data || response) as {
+      venueId: string;
+      categoryId: string;
+      priceId: string | null;
+      prices: Array<{
+        id: string;
+        date: string | null;
+        day: string | null;
+        start_time: string;
+        end_time: string;
+        fixed_price: number | null;
+        current_price: number | null;
+      }>;
     };
   },
 };

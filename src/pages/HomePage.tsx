@@ -21,6 +21,7 @@ function HomePage() {
     undefined
   );
   const [listView, setListView] = useState<Venue[]>([]);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   useEffect(() => {
     if (activeTab === "account" && !loading && !isAuthenticated) {
@@ -28,6 +29,26 @@ function HomePage() {
       setActiveTab("home");
     }
   }, [activeTab, isAuthenticated, loading, navigate]);
+
+  useEffect(() => {
+    const handleSwitchToMapTab = () => {
+      setActiveTab("map");
+    };
+    const handleSwitchToAccountTab = () => {
+      setActiveTab("account");
+    };
+
+    window.addEventListener("switchToMapTab", handleSwitchToMapTab);
+    window.addEventListener("switchToAccountTab", handleSwitchToAccountTab);
+
+    return () => {
+      window.removeEventListener("switchToMapTab", handleSwitchToMapTab);
+      window.removeEventListener(
+        "switchToAccountTab",
+        handleSwitchToAccountTab
+      );
+    };
+  }, []);
 
   return (
     <div className="app-container">
@@ -42,11 +63,14 @@ function HomePage() {
           <FilterTabs
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
+            showFavoritesOnly={showFavoritesOnly}
+            setShowFavoritesOnly={setShowFavoritesOnly}
           />
           <VenueGridView
             search={searchText}
             categoryId={selectedCategory}
             listView={listView}
+            showFavoritesOnly={showFavoritesOnly}
           />
         </>
       ) : activeTab === "map" ? (

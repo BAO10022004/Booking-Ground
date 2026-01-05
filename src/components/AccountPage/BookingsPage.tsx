@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Calendar,
   Clock,
@@ -9,16 +9,27 @@ import {
   Edit,
   Trash2,
   X,
+  Star,
 } from "lucide-react";
 import "../../assets/styles/BookingsPage.css";
 import { useMyBookings } from "../../hooks";
-import { bookingService } from "../../services";
+import { ratingService } from "../../services";
 
 const BookingsPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const [editingBooking, setEditingBooking] = useState<string | null>(null);
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
-  const { rawBookings, loading, error, updateBooking, deleteBooking, refreshBookings } = useMyBookings();
+  const [showRatingModal, setShowRatingModal] = useState<string | null>(null);
+  const [ratingStars, setRatingStars] = useState(0);
+  const [ratingReview, setRatingReview] = useState("");
+  const [isSubmittingRating, setIsSubmittingRating] = useState(false);
+  const {
+    rawBookings,
+    loading,
+    error,
+    updateBooking,
+    deleteBooking,
+    refreshBookings,
+  } = useMyBookings();
 
   if (loading) {
     return (
@@ -34,11 +45,12 @@ const BookingsPage = () => {
     );
   }
 
-  const bookings = (rawBookings || []).map((b) => {
+  const bookings = (rawBookings || []).map((b, index) => {
     let dateStr = "";
     try {
       if (b.date) {
-        const date = b.date instanceof Date ? b.date : new Date(b.date);
+        const date =
+          typeof b.date === "string" ? new Date(b.date) : new Date(b.date);
         dateStr = date.toISOString().split("T")[0];
       }
     } catch (e) {
@@ -47,18 +59,22 @@ const BookingsPage = () => {
     }
 
     return {
-      BookingID: b.bookingId || "",
-      UserID: b.userId || "",
+      BookingID: b.id || `booking-${index}`,
+      UserID: b.user_id || "",
       Date: dateStr,
-      StartTime: b.startTime || "",
-      EndTime: b.endTime || "",
-      AmountTime: b.amountTime || 0,
+      StartTime: b.start_time || "",
+      EndTime: b.end_time || "",
+      AmountTime: b.amount_time || 0,
       IsEvent: b.is_event || false,
-      GroundID: b.groundId || "",
+      GroundID: b.ground_id || "",
       GroundName:
         (b.ground && typeof b.ground === "object" && "name" in b.ground
           ? b.ground.name
           : null) || "Sân bóng",
+      VenueId:
+        (b.ground && typeof b.ground === "object" && "venue_id" in b.ground
+          ? b.ground.venue_id
+          : null) || null,
       Target: b.target || "",
       CustomerNote: b.customer_note || "",
       OwnerNote: b.owner_note || "",
@@ -114,10 +130,13 @@ const BookingsPage = () => {
   };
 
   const handleDelete = async (bookingId: string) => {
+    if (!bookingId || bookingId === "") {
+      alert("Không thể xóa đặt sân: ID không hợp lệ");
+      return;
+    }
     if (window.confirm("Bạn có chắc chắn muốn hủy đặt sân này?")) {
       try {
         await deleteBooking(bookingId);
-        setDeleteConfirm(null);
       } catch (err) {
         alert("Có lỗi xảy ra khi hủy đặt sân. Vui lòng thử lại.");
         console.error("Delete booking error:", err);
@@ -296,10 +315,13 @@ const BookingsPage = () => {
 
                 {/* Card Footer */}
                 <div className="booking-card-footer">
-                  {(booking.Status === "Pending" || booking.Status === "Confirmed") && (
+                  {(booking.Status === "Pending" ||
+                    booking.Status === "Confirmed") && (
                     <>
                       {editingBooking === booking.BookingID ? (
-                        <div style={{ display: "flex", gap: "8px", width: "100%" }}>
+                        <div
+                          style={{ display: "flex", gap: "8px", width: "100%" }}
+                        >
                           <input
                             type="text"
                             defaultValue={booking.CustomerNote || ""}
@@ -312,7 +334,10 @@ const BookingsPage = () => {
                             }}
                             onKeyDown={(e) => {
                               if (e.key === "Enter") {
-                                handleUpdate(booking.BookingID, e.currentTarget.value);
+                                handleUpdate(
+                                  booking.BookingID,
+                                  e.currentTarget.value
+                                );
                               }
                               if (e.key === "Escape") {
                                 setEditingBooking(null);
@@ -324,7 +349,9 @@ const BookingsPage = () => {
                             className="booking-action-btn btn-save"
                             onClick={() => {
                               const input = document.querySelector(
-                                `input[defaultValue="${booking.CustomerNote || ""}"]`
+                                `input[defaultValue="${
+                                  booking.CustomerNote || ""
+                                }"]`
                               ) as HTMLInputElement;
                               if (input) {
                                 handleUpdate(booking.BookingID, input.value);
@@ -361,7 +388,20 @@ const BookingsPage = () => {
                     </>
                   )}
                   {booking.Status === "Completed" && (
-                    <button className="booking-action-btn btn-review">
+                    <button
+                      className="booking-action-btn btn-review"
+                      onClick={() => {
+                        const venueId = (booking as any).VenueId;
+                        if (venueId) {
+                          setShowRatingModal(venueId);
+                          setRatingStars(0);
+                          setRatingReview("");
+                        } else {
+                          alert("Không tìm thấy thông tin sân để đánh giá");
+                        }
+                      }}
+                    >
+                      <Star size={16} />
                       Đánh giá
                     </button>
                   )}
@@ -371,6 +411,98 @@ const BookingsPage = () => {
           })
         )}
       </div>
+
+      {/* Rating Modal */}
+      {showRatingModal && (
+        <div
+          className="rating-modal-backdrop"
+          onClick={() => setShowRatingModal(null)}
+        >
+          <div
+            className="rating-modal-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="rating-modal-header">
+              <h3>Đánh giá sân</h3>
+              <button
+                className="rating-modal-close"
+                onClick={() => setShowRatingModal(null)}
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="rating-modal-content">
+              <div className="rating-stars-input">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    className="rating-star-button"
+                    onClick={() => setRatingStars(star)}
+                  >
+                    <Star
+                      size={32}
+                      fill={star <= ratingStars ? "currentColor" : "none"}
+                      color={star <= ratingStars ? "#FFD700" : "#ccc"}
+                    />
+                  </button>
+                ))}
+              </div>
+              <textarea
+                className="rating-textarea"
+                placeholder="Nhập đánh giá của bạn..."
+                value={ratingReview}
+                onChange={(e) => setRatingReview(e.target.value)}
+                rows={4}
+              />
+              <div className="rating-modal-actions">
+                <button
+                  className="rating-submit-btn"
+                  onClick={async () => {
+                    if (ratingStars === 0) {
+                      alert("Vui lòng chọn số sao đánh giá");
+                      return;
+                    }
+                    setIsSubmittingRating(true);
+                    try {
+                      await ratingService.createRating({
+                        venue_id: showRatingModal,
+                        star_number: ratingStars,
+                        review: ratingReview || undefined,
+                      });
+                      setShowRatingModal(null);
+                      setRatingStars(0);
+                      setRatingReview("");
+                      alert("Đánh giá thành công!");
+                    } catch (err: any) {
+                      alert(
+                        err?.message ||
+                          "Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại."
+                      );
+                      console.error("Rating error:", err);
+                    } finally {
+                      setIsSubmittingRating(false);
+                    }
+                  }}
+                  disabled={isSubmittingRating || ratingStars === 0}
+                >
+                  {isSubmittingRating ? "Đang gửi..." : "Gửi đánh giá"}
+                </button>
+                <button
+                  className="rating-cancel-btn"
+                  onClick={() => {
+                    setShowRatingModal(null);
+                    setRatingStars(0);
+                    setRatingReview("");
+                  }}
+                >
+                  Hủy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -94,6 +94,23 @@ export const authService = {
     return (response.data || response) as User;
   },
 
+  async updateProfile(data: Partial<User>): Promise<User> {
+    const response = await apiClient.put<User>(API_ENDPOINTS.AUTH.UPDATE, data);
+    return (response.data || response) as User;
+  },
+
+  async changePassword(data: {
+    current_password: string;
+    new_password: string;
+    password_confirmation: string;
+  }): Promise<void> {
+    await apiClient.post(API_ENDPOINTS.AUTH.CHANGE_PASSWORD, data);
+  },
+
+  async deleteAccount(): Promise<void> {
+    await apiClient.delete(API_ENDPOINTS.AUTH.DELETE_ACCOUNT);
+  },
+
   isAuthenticated(): boolean {
     return apiClient.isAuthenticated();
   },

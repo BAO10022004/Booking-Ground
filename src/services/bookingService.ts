@@ -112,4 +112,22 @@ export const bookingService = {
   async deleteBooking(id: string): Promise<void> {
     await apiClient.delete(API_ENDPOINTS.BOOKINGS.DELETE(id));
   },
+
+  async confirmBooking(id: string): Promise<Booking> {
+    const response = await apiClient.post<Booking>(
+      API_ENDPOINTS.BOOKINGS.CONFIRM(id)
+    );
+
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Booking;
+  },
+
+  async cancelBooking(id: string): Promise<Booking> {
+    const response = await apiClient.post<Booking>(
+      API_ENDPOINTS.BOOKINGS.CANCEL(id)
+    );
+
+    // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
+    return (response.data || response) as Booking;
+  },
 };
