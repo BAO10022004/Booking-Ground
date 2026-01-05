@@ -131,7 +131,6 @@ function AccountPage() {
         }
       }
     } catch (error) {
-      console.error("Error rendering content:", error);
       return (
         <div className="account-empty-state">
           <div className="account-empty-icon">⚠️</div>
@@ -246,12 +245,12 @@ function AccountPage() {
           <p>Thông tin phiên bản: 2.8.1</p>
         </div>
 
-        <div className="account-logout-section">
+        {/* <div className="account-logout-section">
           <button className="account-logout-button" onClick={handleLogout}>
             <LogOut size={20} />
             <span>Đăng xuất</span>
           </button>
-        </div>
+        </div> */}
       </div>
 
       <div className="account-content">

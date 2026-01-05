@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Star,
-  Heart,
-  MapPin,
-  Clock,
-  Phone,
-  Globe,
-  ArrowLeft,
-} from "lucide-react";
+import { Star, Heart, MapPin, Clock, Phone, ArrowLeft } from "lucide-react";
 import {
   useVenue,
   useRatings,
@@ -28,7 +20,7 @@ interface VenueDetailModalProps {
   onBookClick: () => void;
 }
 
-type TabType = "services" | "images" | "terms";
+type TabType = "services" | "images" | "terms" | "ratings";
 
 export default function VenueDetailModal({
   isOpen,
@@ -36,7 +28,7 @@ export default function VenueDetailModal({
   venueId,
   onBookClick,
 }: VenueDetailModalProps) {
-  const [activeTab, setActiveTab] = useState<TabType>("info");
+  const [activeTab, setActiveTab] = useState<TabType>("services");
   const [showRatingForm, setShowRatingForm] = useState(false);
   const [ratingStars, setRatingStars] = useState(0);
   const [ratingReview, setRatingReview] = useState("");
@@ -74,58 +66,43 @@ export default function VenueDetailModal({
   useEffect(() => {
     if (isOpen) {
       setActiveTab("services");
+      setShowRatingForm(false);
+      setRatingStars(0);
+      setRatingReview("");
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    if (venueId && activeTab === "services") {
-      console.log("=== SERVICES TAB DEBUG ===");
-      console.log("venueId:", venueId);
-      console.log("services:", services);
-      console.log("services.length:", services?.length || 0);
-      console.log("servicesLoading:", servicesLoading);
-      console.log("servicesError:", servicesError);
-      console.log("priceLists:", priceLists);
-      console.log("priceLists.length:", priceLists?.length || 0);
-      console.log("priceListsLoading:", priceListsLoading);
-      console.log("priceListsError:", priceListsError);
-      console.log("=========================");
-    }
-  }, [
-    venueId,
-    activeTab,
-    services,
-    servicesLoading,
-    servicesError,
-    priceLists,
-    priceListsLoading,
-    priceListsError,
-  ]);
-
-  useEffect(() => {
-    if (venueId) {
-      console.log("VenueDetailModal - venueId:", venueId);
-      console.log("VenueDetailModal - services:", services);
-      console.log("VenueDetailModal - servicesLoading:", servicesLoading);
-      console.log("VenueDetailModal - servicesError:", servicesError);
-      console.log("VenueDetailModal - priceLists:", priceLists);
-      console.log("VenueDetailModal - priceListsLoading:", priceListsLoading);
-      console.log("VenueDetailModal - priceListsError:", priceListsError);
-    }
-  }, [
-    venueId,
-    services,
-    servicesLoading,
-    servicesError,
-    priceLists,
-    priceListsLoading,
-    priceListsError,
-  ]);
 
   if (!isOpen || !venueId) return null;
 
   const averageRating = getAverageRating(venueId);
   const venueRatings = ratings.filter((r) => r.venue_id === venueId);
+  const userRating = venueRatings.find((r) => r.user_id === (user as any)?.id);
+
+  const handleSubmitRating = async () => {
+    if (!isAuthenticated || !user) {
+      return;
+    }
+
+    if (ratingStars === 0) {
+      return;
+    }
+
+    try {
+      setIsSubmittingRating(true);
+      await ratingService.createRating({
+        venue_id: venueId!,
+        star_number: ratingStars,
+        review: ratingReview.trim() || undefined,
+      });
+      await refreshRatings();
+      setShowRatingForm(false);
+      setRatingStars(0);
+      setRatingReview("");
+    } catch (error: any) {
+    } finally {
+      setIsSubmittingRating(false);
+    }
+  };
 
   return (
     <div className="venue-detail-backdrop" onClick={onClose}>
@@ -219,6 +196,14 @@ export default function VenueDetailModal({
                   onClick={() => setActiveTab("terms")}
                 >
                   Điều khoản & quy định
+                </button>
+                <button
+                  className={`venue-detail-tab ${
+                    activeTab === "ratings" ? "active" : ""
+                  }`}
+                  onClick={() => setActiveTab("ratings")}
+                >
+                  Đánh giá
                 </button>
               </div>
 
@@ -518,6 +503,200 @@ export default function VenueDetailModal({
                         </div>
                       </>
                     )}
+                  </div>
+                )}
+
+                {activeTab === "ratings" && (
+                  <div className="venue-detail-ratings">
+                    {isAuthenticated && !userRating && !showRatingForm && (
+                      <div className="venue-detail-rating-form-toggle">
+                        <button
+                          className="venue-detail-add-rating-btn"
+                          onClick={() => setShowRatingForm(true)}
+                        >
+                          Viết đánh giá
+                        </button>
+                      </div>
+                    )}
+
+                    {showRatingForm && (
+                      <div className="venue-detail-rating-form">
+                        <h4 className="venue-detail-section-title">
+                          Viết đánh giá
+                        </h4>
+                        <div className="venue-detail-rating-stars-input">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                              key={star}
+                              type="button"
+                              className="venue-detail-star-btn"
+                              onClick={() => setRatingStars(star)}
+                              onMouseEnter={() => setRatingStars(star)}
+                            >
+                              <Star
+                                size={32}
+                                fill={
+                                  star <= ratingStars ? "currentColor" : "none"
+                                }
+                                color={
+                                  star <= ratingStars ? "#fbbf24" : "#d1d5db"
+                                }
+                              />
+                            </button>
+                          ))}
+                        </div>
+                        <textarea
+                          className="venue-detail-rating-textarea"
+                          placeholder="Chia sẻ trải nghiệm của bạn..."
+                          value={ratingReview}
+                          onChange={(e) => setRatingReview(e.target.value)}
+                          rows={4}
+                        />
+                        <div className="venue-detail-rating-form-actions">
+                          <button
+                            className="venue-detail-rating-cancel-btn"
+                            onClick={() => {
+                              setShowRatingForm(false);
+                              setRatingStars(0);
+                              setRatingReview("");
+                            }}
+                            disabled={isSubmittingRating}
+                          >
+                            Hủy
+                          </button>
+                          <button
+                            className="venue-detail-rating-submit-btn"
+                            onClick={handleSubmitRating}
+                            disabled={isSubmittingRating || ratingStars === 0}
+                          >
+                            {isSubmittingRating
+                              ? "Đang gửi..."
+                              : "Gửi đánh giá"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {userRating && (
+                      <div className="venue-detail-user-rating">
+                        <h4 className="venue-detail-section-title">
+                          Đánh giá của bạn
+                        </h4>
+                        <div className="venue-detail-rating-item">
+                          <div className="venue-detail-rating-header">
+                            <div className="venue-detail-rating-user">
+                              <div className="venue-detail-rating-avatar">
+                                {userRating.user?.name
+                                  ?.charAt(0)
+                                  .toUpperCase() || "U"}
+                              </div>
+                              <div>
+                                <div className="venue-detail-rating-name">
+                                  {userRating.user?.name || "Người dùng"}
+                                </div>
+                                <div className="venue-detail-rating-stars">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <Star
+                                      key={star}
+                                      size={16}
+                                      fill={
+                                        star <= userRating.star_number
+                                          ? "currentColor"
+                                          : "none"
+                                      }
+                                      color={
+                                        star <= userRating.star_number
+                                          ? "#fbbf24"
+                                          : "#d1d5db"
+                                      }
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="venue-detail-rating-date">
+                              {userRating.created_at
+                                ? new Date(
+                                    userRating.created_at
+                                  ).toLocaleDateString("vi-VN")
+                                : ""}
+                            </div>
+                          </div>
+                          {userRating.review && (
+                            <div className="venue-detail-rating-review">
+                              {userRating.review}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="venue-detail-ratings-list">
+                      <h4 className="venue-detail-section-title">
+                        Đánh giá ({venueRatings.length})
+                      </h4>
+                      {venueRatings.length === 0 ? (
+                        <div className="venue-detail-empty">
+                          <p>Chưa có đánh giá nào</p>
+                        </div>
+                      ) : (
+                        <div className="venue-detail-ratings-items">
+                          {venueRatings
+                            .filter((r) => r.user_id !== (user as any)?.id)
+                            .map((rating) => (
+                              <div
+                                key={rating.id}
+                                className="venue-detail-rating-item"
+                              >
+                                <div className="venue-detail-rating-header">
+                                  <div className="venue-detail-rating-user">
+                                    <div className="venue-detail-rating-avatar">
+                                      {rating.user?.name
+                                        ?.charAt(0)
+                                        .toUpperCase() || "U"}
+                                    </div>
+                                    <div>
+                                      <div className="venue-detail-rating-name">
+                                        {rating.user?.name || "Người dùng"}
+                                      </div>
+                                      <div className="venue-detail-rating-stars">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                          <Star
+                                            key={star}
+                                            size={16}
+                                            fill={
+                                              star <= rating.star_number
+                                                ? "currentColor"
+                                                : "none"
+                                            }
+                                            color={
+                                              star <= rating.star_number
+                                                ? "#fbbf24"
+                                                : "#d1d5db"
+                                            }
+                                          />
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="venue-detail-rating-date">
+                                    {rating.created_at
+                                      ? new Date(
+                                          rating.created_at
+                                        ).toLocaleDateString("vi-VN")
+                                      : ""}
+                                  </div>
+                                </div>
+                                {rating.review && (
+                                  <div className="venue-detail-rating-review">
+                                    {rating.review}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

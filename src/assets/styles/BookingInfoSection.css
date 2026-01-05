@@ -5,22 +5,7 @@
   border-radius: 16px;
   margin-bottom: 20px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: slideUp 0.5s ease-out;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .info-card:hover {
@@ -46,7 +31,7 @@
 }
 
 .info-card-header::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
@@ -91,6 +76,7 @@
   position: relative;
   z-index: 1;
   color: rgba(255, 255, 255, 0.8);
+  /* color: white; */
 }
 
 .toggle-icon.open {
@@ -136,6 +122,7 @@
   white-space: nowrap;
   font-size: 14px;
   letter-spacing: 0.3px;
+  color: white;
 }
 
 .info-value {
@@ -161,13 +148,18 @@
 }
 
 .booking-details::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -100%;
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
   transition: left 0.6s;
 }
 
@@ -196,7 +188,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -217,7 +210,7 @@
 }
 
 .total-row::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -288,7 +281,7 @@
   .info-card {
     background: rgba(255, 255, 255, 0.12);
   }
-  
+
   .info-card:hover {
     background: rgba(255, 255, 255, 0.16);
   }
@@ -306,7 +299,7 @@
   .mobile-only {
     display: none;
   }
-  
+
   .desktop-only {
     display: block;
   }

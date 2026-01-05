@@ -40,9 +40,7 @@ export default function PlayerLoginPage() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Google login - TODO: Implement");
-  };
+  const handleGoogleLogin = () => {};
 
   if (loading) {
     return (
@@ -162,7 +160,7 @@ export default function PlayerLoginPage() {
             <button
               type="button"
               className="player-forgot-link"
-              onClick={() => console.log("Forgot password - TODO")}
+              onClick={() => {}}
             >
               Quên mật khẩu
             </button>

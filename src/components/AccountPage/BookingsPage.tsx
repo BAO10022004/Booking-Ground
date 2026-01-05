@@ -54,7 +54,6 @@ const BookingsPage = () => {
         dateStr = date.toISOString().split("T")[0];
       }
     } catch (e) {
-      console.error("Error parsing date:", e);
       dateStr = new Date().toISOString().split("T")[0];
     }
 
@@ -70,16 +69,21 @@ const BookingsPage = () => {
       GroundName:
         (b.ground && typeof b.ground === "object" && "name" in b.ground
           ? b.ground.name
-          : null) || "Sân bóng",
+          : null) || (b.is_event ? "Sự kiện" : "Sân bóng"),
       VenueId:
         (b.ground && typeof b.ground === "object" && "venue_id" in b.ground
           ? b.ground.venue_id
-          : null) || null,
+          : null) ||
+        (b.event && typeof b.event === "object" && "venue_id" in b.event
+          ? b.event.venue_id
+          : null) ||
+        null,
       Target: b.target || "",
       CustomerNote: b.customer_note || "",
       OwnerNote: b.owner_note || "",
       Quantity: b.quantity || 1,
       Status: b.status || "Pending",
+      Event: b.event || null,
     };
   });
 
@@ -139,7 +143,6 @@ const BookingsPage = () => {
         await deleteBooking(bookingId);
       } catch (err) {
         alert("Có lỗi xảy ra khi hủy đặt sân. Vui lòng thử lại.");
-        console.error("Delete booking error:", err);
       }
     }
   };
@@ -151,7 +154,6 @@ const BookingsPage = () => {
       await refreshBookings();
     } catch (err) {
       alert("Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.");
-      console.error("Update booking error:", err);
     }
   };
 
@@ -213,7 +215,9 @@ const BookingsPage = () => {
                 <div className="booking-card-header">
                   <div className="booking-header-left">
                     <h3 className="booking-ground-name">
-                      {booking.GroundName}
+                      {booking.IsEvent && booking.Event
+                        ? booking.Event.name || "Sự kiện"
+                        : booking.GroundName}
                     </h3>
                     {booking.IsEvent && (
                       <span className="event-badge">🎉 Sự kiện</span>
@@ -227,60 +231,151 @@ const BookingsPage = () => {
 
                 {/* Card Body */}
                 <div className="booking-card-body">
-                  <div className="booking-info-grid">
-                    {/* Date */}
-                    <div className="booking-info-item">
-                      <div className="info-icon-wrapper info-icon-blue">
-                        <Calendar size={18} />
-                      </div>
-                      <div className="info-content">
-                        <span className="info-label">Ngày đặt</span>
-                        <span className="info-value">
-                          {formatDate(booking.Date)}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Time */}
-                    <div className="booking-info-item">
-                      <div className="info-icon-wrapper info-icon-green">
-                        <Clock size={18} />
-                      </div>
-                      <div className="info-content">
-                        <span className="info-label">Thời gian</span>
-                        <span className="info-value">
-                          {booking.StartTime} - {booking.EndTime} (
-                          {booking.AmountTime}h)
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Quantity */}
-                    <div className="booking-info-item">
-                      <div className="info-icon-wrapper info-icon-purple">
-                        <Users size={18} />
-                      </div>
-                      <div className="info-content">
-                        <span className="info-label">Số lượng sân</span>
-                        <span className="info-value">
-                          {booking.Quantity} sân
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Target */}
-                    {booking.Target && (
+                  {booking.IsEvent && booking.Event ? (
+                    <div className="booking-info-grid">
                       <div className="booking-info-item">
-                        <div className="info-icon-wrapper info-icon-orange">
-                          <MapPin size={18} />
+                        <div className="info-icon-wrapper info-icon-blue">
+                          <Calendar size={18} />
                         </div>
                         <div className="info-content">
-                          <span className="info-label">Mục đích</span>
-                          <span className="info-value">{booking.Target}</span>
+                          <span className="info-label">Tên sự kiện</span>
+                          <span className="info-value">
+                            {booking.Event.name || "N/A"}
+                          </span>
                         </div>
                       </div>
-                    )}
-                  </div>
+
+                      {booking.Event.start_date && (
+                        <div className="booking-info-item">
+                          <div className="info-icon-wrapper info-icon-green">
+                            <Clock size={18} />
+                          </div>
+                          <div className="info-content">
+                            <span className="info-label">
+                              Thời gian bắt đầu
+                            </span>
+                            <span className="info-value">
+                              {new Date(
+                                booking.Event.start_date
+                              ).toLocaleString("vi-VN")}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {booking.Event.end_date && (
+                        <div className="booking-info-item">
+                          <div className="info-icon-wrapper info-icon-green">
+                            <Clock size={18} />
+                          </div>
+                          <div className="info-content">
+                            <span className="info-label">
+                              Thời gian kết thúc
+                            </span>
+                            <span className="info-value">
+                              {new Date(booking.Event.end_date).toLocaleString(
+                                "vi-VN"
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {booking.Event.level && (
+                        <div className="booking-info-item">
+                          <div className="info-icon-wrapper info-icon-purple">
+                            <Users size={18} />
+                          </div>
+                          <div className="info-content">
+                            <span className="info-label">Mức độ</span>
+                            <span className="info-value">
+                              {booking.Event.level}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="booking-info-item">
+                        <div className="info-icon-wrapper info-icon-purple">
+                          <Users size={18} />
+                        </div>
+                        <div className="info-content">
+                          <span className="info-label">Số vé</span>
+                          <span className="info-value">
+                            {booking.Quantity} vé
+                          </span>
+                        </div>
+                      </div>
+
+                      {booking.Event.price && (
+                        <div className="booking-info-item">
+                          <div className="info-icon-wrapper info-icon-orange">
+                            <FileText size={18} />
+                          </div>
+                          <div className="info-content">
+                            <span className="info-label">Giá vé</span>
+                            <span className="info-value">
+                              {Number(booking.Event.price).toLocaleString(
+                                "vi-VN"
+                              )}{" "}
+                              ₫
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="booking-info-grid">
+                      <div className="booking-info-item">
+                        <div className="info-icon-wrapper info-icon-blue">
+                          <Calendar size={18} />
+                        </div>
+                        <div className="info-content">
+                          <span className="info-label">Ngày đặt</span>
+                          <span className="info-value">
+                            {formatDate(booking.Date)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="booking-info-item">
+                        <div className="info-icon-wrapper info-icon-green">
+                          <Clock size={18} />
+                        </div>
+                        <div className="info-content">
+                          <span className="info-label">Thời gian</span>
+                          <span className="info-value">
+                            {booking.StartTime} - {booking.EndTime} (
+                            {booking.AmountTime}h)
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="booking-info-item">
+                        <div className="info-icon-wrapper info-icon-purple">
+                          <Users size={18} />
+                        </div>
+                        <div className="info-content">
+                          <span className="info-label">Số lượng sân</span>
+                          <span className="info-value">
+                            {booking.Quantity} sân
+                          </span>
+                        </div>
+                      </div>
+
+                      {booking.Target && (
+                        <div className="booking-info-item">
+                          <div className="info-icon-wrapper info-icon-orange">
+                            <MapPin size={18} />
+                          </div>
+                          <div className="info-content">
+                            <span className="info-label">Mục đích</span>
+                            <span className="info-value">{booking.Target}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Notes */}
                   {(booking.CustomerNote || booking.OwnerNote) && (
@@ -479,7 +574,6 @@ const BookingsPage = () => {
                         err?.message ||
                           "Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại."
                       );
-                      console.error("Rating error:", err);
                     } finally {
                       setIsSubmittingRating(false);
                     }

@@ -7,7 +7,7 @@ const PromotionSlider = () => {
         <div className="promotion-empty-icon">⭐</div>
         <h2 className="promotion-empty-title">Nổi bật</h2>
         <p className="promotion-empty-text">
-          Chức năng nổi bật sẽ được phát triển tại đây
+          Chức năng nổi bật sẽ được phát triển sớm
         </p>
       </div>
     </div>
