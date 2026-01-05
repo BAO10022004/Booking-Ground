@@ -4,7 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import "../assets/styles/BookingConfirmationPage.css";
 import AuthInfoSection from "../components/AuthInfoSection";
 import BookingInfoSection from "../components/BookingInfoSection";
-import VenueInfoSection from "../components/VenueInfoSection";
 import PaymentInfoSection from "../components/PaymentInfoSection";
 import CustomerInfoSection from "../components/CustomerInfoSection";
 import TermsInfoSection from "../components/TermsInfoSection";
@@ -55,26 +54,45 @@ export default function BookingConfirmationPage() {
           setTempBookingData(tempData);
           setTotalPrice(tempData.totalPrice || 0);
           setTotalHours(tempData.totalHours || 0);
-          setVenueId(tempData.venueId);
+
+          // Set venueId - có thể từ tempData.venueId hoặc từ ground sau này
+          if (tempData.venueId) {
+            setVenueId(tempData.venueId);
+          }
 
           const tempBooking = new Booking();
-          tempBooking.date = new Date(tempData.date);
-          tempBooking.startTime = tempData.start_time;
-          tempBooking.endTime = tempData.end_time;
-          tempBooking.groundId = tempData.ground_id;
-          tempBooking.target = tempData.target || null;
+          let calculatedHours = 0;
 
-          const calculatedHours =
-            tempData.totalHours ||
-            calculateHours(tempData.start_time, tempData.end_time);
-          tempBooking.amountTime = calculatedHours;
+          // Chỉ set date, startTime, endTime, groundId nếu không phải event booking
+          if (!tempData.is_event) {
+            if (tempData.date) {
+              tempBooking.date = new Date(tempData.date);
+            }
+            tempBooking.startTime = tempData.start_time || "";
+            tempBooking.endTime = tempData.end_time || "";
+            tempBooking.groundId = tempData.ground_id || "";
 
-          tempBooking.isEvent = false;
+            calculatedHours =
+              tempData.totalHours ||
+              (tempData.start_time && tempData.end_time
+                ? calculateHours(tempData.start_time, tempData.end_time)
+                : 0);
+            tempBooking.amountTime = calculatedHours;
+          } else {
+            // Event booking: không có date, time, ground
+            tempBooking.date = undefined as any;
+            tempBooking.startTime = undefined as any;
+            tempBooking.endTime = undefined as any;
+            tempBooking.groundId = undefined as any;
+            tempBooking.amountTime = 0;
+          }
+
+          tempBooking.isEvent = tempData.is_event || false;
           tempBooking.quantity = tempData.quantity || 1;
           tempBooking.status = "Pending";
           setBooking(tempBooking);
 
-          if (!tempData.totalHours) {
+          if (!tempData.totalHours && !tempData.is_event) {
             setTotalHours(calculatedHours);
           }
         } catch (error) {
@@ -87,19 +105,24 @@ export default function BookingConfirmationPage() {
 
   useEffect(() => {
     const fetchGround = async () => {
-      if (booking?.groundId) {
+      // Chỉ fetch ground nếu là booking thường (có groundId)
+      if (booking?.groundId && !booking.isEvent) {
         const foundGround = await getGroundById(booking.groundId);
         setGround(foundGround);
         if (foundGround && !venueId) {
           setVenueId(foundGround.venueId);
         }
       }
+      // Nếu là event booking và chưa có venueId, lấy từ tempBookingData
+      else if (booking?.isEvent && !venueId && tempBookingData?.venueId) {
+        setVenueId(tempBookingData.venueId);
+      }
     };
 
     if (booking) {
       fetchGround();
     }
-  }, [booking, venueId]);
+  }, [booking, venueId, tempBookingData]);
 
   const handleBack = () => navigate(-1);
 
@@ -133,16 +156,29 @@ export default function BookingConfirmationPage() {
 
     try {
       setIsCreating(true);
-      const createdBooking = await createBooking({
-        date: tempBookingData.date,
-        start_time: tempBookingData.start_time,
-        end_time: tempBookingData.end_time,
-        ground_id: tempBookingData.ground_id,
-        is_event: false,
+
+      // Chuẩn bị dữ liệu booking
+      const bookingData: any = {
+        is_event: tempBookingData.is_event || false,
+        event_id: tempBookingData.event_id || null,
         quantity: tempBookingData.quantity || 1,
-        target: tempBookingData.target || undefined,
-        customer_note: notes.trim() || undefined,
-      });
+        target: tempBookingData.target || null,
+        customer_note: notes.trim() || null,
+        total_price:
+          tempBookingData.totalPrice || tempBookingData.total_price || 0,
+      };
+
+      // Chỉ thêm date, start_time, end_time, ground_id nếu không phải event booking
+      if (!tempBookingData.is_event) {
+        bookingData.date = tempBookingData.date || null;
+        bookingData.start_time = tempBookingData.start_time || null;
+        bookingData.end_time = tempBookingData.end_time || null;
+        bookingData.ground_id = tempBookingData.ground_id || null;
+      }
+      // Event booking: không gửi date, start_time, end_time, ground_id
+      // Backend sẽ tự set null cho các field này
+
+      await createBooking(bookingData);
 
       localStorage.removeItem("tempBookingData");
       showToast("success", "Đặt sân thành công!");
@@ -192,7 +228,9 @@ export default function BookingConfirmationPage() {
     );
   }
 
-  if (!venue || !booking) {
+  // Với event booking, không cần venue (hoặc có thể hiển thị mà không cần venue)
+  // Với booking thường, cần có venue
+  if (!booking) {
     if (loading) {
       return (
         <div className="booking-confirmation-page">
@@ -206,6 +244,40 @@ export default function BookingConfirmationPage() {
       <div className="booking-confirmation-page">
         <div style={{ padding: "40px", textAlign: "center" }}>
           Không tìm thấy thông tin đặt sân
+        </div>
+        <button
+          onClick={() => navigate("/")}
+          style={{
+            padding: "12px 24px",
+            backgroundColor: "#1890ff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            marginTop: "16px",
+          }}
+        >
+          Về trang chủ
+        </button>
+      </div>
+    );
+  }
+
+  // Với booking thường, cần có venue. Với event booking, venue là optional
+  if (!booking.isEvent && !venue) {
+    if (loading) {
+      return (
+        <div className="booking-confirmation-page">
+          <div style={{ padding: "40px", textAlign: "center" }}>
+            Đang tải thông tin sân...
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="booking-confirmation-page">
+        <div style={{ padding: "40px", textAlign: "center" }}>
+          Không tìm thấy thông tin sân
         </div>
         <button
           onClick={() => navigate("/")}
@@ -247,6 +319,7 @@ export default function BookingConfirmationPage() {
             setShowBookingInfo={setShowBookingInfo}
             totalPrice={totalPrice}
             totalHours={totalHours}
+            event={tempBookingData?.event}
           />
           <AuthInfoSection
             account={account}
@@ -264,7 +337,7 @@ export default function BookingConfirmationPage() {
             setNotes={setNotes}
           />
 
-          <TermsInfoSection />
+          {/* <TermsInfoSection /> */}
 
           {/* Submit button cho mobile */}
           <div className="mobile-only">
@@ -280,11 +353,11 @@ export default function BookingConfirmationPage() {
 
         {/* Right Column - Summary (Sticky on Desktop) */}
         <div className="right-column">
-          <PaymentInfoSection
+          {/* <PaymentInfoSection
             totalAmount={
               totalPrice > 0 ? `${totalPrice.toLocaleString("vi-VN")} ₫` : "0 ₫"
             }
-          />
+          /> */}
           <PaymentMethodSection
             selectedMethod={selectedMethod}
             setSelectedMethod={setSelectedMethod}

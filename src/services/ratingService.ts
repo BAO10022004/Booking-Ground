@@ -13,12 +13,13 @@ export interface CreateRatingData {
 }
 
 export interface Rating {
-  id?: string;
+  id: string;
   user_id: string;
   venue_id: string;
   star_number: number;
-  review?: string;
+  review?: string | null;
   created_at?: string;
+  updated_at?: string;
   user?: {
     id: string;
     name: string;

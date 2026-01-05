@@ -7,6 +7,7 @@ export interface Favorite {
   user_id: string;
   venue_id: string;
   created_at?: string;
+  updated_at?: string;
   venue?: Venue;
 }
 

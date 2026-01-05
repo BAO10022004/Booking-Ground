@@ -9,6 +9,7 @@ import FieldOwnerLoginPage from "./pages/FieldOwnerLoginPage";
 import PlayerLoginPage from "./pages/PlayerLoginPage";
 import PlayerRegisterPage from "./pages/PlayerRegisterPage";
 import FieldOwnerPortal from "./pages/FieldOwnerPortal";
+
 function App() {
   return (
     <BrowserRouter basename="/Booking-Ground">
@@ -40,7 +41,7 @@ function App() {
           element={<BookingConfirmationPage />}
         />
         <Route path="/login/:isLoginAgument" element={<LoginPage />} />
-        <Route path="/event/" element={<EventsBookingPage />} />
+        <Route path="/event/:venueId?" element={<EventsBookingPage />} />
         <Route path="/services/:venueId" element={<ServiceSelectionPage />} />
         {/* 404 - Not Found (Optional) */}
         <Route

@@ -41,7 +41,12 @@ export default function BookingTypeModal({
       onClose();
       return;
     }
-    navigate(`/event/`);
+    const venueId = (venue as any)?.venueId || (venue as any)?.id;
+    if (venueId) {
+      navigate(`/event/${venueId}`);
+    } else {
+      navigate(`/event`);
+    }
     onClose();
   };
 

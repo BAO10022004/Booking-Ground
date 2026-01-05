@@ -15,13 +15,18 @@ export interface Payment {
   amount: number;
   unit_price: number;
   method: string;
-  note?: string;
+  note?: string | null;
   status: string;
+  created_at?: string;
+  updated_at?: string;
   booking?: {
     id: string;
     date: string;
     start_time: string;
     end_time: string;
+    user_id: string;
+    ground_id: string;
+    status: string;
   };
 }
 

@@ -4,6 +4,8 @@ import { API_ENDPOINTS } from "../config/api";
 export interface Category {
   id: string;
   name: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CategoriesResponse {
@@ -17,7 +19,10 @@ export const categoryService = {
     );
 
     // Response có thể là data trực tiếp hoặc wrapped trong { data: ... }
-    const data = (response.data as CategoriesResponse)?.data || (response as any)?.data || [];
+    const data =
+      (response.data as CategoriesResponse)?.data ||
+      (response as any)?.data ||
+      [];
     return Array.isArray(data) ? data : [];
   },
 

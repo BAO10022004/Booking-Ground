@@ -11,7 +11,6 @@ import Toast from "../components/Toast";
 import { useVenue, useAuth, useGrounds } from "../hooks";
 import { getCurrentDate } from "../utils/helpers";
 import { venueService } from "../services";
-import getCategoriesByVenue from "../utils/getCategoriesByVenue";
 import { calculateHours } from "../utils/helpers/calculateHelpers";
 
 interface BookingSchedulePageProps {
@@ -96,6 +95,15 @@ export default function BookingSchedulePage({
     if (!account) {
       console.error("Account not found");
     }
+
+    // Load categories from venue
+    if (venue && (venue as any).categories) {
+      const venueCategories = (venue as any).categories.map((cat: any) => ({
+        id: cat.id,
+        name: cat.name,
+      }));
+      setCategories(venueCategories);
+    }
   }, [venue, venueId, account]);
 
   // Show category modal on mount if no selection
@@ -141,8 +149,8 @@ export default function BookingSchedulePage({
 
         try {
           // Get ground to get categoryId
-          const ground = grounds.find((g) => g.id === booking.ground);
-          const categoryId = ground?.category_id;
+          const ground = grounds.find((g) => g.groundId === booking.ground);
+          const categoryId = ground?.categoryId;
 
           const result = await venueService.calculatePrice({
             venueId: venue.venueId,
@@ -289,6 +297,55 @@ export default function BookingSchedulePage({
     };
   };
 
+  const createTempBookingData = (cells: Cell[]) => {
+    const validation = validateContinuousTimeSlots(cells);
+    if (!validation.isValid) {
+      showToast("error", validation.message);
+      return null;
+    }
+
+    const bookingDetails = validation.bookings;
+    if (bookingDetails.length === 0) {
+      showToast("error", "Không có thông tin đặt sân hợp lệ.");
+      return null;
+    }
+
+    const sortedByTime = [...bookingDetails].sort(
+      (a, b) => timeSlots.indexOf(a.startTime) - timeSlots.indexOf(b.startTime)
+    );
+
+    const startTime = sortedByTime[0].startTime;
+    const endTime = sortedByTime[sortedByTime.length - 1].endTime;
+    const groundId = cells[0].groundId;
+
+    const [day, month, year] = selectedDate.split("/").map(Number);
+    const bookingDate = `${year}-${String(month).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+
+    return {
+      date: bookingDate,
+      start_time: startTime,
+      end_time: endTime,
+      ground_id: groundId,
+      is_event: false,
+      quantity: 1,
+      target: selectedCategoryName || undefined,
+      venueId: venue?.venueId,
+      totalPrice,
+      total_price: totalPrice, // Thêm total_price cho API
+      totalHours,
+    };
+  };
+
+  const proceedToConfirmation = (cells: Cell[]) => {
+    const tempBookingData = createTempBookingData(cells);
+    if (!tempBookingData) return;
+
+    localStorage.setItem("tempBookingData", JSON.stringify(tempBookingData));
+    navigate("/booking-confirmation");
+  };
+
   const handleSubmit = async (cells: Cell[]) => {
     if (cells.length === 0) {
       showToast(
@@ -321,46 +378,13 @@ export default function BookingSchedulePage({
       return;
     }
 
-    try {
-      const bookingDetails = validation.bookings;
-      if (bookingDetails.length === 0) {
-        showToast("error", "Không có thông tin đặt sân hợp lệ.");
-        return;
-      }
-
-      const sortedByTime = [...bookingDetails].sort(
-        (a, b) =>
-          timeSlots.indexOf(a.startTime) - timeSlots.indexOf(b.startTime)
-      );
-
-      const startTime = sortedByTime[0].startTime;
-      const endTime = sortedByTime[sortedByTime.length - 1].endTime;
-      const groundId = selectedCells[0].groundId;
-
-      const [day, month, year] = selectedDate.split("/").map(Number);
-      const bookingDate = `${year}-${String(month).padStart(2, "0")}-${String(
-        day
-      ).padStart(2, "0")}`;
-
-      const tempBookingData = {
-        date: bookingDate,
-        start_time: startTime,
-        end_time: endTime,
-        ground_id: groundId,
-        is_event: false,
-        quantity: 1,
-        target: selectedCategoryName || undefined,
-        venueId: venue.venueId,
-        totalPrice,
-        totalHours,
-      };
-
-      localStorage.setItem("tempBookingData", JSON.stringify(tempBookingData));
-      navigate("/booking-confirmation");
-    } catch (error: any) {
-      console.error("Error preparing booking:", error);
-      showToast("error", error?.message || "Có lỗi xảy ra. Vui lòng thử lại.");
+    const bookingDetails = validation.bookings;
+    if (bookingDetails.length === 0) {
+      showToast("error", "Không có thông tin đặt sân hợp lệ.");
+      return;
     }
+
+    proceedToConfirmation(cells);
   };
 
   const handleDateClick = () => {
@@ -503,10 +527,6 @@ export default function BookingSchedulePage({
           <div className="booking-legend-item">
             <div className="booking-legend-box legend-locked"></div>
             <span>Khóa</span>
-          </div>
-          <div className="booking-legend-item">
-            <div className="booking-legend-box legend-event"></div>
-            <span>Sự kiện</span>
           </div>
           <button
             className="booking-view-courts-btn"
